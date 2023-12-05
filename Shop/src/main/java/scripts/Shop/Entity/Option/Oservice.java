@@ -2,6 +2,7 @@ package scripts.Shop.Entity.Option;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Product.Preposit;
 import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Product.ProductResponse;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class Oservice {
     private final Oreposit reposit;
     private final Preposit preposit;
@@ -37,18 +39,7 @@ public class Oservice {
         return findAllDtos;
     }
 
-    public void save(Product product, Long amount) {
-        Option optionEntity = Option.builder()
-                .optionName(product.getProductName())
-                .o_img(product.getImg())
-                .price(product.getPrice())
-                .quantity(amount)
-                .product(product)
-                .build();
-
-        reposit.save(optionEntity);
-    }
-
+    @Transactional
     public String add(Long id, OResponse dto){
         Optional<Product> product = preposit.findById(id);
 
@@ -67,5 +58,35 @@ public class Oservice {
         }
     }
 
+    @Transactional
+    public String delete(Long id) {
+        Optional<Option> optionOptional = reposit.findById(id);
+        if(optionOptional.isPresent()) {
 
+            String deleted = optionOptional.get().getOptionName();
+            reposit.deleteById(id);
+
+            return deleted;
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public String update(Long id, OResponse dto){
+        Optional<Option> option = reposit.findById(id);
+
+        if (option.isPresent()){
+            Option option1 = option.get();
+
+            option1.update(dto.getOptionName(),dto.getO_img(),dto.getPrice(),dto.getQuantity());
+            reposit.save(option1);
+
+            return option1.getOptionName();
+        }
+        else {
+            return null;
+        }
+    }
 }

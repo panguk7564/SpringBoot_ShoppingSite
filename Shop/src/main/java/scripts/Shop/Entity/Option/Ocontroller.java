@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 public class Ocontroller {
     private final Oservice service;
-    private final Pservice pservice;
 
     /**
      *
@@ -33,7 +32,7 @@ public class Ocontroller {
         return ResponseEntity.ok(apiResult);
     }
 
-    @GetMapping("/options") //-- 존체 옵션 출력
+    @GetMapping("/options") //-- 전체 옵션 출력
     public ResponseEntity<?> findAll(){
         List<OResponse.FindAllDto> optionsResponse = service.findAll(); //-- 수정요망
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(optionsResponse);
@@ -49,5 +48,17 @@ public class Ocontroller {
         return ResponseEntity.ok().body("옵션 등록 성공: "+ result);
     }
 
+    @GetMapping("/remove_option/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        String name = service.delete(id);
+        return ResponseEntity.ok().body("삭제완료: "+name +"id: "+id);
+    }
+
+    @PostMapping("/update_option/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody OResponse dto){
+        String result = service.update(id,dto);
+
+        return ResponseEntity.ok().body("업데이트 성공: "+ result+"id: "+id);
+    }
 
 }
