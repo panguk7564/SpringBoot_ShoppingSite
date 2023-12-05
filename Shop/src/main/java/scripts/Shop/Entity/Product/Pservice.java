@@ -6,10 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import scripts.Shop.Entity.Option.Odto;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oreposit;
-import scripts.core.error.exception.Exception404;
+import scripts.Shop.core.error.exception.Exception404;
 
 
 import java.util.List;
@@ -77,7 +76,7 @@ public class Pservice {
     }
 
     @Transactional
-    public String update(Long id, ProductResponse.FindAllDto dto) {
+    public String update(Long id, ProductResponse.updateDto dto) {
 
         Optional<Product> product = reposit.findById(id);
         List<Option> options = oreposit.findByProductId(id);
@@ -95,7 +94,9 @@ public class Pservice {
             return product1.getProductName();
         }
         else {
-            return  null;
+            System.out.println("실패");
+            return "아아앙";
+
         }
     }
 }

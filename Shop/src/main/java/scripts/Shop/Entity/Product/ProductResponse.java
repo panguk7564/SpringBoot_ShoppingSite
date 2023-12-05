@@ -8,8 +8,22 @@ import scripts.Shop.Entity.Option.Option;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
+
 public class ProductResponse {
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class updateDto{
+
+        private String productName;
+
+        private String description;
+
+        private String img;
+
+        private Long price;
+    }
 
     @NoArgsConstructor
     @Getter
@@ -38,7 +52,7 @@ public class ProductResponse {
                     .build();
         }
 
-        public FindAllDto(Product product) {
+        public FindAllDto(Product product) { //-- 이렇게 해도 된다.(빌더를 쓰기 불편할때 ?)
             this.Id = product.getId();
             this.productName = product.getProductName();
             this.description = product.getDescription();

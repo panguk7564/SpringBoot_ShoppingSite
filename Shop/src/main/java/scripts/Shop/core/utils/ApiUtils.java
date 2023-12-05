@@ -1,4 +1,4 @@
-package scripts.core.utils;
+package scripts.Shop.core.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

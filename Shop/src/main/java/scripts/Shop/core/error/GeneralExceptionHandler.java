@@ -1,12 +1,12 @@
-package scripts.core.error;
+package scripts.Shop.core.error;
 
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import scripts.core.error.exception.*;
-import scripts.core.utils.ApiUtils;
+import scripts.Shop.core.error.exception.*;
+import scripts.Shop.core.utils.ApiUtils;
 
 
 @ControllerAdvice

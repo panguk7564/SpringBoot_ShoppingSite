@@ -10,11 +10,14 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "option_tb")
+@Table(name = "option_tb",
+        indexes = {
+        @Index(name = "option_producr_id_index", columnList = "product_id")
+        }) //-- 불러올때 product_id 를 바로 불러옴
 public class Option {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // --
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @ManyToOne(fetch = FetchType.LAZY) //-- 연관관계

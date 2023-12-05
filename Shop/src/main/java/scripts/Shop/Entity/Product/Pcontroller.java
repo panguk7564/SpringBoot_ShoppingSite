@@ -1,10 +1,9 @@
 package scripts.Shop.Entity.Product;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import scripts.core.utils.ApiUtils;
+import scripts.Shop.core.utils.ApiUtils;
 
 import java.util.List;
 
@@ -43,9 +42,14 @@ public class Pcontroller {
    }
 
    @PostMapping("/update/{id}")
-    private ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductResponse.FindAllDto dto){
-        String item = service.update(id,dto);
+    private ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductResponse.updateDto dto){
+        if(dto != null ){
+        service.update(id,dto);
 
-        return ResponseEntity.ok(ApiUtils.success("업데이트 되었습니다: "+item));
+        return ResponseEntity.ok(ApiUtils.success("업데이트 성공"));}
+        else {
+            System.out.println("상품없음");
+            return ResponseEntity.ok("상품없음");
+        }
    }
 }

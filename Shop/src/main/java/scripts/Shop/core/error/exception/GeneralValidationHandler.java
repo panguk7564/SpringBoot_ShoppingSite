@@ -1,4 +1,4 @@
-package scripts.core.error.exception;
+package scripts.Shop.core.error.exception;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

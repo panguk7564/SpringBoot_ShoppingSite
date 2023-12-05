@@ -1,8 +1,8 @@
-package scripts.core.error.exception;
+package scripts.Shop.core.error.exception;
 
 
 import org.springframework.http.HttpStatus;
-import scripts.core.utils.ApiUtils;
+import scripts.Shop.core.utils.ApiUtils;
 
 public class Exception401 extends RuntimeException{
     public Exception401(String message) {
