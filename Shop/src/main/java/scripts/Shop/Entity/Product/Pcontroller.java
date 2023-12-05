@@ -1,8 +1,10 @@
 package scripts.Shop.Entity.Product;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.core.utils.ApiUtils;
 
 import java.util.List;
@@ -10,7 +12,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class Pcontroller {
+
+    @Autowired
     private final Pservice service;
+    private final Oservice oservice;
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody ProductResponse.FindAllDto dto){
@@ -42,11 +47,12 @@ public class Pcontroller {
    }
 
    @PostMapping("/update/{id}")
-    private ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductResponse.updateDto dto){
-        if(dto != null ){
-        service.update(id,dto);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProductResponse.FindAllDto dto){
+       String name = service.update(id.longValue(),dto);
+       System.out.println(dto);
 
-        return ResponseEntity.ok(ApiUtils.success("업데이트 성공"));}
+        if(dto != null && name != null){
+        return ResponseEntity.ok(ApiUtils.success("업데이트 성공: "+ name));}
         else {
             System.out.println("상품없음");
             return ResponseEntity.ok("상품없음");

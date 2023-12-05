@@ -14,20 +14,6 @@ public class ProductResponse {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class updateDto{
-
-        private String productName;
-
-        private String description;
-
-        private String img;
-
-        private Long price;
-    }
-
-    @NoArgsConstructor
-    @Getter
-    @Setter
     public static class FindAllDto{
         //-- pk
         private Long Id;
@@ -40,6 +26,7 @@ public class ProductResponse {
         //-- 상품 이미지
         private Long price;
         // -- 상품 가격
+        private Long stock;
 
 
         public Product toEntity(){
@@ -58,6 +45,7 @@ public class ProductResponse {
             this.description = product.getDescription();
             this.img = product.getImg();
             this.price = product.getPrice();
+            this.stock = getStock();
         }
     }
 

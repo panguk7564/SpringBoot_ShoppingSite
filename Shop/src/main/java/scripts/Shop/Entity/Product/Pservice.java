@@ -46,12 +46,13 @@ public class Pservice {
     @Transactional
     public Product addProduct(ProductResponse.FindAllDto dto) {
         Product product = reposit.save(dto.toEntity());
-        Option option = Option.builder()
-                .product(product)
-                .optionName(dto.getProductName())
-                .o_img(dto.getImg())
+        Option option = Option.builder().optionName(dto.getProductName())
                 .price(dto.getPrice())
+                .o_img(dto.getImg())
+                .product(product)
+                .quantity(dto.getStock())
                 .build();
+
         oreposit.save(option);
         return product;
     }
@@ -76,7 +77,7 @@ public class Pservice {
     }
 
     @Transactional
-    public String update(Long id, ProductResponse.updateDto dto) {
+    public String update(Long id, ProductResponse.FindAllDto dto) {
 
         Optional<Product> product = reposit.findById(id);
         List<Option> options = oreposit.findByProductId(id);
@@ -86,7 +87,7 @@ public class Pservice {
             Option product_option1 = options.get(0);
 
             product1.update(dto.getProductName(),dto.getDescription(),dto.getImg(),dto.getPrice());
-            product_option1.update(dto.getProductName(),dto.getImg(),dto.getPrice());
+            product_option1.update(dto.getProductName(),dto.getImg(),dto.getPrice(),dto.getStock());
 
             reposit.save(product1);
             oreposit.save(product_option1);
@@ -95,7 +96,7 @@ public class Pservice {
         }
         else {
             System.out.println("실패");
-            return "아아앙";
+            return null;
 
         }
     }

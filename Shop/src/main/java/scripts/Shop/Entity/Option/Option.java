@@ -42,9 +42,10 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public void update(String optionName, String o_img, Long price) {
+    public void update(String optionName, String o_img, Long price, Long stock) {
         this.optionName = optionName;
         this.o_img = o_img;
         this.price = price;
+        this.quantity = stock;
     }
 }

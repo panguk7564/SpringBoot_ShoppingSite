@@ -3,10 +3,10 @@ package scripts.Shop.Entity.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Product.ProductResponse;
+import scripts.Shop.Entity.Product.Pservice;
 import scripts.Shop.core.utils.ApiUtils;
 
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 public class Ocontroller {
     private final Oservice service;
+    private final Pservice pservice;
 
     /**
      *
@@ -39,4 +40,14 @@ public class Ocontroller {
 
         return ResponseEntity.ok(apiResult);
     }
+
+    @PostMapping("/add_option/{id}")
+    public ResponseEntity<?> create(@PathVariable Long id,@RequestBody OResponse dto){
+
+        String result = service.add(id,dto);
+
+        return ResponseEntity.ok().body("옵션 등록 성공: "+ result);
+    }
+
+
 }
