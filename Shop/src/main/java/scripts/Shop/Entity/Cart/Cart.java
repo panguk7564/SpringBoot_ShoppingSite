@@ -37,4 +37,9 @@ public class Cart {
         this.maxQuantity = maxQuantity;
         this.price = price;
     }
+
+    public void update(Long quantity, Long price){
+        this.maxQuantity = quantity;
+        this.price = price;
+    }
 }

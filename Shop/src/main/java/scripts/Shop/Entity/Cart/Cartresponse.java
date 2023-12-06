@@ -13,6 +13,43 @@ public class Cartresponse { // -- 교차형 데이터 공유(브릿지패턴)
 
     @Getter
     @Setter
+    public static class updateDto {
+
+        private List<CartDto> dtoList;
+        private Long totalprice;
+
+        public updateDto(List<Cart> dtoList) {
+            this.dtoList = dtoList.stream().map(CartDto::new).collect(Collectors.toList());
+            this.totalprice = totalprice;
+        }
+
+        @Getter
+        @Setter
+        private class CartDto {
+
+            private Long cartId;
+
+            private Long option;
+
+            private String optionName;
+
+            private Long quantity;
+
+            private Long price;
+
+            public CartDto(Cart cart) {
+                this.cartId = cart.getId();
+                this.option = cart.getOption().getId();
+                this.optionName = cart.getOption().getOptionName();
+                this.quantity = cart.getMaxQuantity();
+                this.price = cart.getPrice();
+            }
+        }
+
+    }
+
+    @Getter
+    @Setter
     public static class findAllDto {
 
         List<ProductDto> products;

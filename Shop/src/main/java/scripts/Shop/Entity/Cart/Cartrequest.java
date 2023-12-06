@@ -22,4 +22,11 @@ public class Cartrequest {
                     .build();
         }
     }
+
+    @Getter
+    @Setter
+    public static class updateDto{
+        private Long cartid;
+        private Long quantity;
+    }
 }

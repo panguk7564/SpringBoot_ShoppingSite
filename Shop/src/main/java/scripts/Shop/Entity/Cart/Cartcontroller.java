@@ -19,15 +19,26 @@ public class Cartcontroller {
     private final Cartservice service;
 
     @PostMapping("/carts/add") // --- 장바구니에 상품 추가
-    public ResponseEntity<?> addCartList(@RequestBody @Valid List<Cartrequest.saveDto> saveDtos,
+    public ResponseEntity<?> addCartList(@RequestBody @Valid List<Cartrequest.saveDto> requestDto,
                                          Error error,
                                          @AuthenticationPrincipal CustomUserDetails customUserDetails)
     {
-        service.addCartList(saveDtos, customUserDetails.getUser());
+        service.addCartList(requestDto, customUserDetails.getUser());
 
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(null);
         return ResponseEntity.ok(apiResult);
     }
+
+    @GetMapping("/carts/update") // -- 장바구니 불러오기
+    public ResponseEntity<?> update(@RequestBody @Valid List<Cartrequest.updateDto> requestDto,
+                                    Error error,
+                                    @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Cartresponse.updateDto updatedto = service.update(requestDto, customUserDetails.getUser());
+
+        ApiUtils.ApiResult<?> apiResult = ApiUtils.success(updatedto);
+        return ResponseEntity.ok(apiResult);
+    }
+
 
     @GetMapping("/carts") // -- 장바구니 불러오기
     public ResponseEntity<?> carts(@AuthenticationPrincipal CustomUserDetails customUserDetails){ // -- 매개변수에 인증이 되어있지 않다면 불러오지 않음
