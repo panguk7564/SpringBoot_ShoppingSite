@@ -51,14 +51,19 @@ public class Ocontroller {
     @GetMapping("/remove_option/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         String name = service.delete(id);
-        return ResponseEntity.ok().body("삭제완료: "+name +"id: "+id);
+        if(name != null){
+        return ResponseEntity.ok().body("삭제완료: "+name +"id: "+id);}
+        else {
+            return ResponseEntity.ok().body("삭제할 옵션이 없어요");
+        }
     }
 
     @PostMapping("/update_option/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody OResponse dto){
         String result = service.update(id,dto);
 
-        return ResponseEntity.ok().body("업데이트 성공: "+ result+"id: "+id);
+        return ResponseEntity.ok().body("업데이트 성공: "+ result + "id: "+id);
     }
+
 
 }

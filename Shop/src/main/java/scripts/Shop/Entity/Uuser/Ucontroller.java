@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class Ucontroller {
     private final Ureposit ureposit; //-- 삭제 요망 (서비스)
+    private final Uservice service;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -43,7 +45,6 @@ public class Ucontroller {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid URequest.JoinDTO requestDTO){
-        Optional<Uuser> byE = ureposit.findByEmail(requestDTO.getEmail());
 
         String jwt = "";
 
@@ -67,4 +68,12 @@ public class Ucontroller {
         }
         return ResponseEntity.ok().header(JwtTokenProvider.HEADER,jwt).body(ApiUtils.success("로그인 완료"));
         }
+
+        @PostMapping("/user/update/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody URequest.JoinDTO dto){
+             Uuser user = service.update(id,dto);
+
+             return ResponseEntity.ok().body(user.getEmail());
+        }
+
     }

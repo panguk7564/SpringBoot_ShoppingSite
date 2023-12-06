@@ -34,4 +34,11 @@ public class Uuser {
         this.pass = pass;
         this.roles = roles;
     }
+
+    public void update(String email, String pass) {
+        this.email = email;
+        this.pass = pass;
+    }
+
+
 }
