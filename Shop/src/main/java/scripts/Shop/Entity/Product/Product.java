@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import scripts.Shop.Entity.Option.Option;
 
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "option_tb",
         indexes = {
-        @Index(name = "option_producr_id_index", columnList = "product_id")
+        @Index(name = "option_product_id_index", columnList = "product_id")
         }) //-- 불러올때 product_id 를 바로 불러옴
 public class Option {
 

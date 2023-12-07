@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import scripts.Shop.Entity.Uuser.Uuser;
 
-
 import java.util.Collection;
 import java.util.stream.Collectors;
 

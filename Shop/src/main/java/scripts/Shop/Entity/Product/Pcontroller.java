@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import scripts.Shop.Entity.Option.Oservice;
+import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
 import java.util.List;

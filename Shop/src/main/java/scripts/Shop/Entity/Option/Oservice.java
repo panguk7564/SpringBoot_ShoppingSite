@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Product.Preposit;
 import scripts.Shop.Entity.Product.Product;
-import scripts.Shop.Entity.Product.ProductResponse;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,12 +1,10 @@
 package scripts.Shop.Entity.Option;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import scripts.Shop.Entity.Product.Product;
-import scripts.Shop.Entity.Product.ProductResponse;
-import scripts.Shop.Entity.Product.Pservice;
+import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
 import java.util.List;
@@ -33,7 +31,9 @@ public class Ocontroller {
     }
 
     @GetMapping("/options") //-- 전체 옵션 출력
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<?> findAll(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        System.out.println(customUserDetails.getUser());
+
         List<OResponse.FindAllDto> optionsResponse = service.findAll(); //-- 수정요망
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(optionsResponse);
 

@@ -22,14 +22,14 @@ public class Cartcontroller {
     public ResponseEntity<?> addCartList(@RequestBody @Valid List<Cartrequest.saveDto> requestDto,
                                          Error error,
                                          @AuthenticationPrincipal CustomUserDetails customUserDetails)
-    {
+    {   System.out.println("0o0");
         service.addCartList(requestDto, customUserDetails.getUser());
 
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(null);
         return ResponseEntity.ok(apiResult);
     }
 
-    @GetMapping("/carts/update") // -- 장바구니 불러오기
+    @GetMapping("/carts/update") // -- 장바구니 업데이트
     public ResponseEntity<?> update(@RequestBody @Valid List<Cartrequest.updateDto> requestDto,
                                     Error error,
                                     @AuthenticationPrincipal CustomUserDetails customUserDetails){

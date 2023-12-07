@@ -31,6 +31,7 @@ public class Ucontroller {
     @PostMapping("/join")
     public ResponseEntity join(@RequestBody @Valid URequest.JoinDTO dto){
         Optional<Uuser> byE = ureposit.findByEmail(dto.getEmail());
+        System.out.println("ddd");
 
         if(byE.isPresent()){
             throw new Exception400("이미 존재하는 이멜입니다: "+ dto.getEmail());
@@ -55,6 +56,7 @@ public class Ucontroller {
             Authentication authentication =  authenticationManager.authenticate(
                     usernamePasswordAuthenticationToken
             );
+
 
             // ** 인증 완료 값을 받아온다.
             CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();

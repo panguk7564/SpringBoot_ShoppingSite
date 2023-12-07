@@ -60,7 +60,8 @@ public class Cartservice {
     }
 
     @Transactional
-    public Cartresponse.updateDto update(List<Cartrequest.updateDto> requestDto, Uuser user) {
+    public Cartresponse.updateDto update(List<Cartrequest.updateDto> requestDto, Uuser user) { // -- 상품 업데이트
+
         List<Cart> cartList = cartreposit.findAllByUserId(user.getId());
 
         List<Long> cartId = cartList.stream().map(cart -> cart.getId()).collect(Collectors.toList());
@@ -70,12 +71,12 @@ public class Cartservice {
             throw new Exception404("장바구니에 상품이 없어요");
         }
         if(requestIds.stream().distinct().count() != requestIds.size()){
-            throw new Exception400("동일한 카티 ID입니다.");
+            throw new Exception400("동일한 카트 ID입니다.");
         }
 
         for(Long requestid : requestIds){
             if(!cartId.contains(requestid)){
-                throw new Exception400("카트에 없는 상품입니다.");
+                throw new Exception400("카트에 없는 상품입니다: "+requestid);
             }
         }
 
@@ -85,7 +86,6 @@ public class Cartservice {
                     cart.update(updateDto.getQuantity(),cart.getPrice() * cart.getMaxQuantity());
                 }
             }
-
         }
         return new Cartresponse.updateDto(cartList);
     }
