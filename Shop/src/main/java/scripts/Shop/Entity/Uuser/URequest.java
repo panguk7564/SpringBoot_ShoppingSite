@@ -41,12 +41,14 @@ public class URequest {
         @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%^&+=!~`<>,./?;:'\"\\[\\]{}\\\\()|_-])\\S*$", message = "영문, 숫자, 특수문자가 포함되어야하고 공백이 포함될 수 없습니다.")
         private String password;
 
+        private String token;
 
 
         public Uuser toEntity() {
             return Uuser.builder()
                     .email(email)
                     .pass(password)
+                    .token(token)
                     .roles(Collections.singletonList("ROLE_USER"))
                     .build();
         }

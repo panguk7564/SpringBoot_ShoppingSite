@@ -19,10 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-
 @Slf4j
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+
         super(authenticationManager);
     }
 
@@ -34,6 +34,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         String prefixJwt = request.getHeader(JwtTokenProvider.HEADER);
 
         // ** 헤더가 없다면 더이상 이 메서드에서 할 일은 없음. 다음으로 넘김.
+
         if(prefixJwt == null) {
             chain.doFilter(request, response);
             return;
@@ -66,9 +67,12 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     customUserDetails.getPassword(),
                     customUserDetails.getAuthorities()
             );
+            System.out.println(customUserDetails.getAuthorities());
+            System.out.println(customUserDetails.getUser().getId());
 
             // ** SecurityContext에 저장.
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println();
             log.debug("인증 객체 생성");
         }
         catch (SignatureVerificationException sve) {

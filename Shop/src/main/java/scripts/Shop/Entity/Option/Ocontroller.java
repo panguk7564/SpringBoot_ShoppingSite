@@ -32,7 +32,7 @@ public class Ocontroller {
 
     @GetMapping("/options") //-- 전체 옵션 출력
     public ResponseEntity<?> findAll(@AuthenticationPrincipal CustomUserDetails customUserDetails){
-        System.out.println(customUserDetails.getUser());
+        System.out.println(customUserDetails.getUser().getId());
 
         List<OResponse.FindAllDto> optionsResponse = service.findAll(); //-- 수정요망
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(optionsResponse);
