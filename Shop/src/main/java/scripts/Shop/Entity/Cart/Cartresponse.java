@@ -18,14 +18,14 @@ public class Cartresponse { // -- 교차형 데이터 공유(브릿지패턴)
         private List<CartDto> dtoList;
         private Long totalprice;
 
-        public updateDto(List<Cart> dtoList) {
+        public updateDto(List<Cart> dtoList) { // 전체 상품 목록 객체화
             this.dtoList = dtoList.stream().map(CartDto::new).collect(Collectors.toList());
             this.totalprice = totalprice;
         }
 
         @Getter
         @Setter
-        private class CartDto {
+        private class CartDto { //-- 상품 목록 객체화
 
             private Long cartId;
 
@@ -50,7 +50,7 @@ public class Cartresponse { // -- 교차형 데이터 공유(브릿지패턴)
 
     @Getter
     @Setter
-    public static class findAllDto {
+    public static class findAllDto { //-- 상품 전체출력
 
         List<ProductDto> products;
 

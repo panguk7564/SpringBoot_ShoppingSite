@@ -21,19 +21,19 @@ import javax.persistence.*;
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //--pk
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY) // -- 본 상품
     private Option option;
 
     @ManyToOne(fetch = FetchType.LAZY) //-- 유저 별로 카트에 몪임
     private Uuser user;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // -- 상품 수량
     private Long maxQuantity;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // -- 상품 가격
     private Long price;
 
     @Builder

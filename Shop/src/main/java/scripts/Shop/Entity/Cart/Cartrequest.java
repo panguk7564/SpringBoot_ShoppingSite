@@ -9,7 +9,7 @@ public class Cartrequest {
 
     @Getter
     @Setter
-    public static class saveDto{
+    public static class saveDto{ // -- 저장 DTO
         private Long optionId;
         private Long quantity;
 
@@ -17,8 +17,8 @@ public class Cartrequest {
             return Cart.builder()
                     .option(option)
                     .user(user)
-                    .maxQuantity(quantity)
-                    .price(option.getPrice() * quantity)
+                    .maxQuantity(quantity) //-- 담을수 있는 최대 수
+                    .price(option.getPrice() * quantity) // -- 전체 상품 가격
                     .build();
         }
     }
