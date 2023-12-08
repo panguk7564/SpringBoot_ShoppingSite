@@ -3,10 +3,7 @@ package scripts.Shop.Entity.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
@@ -29,7 +26,7 @@ public class Cartcontroller {
         return ResponseEntity.ok(apiResult);
     }
 
-    @GetMapping("/carts/update") // -- 장바구니 업데이트
+    @PostMapping("/carts/update") // -- 장바구니 업데이트
     public ResponseEntity<?> update(@RequestBody @Valid List<Cartrequest.updateDto> requestDto,
                                     Error error,
                                     @AuthenticationPrincipal CustomUserDetails customUserDetails){
@@ -46,6 +43,18 @@ public class Cartcontroller {
         Cartresponse.findAllDto dto = service.findAll();//-- 인증된 유저의 상품 전체 불러오기
 
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(dto);
+        return ResponseEntity.ok(apiResult);
+    }
+
+
+    @GetMapping("/carts/delete/{id}")
+    public ResponseEntity<?> delete_cart(@PathVariable Long id,
+                                         Error error,
+                                         @AuthenticationPrincipal CustomUserDetails customUserDetails) // -- 인증후 실행
+    {
+        service.deletecart(id); // -- 인증된 유저에게 상품 추가
+
+        ApiUtils.ApiResult<?> apiResult = ApiUtils.success("장바구니 목록이 삭제됨: 번호."+id);
         return ResponseEntity.ok(apiResult);
     }
 

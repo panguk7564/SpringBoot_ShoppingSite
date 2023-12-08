@@ -10,9 +10,7 @@ import scripts.Shop.core.error.exception.Exception400;
 import scripts.Shop.core.error.exception.Exception404;
 import scripts.Shop.core.error.exception.Exception500;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -34,7 +32,8 @@ public class Cartservice {
 
         Set<Long> optionId = new HashSet<>(); //-- 동일한 데이터를 묶어줌
 
-       /* for(Cartrequest.saveDto cart : saveDtos){ // -- 동일상품 예외처리
+
+       /* for(Cartrequest.saveDto cart : saveDtos){ // -- 동일상품 예외처리 (잠시 보류)
             if(!optionId.add(cart.getOptionId()));
             throw new Exception400("동일 상품 옵션 중복됨: "+cart.getOptionId());
         }
@@ -84,11 +83,16 @@ public class Cartservice {
 
         for(Cartrequest.updateDto updateDto : requestDto){
             for(Cart cart : cartList){
-                if(cart.getId() == updateDto.getCartid()){
-                    cart.update(updateDto.getQuantity(),cart.getPrice() * cart.getItem_Quantity());
+                if(cart.getId() == updateDto.getCartid()){ //-- 수량에 비례한 가격 업데이트
+                    cart.update(updateDto.getQuantity(),cart.getOption().getPrice() * updateDto.getQuantity());
                 }
             }
         }
         return new Cartresponse.updateDto(cartList);
+    }
+
+    @Transactional
+    public void deletecart(Long cartid) { // -- 상품 아이디별 삭제
+            cartreposit.deleteById(cartid);
     }
 }

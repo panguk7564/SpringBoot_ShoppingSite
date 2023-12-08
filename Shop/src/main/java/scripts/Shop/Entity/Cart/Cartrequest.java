@@ -29,4 +29,8 @@ public class Cartrequest {
         private Long cartid;
         private Long quantity;
     }
+
+    public class deleteDto {
+        private Long cartid;
+    }
 }
