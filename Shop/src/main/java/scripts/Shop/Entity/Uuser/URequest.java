@@ -63,6 +63,8 @@ public class URequest {
         return Uuser.builder()
                 .email(uuser.getEmail())
                 .id(uuser.getId())
+                .name(uuser.getName())
+                .img(uuser.getImg())
                 .build();
     }
 }

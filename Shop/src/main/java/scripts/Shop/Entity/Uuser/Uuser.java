@@ -44,7 +44,7 @@ public class Uuser {
         this.roles = roles;
     }
 
-    public void update(String email, String pass,String img) {
+    public void update(String email, String pass, String img) {
         this.email = email;
         this.pass = pass;
         this.img = img;

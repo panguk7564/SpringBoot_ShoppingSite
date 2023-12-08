@@ -34,7 +34,7 @@ public class Uservice {
             String enPass = passwordEncoder.encode(dto.getPassword());
             dto.setPassword(enPass);
 
-        uuser.update(dto.getEmail(),dto.getPassword(),dto.);
+        uuser.update(dto.getEmail(),dto.getPassword(), dto.getImg());
 
         ureposit.save(uuser);
 
