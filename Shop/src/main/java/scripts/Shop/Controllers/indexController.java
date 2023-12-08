@@ -9,19 +9,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+import scripts.Shop.Entity.Product.Product;
+import scripts.Shop.Entity.Product.Pservice;
 import scripts.Shop.Entity.Uuser.Uservice;
 import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.security.CustomUserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class indexController {
     private final Uservice service;
-    private final AuthenticationManager authenticationManager;
+    private final Pservice pservice;
 
     @GetMapping("/")
     public String index(){
@@ -59,6 +63,13 @@ public class indexController {
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/";
+    }
+
+    @GetMapping("/items")
+    public String shop(Model model){
+        List<Product> productList = pservice.findall();
+        model.addAttribute("itemlist",productList);
+        return "items";
     }
 
 }

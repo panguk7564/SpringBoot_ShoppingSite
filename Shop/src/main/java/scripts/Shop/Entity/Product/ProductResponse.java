@@ -4,12 +4,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import scripts.Shop.Entity.Option.Option;
+import scripts.Shop.Entity.Uuser.Uuser;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class ProductResponse {
+
+    public static Product listofUser(Product product) {
+        return product.builder()
+                .id(product.getId())
+                .productName(product.getProductName())
+                .price(product.getPrice())
+                .description(product.getDescription())
+                .img(product.getImg())
+                .options(product.getOptions())
+                .build();
+    }
 
     @NoArgsConstructor
     @Getter

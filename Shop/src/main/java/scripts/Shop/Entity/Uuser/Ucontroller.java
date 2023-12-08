@@ -16,6 +16,7 @@ import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.security.JwtTokenProvider;
 import scripts.Shop.core.utils.ApiUtils;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class Ucontroller {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid URequest.JoinDTO requestDTO){
+    public ResponseEntity<?> login(@RequestBody @Valid URequest.JoinDTO requestDTO, HttpSession session){
 
         String jwt = "";
 
@@ -70,6 +71,7 @@ public class Ucontroller {
             requestDTO.setToken(jwt);
             service.tokensave(customUserDetails.getUser().getId(), requestDTO);
             service.tokenThrower(customUserDetails.getUser().getId(),"/login");
+            session.setAttribute("loginBy", requestDTO.getEmail());
 
         }catch (Exception e){
             // 401 반환.

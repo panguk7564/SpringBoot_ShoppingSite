@@ -26,21 +26,28 @@ public class Uuser {
 
     private String token;
 
+    private String name;
+
+    private String img;
+
     @Convert(converter = StringArrayConverter.class)
     private List<String> roles = new ArrayList<>();
 
     @Builder
-    public Uuser(Long id, String email, String pass,String token ,List<String> roles) {
+    public Uuser(Long id, String email, String pass, String token, String name, String img, List<String> roles) {
         this.id = id;
         this.email = email;
         this.pass = pass;
         this.token = token;
+        this.name = name;
+        this.img = img;
         this.roles = roles;
     }
 
-    public void update(String email, String pass) {
+    public void update(String email, String pass,String img) {
         this.email = email;
         this.pass = pass;
+        this.img = img;
     }
 
     public void setToken(String token) {

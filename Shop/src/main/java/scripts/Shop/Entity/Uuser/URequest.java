@@ -43,6 +43,10 @@ public class URequest {
 
         private String token;
 
+        private String name;
+
+        private String img;
+
 
         public Uuser toEntity() {
             return Uuser.builder()
@@ -50,6 +54,8 @@ public class URequest {
                     .pass(password)
                     .token(token)
                     .roles(Collections.singletonList("ROLE_USER"))
+                    .name(name)
+                    .img(img)
                     .build();
         }
     }

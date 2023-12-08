@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품목록</title>
+</head>
+<body>
+<h2>상점</h2>
+<table>
+    <tr>
+        <th>상세조회</th>
+        <th>삭제</th>
+    </tr>
+    <tr th:each="item: ${itemlist}">
+        <td th:text="${item.productName}"></td>
+        <td>
+            <!-- query string /member?id=1
+                rest api /member/1 -->
+            <a th:href="@{|/item/${item.id}|}">조회</a>
+        </td>
+        <td>
+            <a th:href="@{|/item/delete/${item.id}|}">삭제</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

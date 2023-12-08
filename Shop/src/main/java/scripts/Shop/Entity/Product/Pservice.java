@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oreposit;
+import scripts.Shop.Entity.Uuser.URequest;
+import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.error.exception.Exception404;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -98,5 +101,14 @@ public class Pservice {
             return null;
 
         }
+    }
+
+    public List<Product> findall() {
+        List<Product> productList = reposit.findAll();
+        List<Product> pdto = new ArrayList<>();
+        for(Product product: productList){
+            pdto.add(ProductResponse.listofUser(product));
+        }
+        return pdto;
     }
 }
