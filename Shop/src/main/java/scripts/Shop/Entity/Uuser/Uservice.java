@@ -1,10 +1,18 @@
 package scripts.Shop.Entity.Uuser;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,6 +21,8 @@ import java.util.Optional;
 public class Uservice {
     private final Ureposit ureposit;
     private final PasswordEncoder passwordEncoder;
+    private final HttpClient client = HttpClientBuilder.create().build();
+    private HttpPost post = null;
 
     @Transactional
     public Uuser update(Long id, URequest.JoinDTO dto){
@@ -24,7 +34,7 @@ public class Uservice {
             String enPass = passwordEncoder.encode(dto.getPassword());
             dto.setPassword(enPass);
 
-        uuser.update(dto.getEmail(),dto.getPassword(),dto.getToken());
+        uuser.update(dto.getEmail(),dto.getPassword());
 
         ureposit.save(uuser);
 
@@ -35,4 +45,80 @@ public class Uservice {
         }
     }
 
+    @Transactional
+    public Uuser tokensave(Long id, URequest.JoinDTO requestDTO){
+        Optional<Uuser> findId = ureposit.findById(id);
+
+        if(findId.isPresent()){
+
+            Uuser uuser = findId.get();
+            uuser.setToken(requestDTO.getToken());
+
+            ureposit.save(uuser);
+            return uuser;
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    public List<Uuser> findall() {
+        List<Uuser> memlist = ureposit.findAll();
+        List<Uuser> memedto = new ArrayList<>();
+        for(Uuser uuser1: memlist){
+            memedto.add(URequest.listofUser(uuser1));
+        }
+        return memedto;
+    }
+
+    public Uuser findByid(Long id) {
+        Optional<Uuser> byid = ureposit.findById(id);
+        if(byid.isPresent()){
+            return URequest.listofUser(byid.get());
+        }
+        else {return null;}
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        ureposit.deleteById(id);
+        System.out.println("잘가시게" + id);
+    }
+
+    public String tokencall(Long id){
+        Optional<Uuser> user = ureposit.findById(id);
+        String token = user.get().getToken();
+        return token;
+    }
+
+    public JsonNode tokenThrower(Long id, String url) {
+        Optional<Uuser> user = ureposit.findById(id);
+        String token = user.get().getToken();
+
+        try{
+            System.out.println(token);
+            post = new HttpPost("http://localhost:8080"+url);
+            post.addHeader("Authorization", token);
+
+            final HttpResponse response = client.execute(post);
+
+            return jsonResponse(response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JsonNode jsonResponse(HttpResponse response){
+        try{
+            JsonNode returnNode = null;
+            ObjectMapper mapper = new ObjectMapper();
+            returnNode = mapper.readTree(response.getEntity().getContent());
+
+            return  returnNode;
+        } catch (Exception e){
+            e.printStackTrace();
+        } return null;
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import scripts.Shop.core.error.exception.Exception400;
 import scripts.Shop.core.error.exception.Exception401;
@@ -16,6 +17,7 @@ import scripts.Shop.core.security.JwtTokenProvider;
 import scripts.Shop.core.utils.ApiUtils;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -63,8 +65,11 @@ public class Ucontroller {
             // ** 토큰 발급.
             jwt = JwtTokenProvider.create(customUserDetails.getUser());
 
+
+
             requestDTO.setToken(jwt);
-            service.update(customUserDetails.getUser().getId(),requestDTO);
+            service.tokensave(customUserDetails.getUser().getId(), requestDTO);
+            service.tokenThrower(customUserDetails.getUser().getId(),"/login");
 
         }catch (Exception e){
             // 401 반환.

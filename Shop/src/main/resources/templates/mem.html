@@ -8,12 +8,12 @@
 <h2>동포들</h2>
 <table>
     <tr>
-        <th>이름</th>
+        <th>유저</th>
         <th>상세조회</th>
         <th>삭제</th>
     </tr>
     <tr th:each="member: ${userlist}">
-        <td th:text="${member.Name}"></td>
+        <td th:text="${member.email}"></td>
         <td>
             <!-- query string /member?id=1
                 rest api /member/1 -->

@@ -38,8 +38,8 @@ public class Orervices {
             Item item = Item.builder()
                     .option(cart.getOption())
                     .order(order)
-                    .quantity(cart.getMaxQuantity())
-                    .price(cart.getOption().getPrice() * cart.getMaxQuantity())
+                    .quantity(cart.getItem_Quantity())
+                    .price(cart.getOption().getPrice() * cart.getItem_Quantity())
                     .build();
 
             itmelist.add(item);

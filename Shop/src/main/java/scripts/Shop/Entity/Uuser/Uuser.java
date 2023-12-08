@@ -38,9 +38,12 @@ public class Uuser {
         this.roles = roles;
     }
 
-    public void update(String email, String pass, String token) {
+    public void update(String email, String pass) {
         this.email = email;
         this.pass = pass;
-        this.token =  token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

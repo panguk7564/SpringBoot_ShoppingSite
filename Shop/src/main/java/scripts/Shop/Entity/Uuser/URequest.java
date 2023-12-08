@@ -53,6 +53,12 @@ public class URequest {
                     .build();
         }
     }
+    public static Uuser listofUser(Uuser uuser) {
+        return Uuser.builder()
+                .email(uuser.getEmail())
+                .id(uuser.getId())
+                .build();
+    }
 }
 
 

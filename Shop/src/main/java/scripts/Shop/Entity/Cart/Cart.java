@@ -31,22 +31,22 @@ public class Cart {
     private Uuser user;
 
     @Column(nullable = false) // -- 상품 수량
-    private Long maxQuantity;
+    private Long item_Quantity;
 
     @Column(nullable = false) // -- 상품 가격
     private Long price;
 
     @Builder
-    public Cart(Long id, Option option, Uuser user, Long maxQuantity, Long price) {
+    public Cart(Long id, Option option, Uuser user, Long item_Quantity, Long price) {
         this.id = id;
         this.option = option;
         this.user = user;
-        this.maxQuantity = maxQuantity;
+        this.item_Quantity = item_Quantity;
         this.price = price;
     }
 
     public void update(Long quantity, Long price){
-        this.maxQuantity = quantity;
+        this.item_Quantity = quantity;
         this.price = price;
     }
 }

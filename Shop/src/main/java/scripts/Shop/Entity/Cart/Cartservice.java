@@ -34,10 +34,12 @@ public class Cartservice {
 
         Set<Long> optionId = new HashSet<>(); //-- 동일한 데이터를 묶어줌
 
-        for(Cartrequest.saveDto cart : saveDtos){ // -- 동일상품 예외처리
+       /* for(Cartrequest.saveDto cart : saveDtos){ // -- 동일상품 예외처리
             if(!optionId.add(cart.getOptionId()));
             throw new Exception400("동일 상품 옵션 중복됨: "+cart.getOptionId());
         }
+
+        */
 
         List<Cart> cartList = saveDtos.stream().map(cartdto -> //-- 상품 존재유무 확인
         {
@@ -83,7 +85,7 @@ public class Cartservice {
         for(Cartrequest.updateDto updateDto : requestDto){
             for(Cart cart : cartList){
                 if(cart.getId() == updateDto.getCartid()){
-                    cart.update(updateDto.getQuantity(),cart.getPrice() * cart.getMaxQuantity());
+                    cart.update(updateDto.getQuantity(),cart.getPrice() * cart.getItem_Quantity());
                 }
             }
         }
