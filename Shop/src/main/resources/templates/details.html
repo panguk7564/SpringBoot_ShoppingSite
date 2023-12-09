@@ -41,7 +41,9 @@
 <div class="container">
     <h1>유저 id: <span th:text="${users.Id}"></span><br> </h1>
     <p>
+        이름: <span th:text="${users.getName}"></span><br>
         이메일: <span th:text="${users.getEmail}"></span><br>
+        <img th:src="${users.getImg}" alt="프로필 사진"><br>
     </p>
 </div>
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,8 +81,6 @@
     <img src="" alt="Random Photo">
 </div>
 
-<p th:text="${session.loginBy}"></p>
-
 <script>
     // 랜덤 이미지 URL 배열
     const imageUrls = [
@@ -108,9 +106,9 @@
 
     // 일정 시간마다 이미지 변경
     setInterval(() => {
-        imgElement.style.animationName = "none"; /
-        void imgElement.offsetWidth;
-        imgElement.style.animationName = "imageAnimation";
+        imgElement.style.animationName = "none"; // 애니메이션 제거
+        void imgElement.offsetWidth; // 리플로우 강제 처리
+        imgElement.style.animationName = "imageAnimation"; // 애니메이션 추가
         setRandomImage();
     }, 5000);
 </script>

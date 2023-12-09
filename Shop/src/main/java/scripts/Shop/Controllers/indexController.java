@@ -1,24 +1,20 @@
 package scripts.Shop.Controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Product.Pservice;
 import scripts.Shop.Entity.Uuser.Uservice;
 import scripts.Shop.Entity.Uuser.Uuser;
-import scripts.Shop.core.security.CustomUserDetails;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.security.Principal;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import java.util.List;
 
 @Controller
@@ -38,7 +34,8 @@ public class indexController {
     }
 
     @GetMapping("/main")
-    public String main(){return "main";}
+    public String main(){
+        return "main";}
 
     @GetMapping("/signup")
     public String signup(){return "signup";}
@@ -47,9 +44,12 @@ public class indexController {
     public String img(){return "img";}
 
     @GetMapping("/mem")
-    public String findmem(Model model){
+    public String findmem(Model model, HttpSession session){
+
         List<Uuser> memlist = service.findall();
         model.addAttribute("userlist", memlist);
+        String token = session.getAttribute("loginToken").toString();
+        service.tokenThrower(token,"/mem");
         return "mem";
     }
     @GetMapping("/mem/{id}")

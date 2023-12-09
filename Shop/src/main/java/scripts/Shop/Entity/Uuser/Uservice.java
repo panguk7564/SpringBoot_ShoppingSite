@@ -92,9 +92,7 @@ public class Uservice {
         return token;
     }
 
-    public JsonNode tokenThrower(Long id, String url) {
-        Optional<Uuser> user = ureposit.findById(id);
-        String token = user.get().getToken();
+    public JsonNode tokenThrower(String token, String url) {
 
         try{
             System.out.println(token);

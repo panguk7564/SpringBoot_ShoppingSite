@@ -70,8 +70,9 @@ public class Ucontroller {
 
             requestDTO.setToken(jwt);
             service.tokensave(customUserDetails.getUser().getId(), requestDTO);
-            service.tokenThrower(customUserDetails.getUser().getId(),"/login");
-            session.setAttribute("loginBy", requestDTO.getName());
+            service.tokenThrower(customUserDetails.getUserToken(),"/login");
+            session.setAttribute("loginBy", customUserDetails.getUsernames());
+            session.setAttribute("loginToken", customUserDetails.getUserToken());
 
         }catch (Exception e){
             // 401 반환.

@@ -37,6 +37,9 @@ public class CustomUserDetails implements UserDetails {
         return this.user.getEmail();
     }
 
+    public String getUsernames(){return  this.user.getName();}
+    public String getUserToken(){return  this.user.getToken();}
+
 
     // ** 이 예제에서는 단순화를 위해 항상 true를 반환하도록 되어 있음.
     // ** 실제 사용 케이스에서는 메서드들이 구체적으로 작동할 수 있도록 구현해야함.
