@@ -31,7 +31,7 @@ public class Product {
     // -- 가격
     private Long price;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY) // -- 댓글
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Option> options = new ArrayList<>();
 
 

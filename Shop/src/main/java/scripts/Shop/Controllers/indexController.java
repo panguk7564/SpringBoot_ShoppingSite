@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import scripts.Shop.Entity.Product.Product;
+import scripts.Shop.Entity.Product.ProductResponse;
 import scripts.Shop.Entity.Product.Pservice;
 import scripts.Shop.Entity.Uuser.Uservice;
 import scripts.Shop.Entity.Uuser.Uuser;
@@ -48,8 +49,6 @@ public class indexController {
 
         List<Uuser> memlist = service.findall();
         model.addAttribute("userlist", memlist);
-        String token = session.getAttribute("loginToken").toString();
-        service.tokenThrower(token,"/mem");
         return "mem";
     }
     @GetMapping("/mem/{id}")
@@ -59,6 +58,7 @@ public class indexController {
         System.out.println(id);
         return "details";
     }
+
     @GetMapping("/signout")
     public String logout(HttpSession session){
         session.invalidate();
@@ -72,4 +72,16 @@ public class indexController {
         return "items";
     }
 
+    @GetMapping("/itemadd")
+    public String additem(){
+    return "itemadd";
+    }
+
+    @GetMapping("/item/{id}")
+    public String itemdetail(@PathVariable Long id, Model model){
+        ProductResponse.FindByIdDto product = pservice.findByid(id);
+        model.addAttribute("items",product);
+        System.out.println(id);
+        return "itemdetails";
+    }
 }

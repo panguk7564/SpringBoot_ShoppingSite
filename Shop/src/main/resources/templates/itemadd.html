@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        form {
+            width: 500px; /* 크기 조정 */
+            float: left;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        form input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #006bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+<form id="myForm">
+    <label for="productName">상품명:</label>
+    <input type="text" name="productName" id="productName">
+
+    <label for="description">설명:</label>
+    <textarea name="description" id="description" cols="30" rows="6"></textarea>
+
+    <label for="price">가격:</label>
+    <input type="text" name="price" id="price">
+
+    <label for="stock">재고수:</label>
+    <input type="text" name="stock" id="stock">
+
+    사진첨부 : <input type="text" name="img" id="img"><br>
+
+    <input type="button" value="글 작성" onclick="submitForm()">
+</form>
+
+<script>
+    function submitForm() {
+        var form = document.getElementById('myForm');
+        var formData = new FormData(form);
+
+        var data = {};
+        formData.forEach(function(value, key){
+            data[key] = value;
+        });
+
+        var jsonData = JSON.stringify(data);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/add');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+           window.location.href = "/items";
+        };
+        xhr.send(jsonData);
+    }
+</script>
+
+</body>
+</html>

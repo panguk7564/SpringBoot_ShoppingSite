@@ -2,10 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>상품목록</title>
+    <title>상점</title>
 </head>
 <body>
 <h2>상점</h2>
+<a th:href="@{/main}">
+    <button style="background-color: blue; color: white;">뒤로가기</button>
+</a>
+
+<a th:href="@{/itemadd}">
+    <button style="background-color: blue; color: white;">상품 등록</button>
+</a>
 <table>
     <tr>
         <th>상세조회</th>
@@ -14,8 +21,6 @@
     <tr th:each="item: ${itemlist}">
         <td th:text="${item.productName}"></td>
         <td>
-            <!-- query string /member?id=1
-                rest api /member/1 -->
             <a th:href="@{|/item/${item.id}|}">조회</a>
         </td>
         <td>
