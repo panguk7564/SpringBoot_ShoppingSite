@@ -130,7 +130,8 @@ public class Uservice {
         } return null;
     }
 
-    @Transactional
+
+    /*@Transactional
     public void save(URequest.JoinDTO dto){
 
         Uuser uuser = dto.toEntity();
@@ -161,11 +162,12 @@ public class Uservice {
 
 
             freposit.save(img);
-*/
+
     }
 
     @Transactional
     public void save_nofile(URequest.JoinDTO dto) {
         ureposit.save(dto.toEntity());
     }
+    */
 }

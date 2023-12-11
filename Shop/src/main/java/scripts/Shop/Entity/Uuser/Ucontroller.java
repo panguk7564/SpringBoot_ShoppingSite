@@ -36,19 +36,16 @@ public class Ucontroller {
     @PostMapping("/join")
     public ResponseEntity join(@RequestBody @Valid URequest.JoinDTO dto){
         Optional<Uuser> byE = ureposit.findByEmail(dto.getEmail());
-
-
         if (byE.isPresent()) {
             throw new Exception400("이미 존재하는 이멜입니다: " + dto.getEmail());
         }
 
-
         String enPass = passwordEncoder.encode(dto.getPassword());
         dto.setPassword(enPass);
 
-        service.save(dto);
+        ureposit.save(dto.toEntity());
 
-        return ResponseEntity.ok(ApiUtils.success("회원가입 성공"));
+        return ResponseEntity.ok().body(ApiUtils.success("회원가입 성공:"+ dto.getName()));
 
     }
 
