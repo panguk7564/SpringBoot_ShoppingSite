@@ -10,16 +10,26 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import scripts.Shop.Entity.Img.ImgFile;
+import scripts.Shop.Entity.Img.ImgReposit;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class Uservice {
     private final Ureposit ureposit;
+    private final ImgReposit freposit;
+
     private final PasswordEncoder passwordEncoder;
     private final HttpClient client = HttpClientBuilder.create().build();
     private HttpPost post = null;
@@ -118,5 +128,44 @@ public class Uservice {
         } catch (Exception e){
             e.printStackTrace();
         } return null;
+    }
+
+    @Transactional
+    public void save(URequest.JoinDTO dto){
+
+        Uuser uuser = dto.toEntity();
+        ureposit.save(uuser);
+/*
+            String originFileName = file.getName();
+
+            // -- 확장자 추출
+            assert originFileName != null;
+            String formatType = originFileName.substring(originFileName.lastIndexOf("."));
+
+            System.out.println("파일명: " + originFileName);
+            System.out.println("확장자: " + formatType);
+
+            //-- UUID 생성
+            String uuid = UUID.randomUUID().toString();
+
+
+
+            ImgFile img = ImgFile.builder() // -- 파일 객체 생성
+                    .imgName(originFileName)
+                    .imgSize(file.getSize())
+                    .imgType(formatType)
+                    .uuid(uuid)
+                    .uuser(uuser)
+                    .build();
+
+
+
+            freposit.save(img);
+*/
+    }
+
+    @Transactional
+    public void save_nofile(URequest.JoinDTO dto) {
+        ureposit.save(dto.toEntity());
     }
 }

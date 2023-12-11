@@ -13,14 +13,11 @@ import scripts.Shop.Entity.Uuser.Uservice;
 import scripts.Shop.Entity.Uuser.Uuser;
 
 import javax.servlet.http.HttpSession;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class indexController {
+public class ViewController {
     private final Uservice service;
     private final Pservice pservice;
 
@@ -83,5 +80,11 @@ public class indexController {
         model.addAttribute("items",product);
         System.out.println(id);
         return "itemdetails";
+    }
+
+    @GetMapping("/mem/delete/{id}")
+    public String delete(@PathVariable Long id){
+        service.deleteById(id);
+        return "redirect:/mem";
     }
 }

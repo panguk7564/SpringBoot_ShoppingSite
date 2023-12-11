@@ -9,15 +9,23 @@ spring:
     password: 9999
   servlet:
     multipart:
-      max-file-size: 152MB
-      max-request-size: 50MB
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+      file-size-threshold: 5MB
 
   thymeleaf:
     cache: false
 
   jpa:
+
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        hbm2ddl:
+          import_files: classpath:db/data.sql

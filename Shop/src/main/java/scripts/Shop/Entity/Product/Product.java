@@ -3,6 +3,7 @@ package scripts.Shop.Entity.Product;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Option.Option;
 
 import javax.persistence.*;
@@ -34,6 +35,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Option> options = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<ImgFile> product_img = new ArrayList<>();
 
     @Builder
     public Product(Long id, String productName, String description, String img, Long price, List<Option> options) {
