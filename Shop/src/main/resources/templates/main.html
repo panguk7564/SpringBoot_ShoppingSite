@@ -20,6 +20,21 @@
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
+        .adminbutton {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            background-color: #117rff;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
 
         .button:hover {
             transform: scale(1.05);
@@ -28,18 +43,26 @@
     </style>
 </head>
 <body>
-<h1> 어서오시오  <p th:text="${session.loginBy}"></p>,  천천히 둘러보시오 </h1>
+
+<a th:if="${session.loginBy}" th:href="@{'mem/' + ${session.loginBy.getId}}">
+    나의 정보(<span th:text="${session.loginBy.getName}"></span>)
+</a>
+<span th:unless="${session.loginBy}" onclick="location.href='/signup'" class="button">회원가입</span>
+
+
+<h1> 어서오시오
+    <p th:if="${session.loginBy}" th:text="${session.loginBy.getName}"></p>,
+    천천히 둘러보시오
+</h1>
 <div>
     <img src="https://mblogthumb-phinf.pstatic.net/MjAyMTExMDJfMTU4/MDAxNjM1NzgxOTQ3OTQ5.udF8IqcBE1LV8Sswpb6z5ZbF2_bpqZWbkPHEPZLp3GIg.O4J8MrGmfd9D-AG-Bs6wBLkDDgqLiWPeV2TZclV_Eokg.JPEG.bnm119/IMG_7872.jpg?type=w800" alt="User Image" width="800">
 </div>
 
-
-
 <!-- 다른 HTML로 이동하는 버튼 -->
 <a href="img" class="button">오늘의 명언</a>
-<a href="mem" class="button">유저 정보</a>
 <a href="items" class="button">상품 구경하기</a>
-<a href="signout" class="button">로그아웃</a>
+<a th:if="${session.loginBy}" href="signout" class="button">로그아웃</a>
+<a th:unless="${session.loginBy}" href="login" class="button">로그인</a><br>
 
 </body>
 </html>

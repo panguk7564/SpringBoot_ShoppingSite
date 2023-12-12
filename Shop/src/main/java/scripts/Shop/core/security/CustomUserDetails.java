@@ -37,7 +37,8 @@ public class CustomUserDetails implements UserDetails {
         return this.user.getEmail();
     }
 
-    public String getUsernames(){return  this.user.getName();}
+    public Long getUserId(){return  this.user.getId();}
+
     public String getUserToken(){return  this.user.getToken();}
 
 

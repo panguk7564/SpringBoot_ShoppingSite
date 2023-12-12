@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        form {
+            width: 500px; /* 크기 조정 */
+            float: left;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        form input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #006bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+<form th:action="@{'/edit/' + ${user.Id}}" method="post" enctype="multipart/form-data">
+
+    <h1>유저 ID <span th:text="${user.Id}"></span><br> </h1>
+    <br>
+
+    <label for="Name">이름: </label>
+    <input type="text" name="Name" id="Name" th:value="${user.Name}">
+
+    <label for="Email">이메일: </label>
+    <input type="text" name="Email" id="Email" th:value="${user.Email}">
+
+    <label for="password">비번: </label>
+    <input type="password" name="password" id="password" th:value="${user.Pass}">
+
+    <label for="file">파일 첨부:</label>
+    <input type="file" id="file" name="file">
+    <br>
+
+
+    <input type="submit" value="수정">
+</form>
+</body>
+</html>

@@ -30,6 +30,7 @@ import java.util.Optional;
 public class Ucontroller {
     private final Ureposit ureposit; //-- 삭제 요망 (서비스)
     private final Uservice service;
+    private final ImgService iservice;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -77,7 +78,11 @@ public class Ucontroller {
 
             requestDTO.setToken(jwt);
             service.tokensave(customUserDetails.getUser().getId(), requestDTO);
-            session.setAttribute("loginBy", customUserDetails.getUsernames());
+
+            Uuser logined_user =  service.findByEmail(customUserDetails.getUser().getEmail());
+            System.out.println(logined_user.getId());
+
+            session.setAttribute("loginBy", logined_user);
             session.setAttribute("loginToken", customUserDetails.getUserToken());
 
         } catch (Exception e) {
@@ -86,11 +91,15 @@ public class Ucontroller {
         }
         return ResponseEntity.ok().header(JwtTokenProvider.HEADER, jwt).body(ApiUtils.success("로그인 완료"));
     }
+    @PostMapping("edit/{id}") // -- 게사글 수정 완료
+    public ResponseEntity<?> user_update(@PathVariable Long id, @ModelAttribute URequest.JoinDTO dto, @RequestParam("file") MultipartFile file) throws IOException {
+        service.update(id, dto);
 
-    @PostMapping("/mem/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody URequest.JoinDTO dto) {
-        Uuser user = service.update(id, dto);
+        if (!file.isEmpty()){ iservice.update(id, file); }
 
-        return ResponseEntity.ok().body(user.getEmail());
+        else {System.out.println("파일없음");}
+
+        return ResponseEntity.ok().body(dto.getEmail());
     }
+
 }

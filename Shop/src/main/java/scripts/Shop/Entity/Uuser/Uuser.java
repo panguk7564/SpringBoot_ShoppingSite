@@ -47,7 +47,8 @@ public class Uuser {
     }
 
 
-    public void update(String email, String pass) {
+    public void update(String name, String email, String pass) {
+        this.name = name;
         this.email = email;
         this.pass = pass;
     }

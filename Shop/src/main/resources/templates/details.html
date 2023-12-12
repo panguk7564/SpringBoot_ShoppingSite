@@ -35,20 +35,61 @@
             height: auto;
             max-width: 100%;
         }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            padding: 0;
+        }
+        li {
+            list-style-type: none;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>유저 id: <span th:text="${users.Id}"></span><br> </h1>
+    <h1>유저 id: <span th:text="${users.Id}"></span></h1>
     <p>
         이름: <span th:text="${users.getName}"></span><br>
-        이메일: <span th:text="${users.getEmail}"></span><br>
-        <li th:each="file : ${file}">
-            <!-- 이미지 표시 -->
-            <img th:src="@{|/download/${file.uuid}/${file.imgName}|}" alt="첨부 이미지">
-        </li>
-        </ul>
+        이메일: <span th:text="${users.getEmail}"></span>
     </p>
+
+    <tr>
+        <td>
+            <div th:if="${file != null}">
+                <ul>
+                    <li th:each="file : ${file}">
+                        <!-- 이미지 표시 -->
+                        <img th:src="@{|/download/${file.uuid}/${file.imgName}|}" alt="첨부 이미지">
+                    </li>
+                </ul>
+            </div>
+        </td>
+    </tr>
+
+    <a th:href="@{/memedit/{id}(id=${users.Id})}" class="button">회원정보 수정</a>
+    <a href="#" class="button" style="background-color: #f44336;" th:onclick="'confirmDelete(\'' + ${users.Id} + '\')'">회원탈퇴</a>
 </div>
+
+<script>
+    function confirmDelete(userId) {
+        if (confirm("정말로 회원탈퇴를 하시겠습니까?")) {
+            alert("잘가시게");
+            window.location.href = "/mem/delete/" + userId;
+        }
+    }
+</script>
+
+
 </body>
 </html>

@@ -34,8 +34,11 @@ public class Uservice {
     private final String filePath = "C:/Users/G/Desktop/DB_Files/";
 
     private final PasswordEncoder passwordEncoder;
-    private final HttpClient client = HttpClientBuilder.create().build();
+
+/*    private final HttpClient client = HttpClientBuilder.create().build();
     private HttpPost post = null;
+
+ */
 
     @Transactional
     public Uuser update(Long id, URequest.JoinDTO dto){
@@ -47,8 +50,7 @@ public class Uservice {
             String enPass = passwordEncoder.encode(dto.getPassword());
             dto.setPassword(enPass);
 
-        uuser.update(dto.getEmail(),dto.getPassword());
-
+        uuser.update(dto.getName(),dto.getEmail(), dto.getPassword());
         ureposit.save(uuser);
 
         return uuser;
@@ -75,7 +77,6 @@ public class Uservice {
         }
     }
 
-
     public List<Uuser> findall() {
         List<Uuser> memlist = ureposit.findAll();
         List<Uuser> memedto = new ArrayList<>();
@@ -98,7 +99,7 @@ public class Uservice {
         ureposit.deleteById(id);
         System.out.println("잘가시게" + id);
     }
-
+/*
     public String tokencall(Long id){
         Optional<Uuser> user = ureposit.findById(id);
         String token = user.get().getToken();
@@ -121,6 +122,8 @@ public class Uservice {
         return null;
     }
 
+
+
     public JsonNode jsonResponse(HttpResponse response){
         try{
             JsonNode returnNode = null;
@@ -133,11 +136,12 @@ public class Uservice {
         } return null;
     }
 
+ */
+
 
     @Transactional
     public void save(URequest dto, MultipartFile file) throws IOException{
 
-        System.out.println("뭐지");
         Path uploadpath = Paths.get(filePath);
         Long userid = ureposit.save(dto.toEntity()).getId();
 
@@ -180,10 +184,8 @@ public class Uservice {
         System.out.println("저장완료");
     }
 
-
-    @Transactional
-    public void save_nofile(URequest.JoinDTO dto) {
-        ureposit.save(dto.toEntity());
+    public Uuser findByEmail(String email) {
+        Optional<Uuser> user = ureposit.findByEmail(email);
+        return user.get();
     }
-
 }

@@ -4,17 +4,19 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgService;
 import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Product.ProductResponse;
 import scripts.Shop.Entity.Product.Pservice;
+import scripts.Shop.Entity.Uuser.URequest;
 import scripts.Shop.Entity.Uuser.Uservice;
 import scripts.Shop.Entity.Uuser.Uuser;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -26,17 +28,13 @@ public class ViewController {
 
     @GetMapping("/")
     public String index(){
-        return "index";
+        return "main";
     }
 
     @GetMapping("/login")
     public String login(){
         return "login";
     }
-
-    @GetMapping("/main")
-    public String main(){
-        return "main";}
 
     @GetMapping("/signup")
     public String signup(){return "signup";}
@@ -50,14 +48,29 @@ public class ViewController {
         model.addAttribute("userlist", memlist);
         return "mem";
     }
+
     @GetMapping("/mem/{id}")
     public String findbyId(@PathVariable Long id, Model model){
         Uuser userDto = service.findByid(id);
         ImgFile imgFile = iservice.findByUserid(id);
+
         model.addAttribute("users",userDto);
         model.addAttribute("file",imgFile);
-        System.out.println(id);
+
         return "details";
+    }
+
+    @GetMapping("/memedit/{id}")
+    public String editor(@PathVariable Long id, Model model){
+        Uuser user = service.findByid(id);
+        model.addAttribute("user",user);
+        return "userupdate";
+    }
+
+    @GetMapping("/mem/delete/{id}")
+    public String delete(@PathVariable Long id){
+        service.deleteById(id);
+        return "redirect:/signout";
     }
 
     @GetMapping("/signout")
@@ -88,9 +101,4 @@ public class ViewController {
         return "itemdetails";
     }
 
-    @GetMapping("/mem/delete/{id}")
-    public String delete(@PathVariable Long id){
-        service.deleteById(id);
-        return "redirect:/mem";
-    }
 }
