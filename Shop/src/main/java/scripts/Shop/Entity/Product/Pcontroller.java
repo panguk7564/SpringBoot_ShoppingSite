@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,10 +21,10 @@ public class Pcontroller {
     private final Oservice oservice;
 
     @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody ProductResponse.FindAllDto dto){
-        Product product = service.addProduct(dto);
+    public ResponseEntity<?>add(@ModelAttribute ProductResponse dto, @RequestParam("file") MultipartFile [] files) throws IOException {
+        service.addProduct(dto,files);
 
-        return ResponseEntity.ok(ApiUtils.success(product));
+        return ResponseEntity.ok(ApiUtils.success("등록완료"));
     }
 
     @GetMapping("/delete/{id}")

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,5 +22,10 @@ public class ImgService {
     public ImgFile findByUserid(Long id) {
         Optional<ImgFile> imgFile = reposit.findByUserId(id);
         return imgFile.get();
+    }
+
+    public List<ImgFile> findAllByProdutId(Long id) {
+        List<ImgFile> imgs = reposit.findAllByProductId(id);
+        return  imgs;
     }
 }

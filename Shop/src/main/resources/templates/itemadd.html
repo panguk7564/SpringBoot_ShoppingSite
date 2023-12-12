@@ -55,7 +55,7 @@
 </head>
 
 <body>
-<form id="myForm">
+<form id="myForm" action="/add" method="POST" enctype="multipart/form-data">
     <label for="productName">상품명:</label>
     <input type="text" name="productName" id="productName">
 
@@ -68,7 +68,9 @@
     <label for="stock">재고수:</label>
     <input type="text" name="stock" id="stock">
 
-    사진첨부 : <input type="text" name="img" id="img"><br>
+    <label for="file">파일 첨부:</label>
+    <input type="file" id="file" name="file">
+    <br>
 
     <input type="button" value="글 작성" onclick="submitForm()">
 </form>
@@ -83,15 +85,19 @@
             data[key] = value;
         });
 
-        var jsonData = JSON.stringify(data);
-
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/add');
-        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function() {
-           window.location.href = "/items";
+           if (xhr.status === 200) {
+                // 전송 성공 시 메시지 출력 및 리다이렉트
+                alert("상품등록 완료");
+                window.location.href = "/items";
+            } else {
+                // 전송 실패 시 폼 초기화
+                alert("문제가 발생했구마")
+            }
         };
-        xhr.send(jsonData);
+        xhr.send(formData);
     }
 </script>
 

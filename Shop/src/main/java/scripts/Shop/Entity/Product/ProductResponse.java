@@ -9,8 +9,31 @@ import scripts.Shop.Entity.Uuser.Uuser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Getter
+@Setter
 public class ProductResponse {
+    private Long Id;
+    // -- 상품명
+    private String productName;
+    //-- 상품설명
+    private String description;
+
+    private Long price;
+
+    private Long stock;
+
+    private List<OptionDto> optionList;
+
+    public Product toEntity() {
+        return Product.builder()
+                .id(Id)
+                .productName(productName)
+                .description(description)
+                .price(price)
+                .build();
+    }
+
+
 
     public static Product listofUser(Product product) {
         return product.builder()
@@ -74,6 +97,8 @@ public class ProductResponse {
         private String img;
         //-- 상품 이미지
         private Long price;
+
+        private Long stock;
         // -- 상품 가격
         private List<OptionDto> optionList;
 
@@ -83,9 +108,18 @@ public class ProductResponse {
             this.description = product.getDescription();
             this.img = product.getImg();
             this.price = product.getPrice();
-            this.optionList = optionsList.stream().map(OptionDto::new)
+
+            Long totalQuantity = optionsList.stream()
+                    .mapToLong(Option::getQuantity)
+                    .sum();
+
+            this.stock = totalQuantity;
+
+            this.optionList = optionsList.stream()
+                    .map(OptionDto::new)
                     .collect(Collectors.toList());
         }
+
     }
 
     @Setter
@@ -104,6 +138,4 @@ public class ProductResponse {
 
         }
     }
-
-
 }

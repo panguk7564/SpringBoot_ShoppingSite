@@ -6,15 +6,24 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import scripts.Shop.Entity.Img.ImgFile;
+import scripts.Shop.Entity.Img.ImgReposit;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oreposit;
 import scripts.Shop.Entity.Uuser.URequest;
 import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.error.exception.Exception404;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +32,8 @@ import java.util.stream.Collectors;
 public class Pservice {
     private final Preposit reposit;
     private final Oreposit oreposit;
+    private final ImgReposit ireposit;
+    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
 
     public List<ProductResponse.FindAllDto> findAll(int page) {
         Pageable pageable = PageRequest.of(page, 3);
@@ -46,18 +57,60 @@ public class Pservice {
     }
 
     @Transactional
-    public Product addProduct(ProductResponse.FindAllDto dto) {
+    public Product addProduct(ProductResponse dto, MultipartFile [] files) throws IOException {
+
         Product product = reposit.save(dto.toEntity());
         Option option = Option.builder().optionName(dto.getProductName())
                 .price(dto.getPrice())
-                .o_img(dto.getImg())
                 .product(product)
                 .quantity(dto.getStock())
                 .build();
 
         oreposit.save(option);
+
+        for (MultipartFile file : files) {
+            Path uploadpath = Paths.get(filePath);
+
+            //-- 경로 부재시 폴더 생성
+            if (!Files.exists(uploadpath)) {
+                Files.createDirectories(uploadpath);
+            }
+
+            if (!file.isEmpty()) {
+
+                String originFileName = file.getOriginalFilename();
+
+                // -- 확장자 추출
+                assert originFileName != null;
+                String formatType = originFileName.substring(originFileName.lastIndexOf("."));
+
+                System.out.println("파일명: " + originFileName);
+                System.out.println("확장자: " + formatType);
+
+                //-- UUID 생성
+                String uuid = UUID.randomUUID().toString();
+
+                String path = filePath + uuid + originFileName;
+
+                file.transferTo(new File(path)); // -- 경로에 파일을 저장(파일이름: uuid+원본이름)
+
+                ImgFile imgFile = ImgFile.builder() // -- 파일 객체 생성
+                        .filePath(filePath)
+                        .imgName(originFileName)
+                        .uuid(uuid)
+                        .imgType(formatType)
+                        .imgSize(file.getSize())
+                        .product(product)
+                        .build();
+
+                ireposit.save(imgFile);
+            }
+            else { System.out.println("파일이 엄서요");}
+        }
         return product;
     }
+
+
 
     @Transactional
     public String remove(Long id) {

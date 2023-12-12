@@ -81,7 +81,9 @@ public class ViewController {
     @GetMapping("/item/{id}")
     public String itemdetail(@PathVariable Long id, Model model){
         ProductResponse.FindByIdDto product = pservice.findByid(id);
+        List<ImgFile> imges = iservice.findAllByProdutId(id);
         model.addAttribute("items",product);
+        model.addAttribute("files",imges);
         System.out.println(id);
         return "itemdetails";
     }
