@@ -33,7 +33,8 @@ public class Pservice {
     private final Preposit reposit;
     private final Oreposit oreposit;
     private final ImgReposit ireposit;
-    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    //private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
     public List<ProductResponse.FindAllDto> findAll(int page) {
         Pageable pageable = PageRequest.of(page, 3);

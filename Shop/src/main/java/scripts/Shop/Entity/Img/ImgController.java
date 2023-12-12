@@ -16,7 +16,8 @@ public class ImgController {
     @GetMapping("/download/{uuid}/{imgName}") // --> 파일 다운로드 기능
     public ResponseEntity<Resource> downloadFile(@PathVariable String uuid,
                                                  @PathVariable String imgName){
-        Path filepath = Paths.get("C:/Users/G/Desktop/DB_Files/"+uuid+imgName); // -- 경로설정 +파일이름(uuid + 파일이름)
+        //Path filepath = Paths.get("C:/Users/G/Desktop/DB_Files/"+uuid+imgName); // -- 경로설정 +파일이름(uuid + 파일이름)
+        Path filepath = Paths.get("C:/Users/bongd/Desktop/DB_Files/"+uuid+imgName);
 
         try{
             Resource ressource = new UrlResource(filepath.toUri());

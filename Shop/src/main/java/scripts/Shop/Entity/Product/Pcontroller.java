@@ -21,8 +21,8 @@ public class Pcontroller {
     private final Oservice oservice;
 
     @PostMapping("/add")
-    public ResponseEntity<?>add(@ModelAttribute ProductResponse dto, @RequestParam("file") MultipartFile [] files) throws IOException {
-        service.addProduct(dto,files);
+    public ResponseEntity<?>add(@ModelAttribute ProductResponse dto, @RequestParam("file") MultipartFile [] file) throws IOException {
+        service.addProduct(dto,file);
 
         return ResponseEntity.ok(ApiUtils.success("등록완료"));
     }

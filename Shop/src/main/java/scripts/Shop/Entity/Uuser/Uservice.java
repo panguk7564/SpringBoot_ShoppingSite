@@ -31,7 +31,8 @@ import java.util.UUID;
 public class Uservice {
     private final Ureposit ureposit;
     private final ImgReposit ireposit;
-    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    //private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
     private final PasswordEncoder passwordEncoder;
 
@@ -43,7 +44,6 @@ public class Uservice {
     @Transactional
     public Uuser update(Long id, URequest.JoinDTO dto){
         Optional<Uuser> findId = ureposit.findById(id);
-
         if(findId.isPresent()){
 
         Uuser uuser = findId.get();

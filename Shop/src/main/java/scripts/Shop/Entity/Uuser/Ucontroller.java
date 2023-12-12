@@ -91,15 +91,21 @@ public class Ucontroller {
         }
         return ResponseEntity.ok().header(JwtTokenProvider.HEADER, jwt).body(ApiUtils.success("로그인 완료"));
     }
-    @PostMapping("edit/{id}") // -- 게사글 수정 완료
-    public ResponseEntity<?> user_update(@PathVariable Long id, @ModelAttribute URequest.JoinDTO dto, @RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("edit/{id}") //-- 회원정보 수정
+    public ResponseEntity<?> user_update(@PathVariable Long id, @ModelAttribute URequest.JoinDTO dto, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         service.update(id, dto);
 
-        if (!file.isEmpty()){ iservice.update(id, file); }
-
-        else {System.out.println("파일없음");}
+        if (file != null && !file.isEmpty()) {
+            System.out.println("파일이요기잉네");
+            iservice.update(id, file);
+        }
+        else {
+            System.out.println("파일이 없습니다.");
+            iservice.deleteimg(id);
+        }
 
         return ResponseEntity.ok().body(dto.getEmail());
     }
+
 
 }

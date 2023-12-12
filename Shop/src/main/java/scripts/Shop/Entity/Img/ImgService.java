@@ -23,7 +23,8 @@ import java.util.UUID;
 public class ImgService {
     private final ImgReposit reposit;
     private final Ureposit ureposit;
-    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    //private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
     @Transactional
     public Long saveImg(imgDto dto){
@@ -49,16 +50,8 @@ public class ImgService {
     @Transactional
     public void update(Long id, MultipartFile file) throws IOException {
         System.out.println("파일좀");
-        Optional<ImgFile> oldfile = reposit.findByUserId(id);
-
-        if(oldfile.isPresent()) {
-
-        System.out.println(oldfile.get().getImgName());
-
-        reposit.deleteAllById(Collections.singleton(oldfile.get().getId()));
 
         Path uploadpath = Paths.get(filePath);
-
 
         if (!Files.exists(uploadpath)) {
             Files.createDirectories(uploadpath);
@@ -96,6 +89,13 @@ public class ImgService {
         } else {
             System.out.println("파일이 엄서요");
            }
-        }
+    }
+
+
+    @Transactional
+    public void deleteimg(Long id) {
+        Optional<ImgFile> oldFile = reposit.findByUserId(id);
+        reposit.deleteById(oldFile.get().getId());
+        System.out.println(oldFile.get().getUserId());
     }
 }
