@@ -24,16 +24,3 @@ insert into product (product_name, price, img, description) values ('Papayas', 1
 insert into product (product_name, price, img, description) values ('Pears - Fiorelle', 9748, 'https://robohash.org/hicquiavoluptatibus.jpg?size=50x50&set=set1', 'description');
 insert into product (product_name, price, img, description) values ('Honey - Lavender', 1707, 'https://robohash.org/occaecatiadipiscieius.jpg?size=50x50&set=set1', 'description');
 insert into product (product_name, price, img, description) values ('Monkfish - Fresh', 15417, 'https://robohash.org/vitaealiastempore.jpg?size=50x50&set=set1', 'description');
-
-insert into uuser (email, pass, roles) values ('tkrolak0@patch.com', 'eZ2<mnfpDdh', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('dpafford1@linkedin.com', 'vF8.<>JV', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('cwarwick2@slideshare.net', 'vU7=W`uzQ7}?A', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('dcunniffe3@theglobeandmail.com', 'mF0=B\Oq7LQ', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('mfreeburn4@jugem.jp', 'mP7\ZBqIm|EWe,&.', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('ldyneley5@webmd.com', 'kB5|<3w*r{9\_', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('jcadalleder6@cdbaby.com', 'tL6\3o.Or&+B\7', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('sbegin7@mlb.com', 'dR9"7rs3_}', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('pbiasioli8@dailymail.co.uk', 'zU8?''X"Q''/1', 'ROLE_USER');
-insert into uuser (email, pass, roles) values ('dfalconer9@360.cn', 'cM6<nrn<', 'ROLE_USER');
-
-

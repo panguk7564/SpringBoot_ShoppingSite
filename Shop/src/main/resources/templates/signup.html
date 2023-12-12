@@ -9,7 +9,7 @@
 
 <h1>Join</h1>
 
-<form id="joinForm" action="/join" method="POST">
+<form id="joinForm" action="/join" method="POST" enctype="multipart/form-data">
     <label for="name">이름:</label>
     <input type="text" id="name" name="name" required>
     <br>
@@ -19,36 +19,34 @@
     <label for="password">비번:</label>
     <input type="password" id="password" name="password" required>
     <br>
+    <label for="file">파일 첨부:</label>
+    <input type="file" id="file" name="file">
+    <br>
     <button type="button" onclick="submitForm()">가입하기</button>
 </form>
 
 <script>
     function submitForm() {
-     var form = document.getElementById('joinForm');
-     var formData = new FormData(form);
+        var form = document.getElementById('joinForm');
+        var formData = new FormData(form);
 
-     var data = {};
-     formData.forEach(function(value, key){
-         data[key] = value;
-     });
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/join');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // 전송 성공 시 메시지 출력 및 리다이렉트
+                alert("오서오시게");
+                window.location.href = "/";
+            } else {
+                // 전송 실패 시 폼 초기화
+                form.reset();
+                alert("이미 있는 계정입니다")
 
-     var jsonData = JSON.stringify(data);
-
-     var xhr = new XMLHttpRequest();
-     xhr.open('POST', '/join');
-     xhr.setRequestHeader('Content-Type', 'application/json');
-     xhr.onload = function() {
-         if (xhr.status === 200) {
-             // 전송 성공 시 메시지 출력 및 리다이렉트
-             alert("오서오시게");
-             window.location.href = "/";
-         } else {
-             // 전송 실패 시 폼 초기화
-             form.reset();
-         }
-     };
-     xhr.send(jsonData);
- }
+            }
+        };
+        xhr.send(formData);
+    }
 </script>
+
 </body>
 </html>

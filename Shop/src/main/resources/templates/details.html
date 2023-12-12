@@ -43,7 +43,11 @@
     <p>
         이름: <span th:text="${users.getName}"></span><br>
         이메일: <span th:text="${users.getEmail}"></span><br>
-        <img th:src="${users.getImg}" alt="프로필 사진"><br>
+        <li th:each="file : ${file}">
+            <!-- 이미지 표시 -->
+            <img th:src="@{|/download/${file.uuid}/${file.imgName}|}" alt="첨부 이미지">
+        </li>
+        </ul>
     </p>
 </div>
 </body>

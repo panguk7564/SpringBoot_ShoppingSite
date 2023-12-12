@@ -1,5 +1,6 @@
 package scripts.Shop.Entity.Uuser;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,12 +9,40 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collections;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class URequest {
+
+    @NotEmpty
+    @Pattern(regexp = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$", message = "이메일 형식으로 작성해주세요")
+    private String email;
+
+
+    @NotEmpty
+    @Size(min = 8, max = 20, message = "8자 이상 20자 이내로 작성 가능합니다.")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%^&+=!~`<>,./?;:'\"\\[\\]{}\\\\()|_-])\\S*$", message = "영문, 숫자, 특수문자가 포함되어야하고 공백이 포함될 수 없습니다.")
+    private String password;
+
+    private String token;
+
+    private String name;
+
+
+
+    public Uuser toEntity() {
+        return Uuser.builder()
+                .email(email)
+                .pass(password)
+                .token(token)
+                .roles(Collections.singletonList("ROLE_USER"))
+                .name(name)
+                .build();
+    }
 
     @Getter
     @Setter
     public static class JoinDTO {
-
         @NotEmpty
         /* ^: 문자열의 시작을 나타냅니다.
          * [A-Za-z0-9+_.-]: 영문 대소문자, 숫자, 특수 문자(+, _, ., -) 중 하나와 일치합니다. [] 사이에 있는 문자들 중 하나라도 일치하면 됩니다.
@@ -45,8 +74,6 @@ public class URequest {
 
         private String name;
 
-        private String img;
-
 
         public Uuser toEntity() {
             return Uuser.builder()
@@ -55,16 +82,15 @@ public class URequest {
                     .token(token)
                     .roles(Collections.singletonList("ROLE_USER"))
                     .name(name)
-                    .img(img)
                     .build();
         }
     }
+
     public static Uuser listofUser(Uuser uuser) {
         return Uuser.builder()
                 .email(uuser.getEmail())
                 .id(uuser.getId())
                 .name(uuser.getName())
-                .img(uuser.getImg())
                 .build();
     }
 }

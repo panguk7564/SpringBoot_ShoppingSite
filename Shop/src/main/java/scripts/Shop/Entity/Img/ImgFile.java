@@ -21,10 +21,9 @@ public class ImgFile {
     private Long imgSize;
     private String imgType;
     private String uuid;
+    private String filePath;
+    private Long userId;
 
-    @OneToOne
-    @JoinColumn(name = "uuser")
-    private Uuser uuser;
 
     @ManyToOne
     @JoinColumn(name = "product")
@@ -33,13 +32,14 @@ public class ImgFile {
 
 
     @Builder
-    public ImgFile(Long id, String imgName, Long imgSize, String imgType, String uuid, Uuser uuser, Product product) {
+    public ImgFile(Long id, String imgName, Long imgSize, String imgType, String uuid, String filePath, Long userId, Product product) {
         this.id = id;
         this.imgName = imgName;
         this.imgSize = imgSize;
         this.imgType = imgType;
         this.uuid = uuid;
-        this.uuser = uuser;
+        this.filePath = filePath;
+        this.userId = userId;
         this.product = product;
     }
 }

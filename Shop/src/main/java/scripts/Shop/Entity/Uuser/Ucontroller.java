@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import scripts.Shop.Entity.Img.ImgService;
 import scripts.Shop.core.error.exception.Exception400;
 import scripts.Shop.core.error.exception.Exception401;
 import scripts.Shop.core.security.CustomUserDetails;
@@ -34,19 +35,22 @@ public class Ucontroller {
 
 
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody @Valid URequest.JoinDTO dto){
-        Optional<Uuser> byE = ureposit.findByEmail(dto.getEmail());
-        if (byE.isPresent()) {
-            throw new Exception400("이미 존재하는 이멜입니다: " + dto.getEmail());
-        }
+    public ResponseEntity join(@ModelAttribute @Valid URequest dto, @RequestParam("file") MultipartFile file) throws IOException {
+        valideuser(dto.getEmail());
 
         String enPass = passwordEncoder.encode(dto.getPassword());
         dto.setPassword(enPass);
 
-        ureposit.save(dto.toEntity());
+        service.save(dto,file);
 
         return ResponseEntity.ok().body(ApiUtils.success("회원가입 성공:"+ dto.getName()));
+    }
 
+    private void valideuser(String email){
+        Optional<Uuser> uuser1 = ureposit.findByEmail(email);
+        if(uuser1.isPresent()){
+            throw new RuntimeException("이미 있는 계정입니다.");
+        }
     }
 
     @PostMapping("/login")

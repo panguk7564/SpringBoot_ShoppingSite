@@ -17,6 +17,8 @@ import scripts.Shop.Entity.Img.ImgReposit;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,8 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class Uservice {
     private final Ureposit ureposit;
-    private final ImgReposit freposit;
+    private final ImgReposit ireposit;
+    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
 
     private final PasswordEncoder passwordEncoder;
     private final HttpClient client = HttpClientBuilder.create().build();
@@ -44,7 +47,7 @@ public class Uservice {
             String enPass = passwordEncoder.encode(dto.getPassword());
             dto.setPassword(enPass);
 
-        uuser.update(dto.getEmail(),dto.getPassword(), dto.getImg());
+        uuser.update(dto.getEmail(),dto.getPassword());
 
         ureposit.save(uuser);
 
@@ -131,13 +134,20 @@ public class Uservice {
     }
 
 
-    /*@Transactional
-    public void save(URequest.JoinDTO dto){
+    @Transactional
+    public void save(URequest dto, MultipartFile file) throws IOException{
 
-        Uuser uuser = dto.toEntity();
-        ureposit.save(uuser);
-/*
-            String originFileName = file.getName();
+        System.out.println("뭐지");
+        Path uploadpath = Paths.get(filePath);
+        Long userid = ureposit.save(dto.toEntity()).getId();
+
+        if (!Files.exists(uploadpath)) {
+            Files.createDirectories(uploadpath);
+        }
+
+        if (!file.isEmpty()) {
+            // -- 파일명 추출
+            String originFileName = file.getOriginalFilename();
 
             // -- 확장자 추출
             assert originFileName != null;
@@ -149,25 +159,31 @@ public class Uservice {
             //-- UUID 생성
             String uuid = UUID.randomUUID().toString();
 
+            String path = filePath + uuid + originFileName;
 
+            file.transferTo(new File(path)); // -- 경로에 파일을 저장(파일이름: uuid+원본이름)
 
-            ImgFile img = ImgFile.builder() // -- 파일 객체 생성
+            ImgFile imgFile = ImgFile.builder() // -- 파일 객체 생성
+                    .filePath(filePath)
                     .imgName(originFileName)
-                    .imgSize(file.getSize())
-                    .imgType(formatType)
                     .uuid(uuid)
-                    .uuser(uuser)
+                    .imgType(formatType)
+                    .imgSize(file.getSize())
+                    .userId(userid)
                     .build();
 
-
-
-            freposit.save(img);
-
+            ireposit.save(imgFile);
+        } else {
+            System.out.println("파일이 엄서요");
+            ureposit.save(dto.toEntity());
+        }
+        System.out.println("저장완료");
     }
+
 
     @Transactional
     public void save_nofile(URequest.JoinDTO dto) {
         ureposit.save(dto.toEntity());
     }
-    */
+
 }

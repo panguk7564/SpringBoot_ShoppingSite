@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import scripts.Shop.Entity.Img.ImgFile;
+import scripts.Shop.Entity.Img.ImgService;
 import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Product.ProductResponse;
 import scripts.Shop.Entity.Product.Pservice;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ViewController {
     private final Uservice service;
     private final Pservice pservice;
+    private final ImgService iservice;
 
     @GetMapping("/")
     public String index(){
@@ -42,8 +45,7 @@ public class ViewController {
     public String img(){return "img";}
 
     @GetMapping("/mem")
-    public String findmem(Model model, HttpSession session){
-
+    public String findmem(Model model){
         List<Uuser> memlist = service.findall();
         model.addAttribute("userlist", memlist);
         return "mem";
@@ -51,7 +53,9 @@ public class ViewController {
     @GetMapping("/mem/{id}")
     public String findbyId(@PathVariable Long id, Model model){
         Uuser userDto = service.findByid(id);
+        ImgFile imgFile = iservice.findByUserid(id);
         model.addAttribute("users",userDto);
+        model.addAttribute("file",imgFile);
         System.out.println(id);
         return "details";
     }

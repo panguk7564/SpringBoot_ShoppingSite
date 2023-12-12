@@ -24,7 +24,7 @@ public class imgDto {
     private Long imgSize;
     private String imgType;
     private String uuid;
-    private Uuser uuser;
+    private String filePath;
     private Product product;
 
     public ImgFile toen(){
@@ -34,7 +34,7 @@ public class imgDto {
                 .imgSize(imgSize)
                 .imgType(imgType)
                 .uuid(uuid)
-                .uuser(uuser)
+                .filePath(filePath)
                 .product(product)
                 .build();
     }
