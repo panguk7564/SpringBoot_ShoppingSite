@@ -55,7 +55,7 @@
 </head>
 
 <body>
-<form id="myForm" action="/add" method="POST" enctype="multipart/form-data">
+<form id="additem" action="/add" method="POST" enctype="multipart/form-data">
     <label for="productName">상품명:</label>
     <input type="text" name="productName" id="productName">
 
@@ -69,37 +69,29 @@
     <input type="text" name="stock" id="stock">
 
     <label for="file">파일 첨부:</label>
-    <input type="file" id="file" name="file">
+    <input type="file" id="file" name="file" multiple >
     <br>
 
-    <input type="button" value="글 작성" onclick="submitForm()">
+    <input type="submit" value="글 작성">
 </form>
-
 <script>
-    function submitForm() {
-        var form = document.getElementById('myForm');
-        var formData = new FormData(form);
+    document.getElementById("additem").addEventListener("submit", function(event) {
+        event.preventDefault(); // 폼 기본 동작 중단
 
-        var data = {};
-        formData.forEach(function(value, key){
-            data[key] = value;
-        });
-
+        // 폼 데이터를 전송하는 비동기 요청
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/add');
+        xhr.open("POST", "/add");
         xhr.onload = function() {
-           if (xhr.status === 200) {
-                // 전송 성공 시 메시지 출력 및 리다이렉트
-                alert("상품등록 완료");
-                window.location.href = "/items";
-            } else {
-                // 전송 실패 시 폼 초기화
-                alert("문제가 발생했구마")
+            if (xhr.status === 200) {
+                alert("상품 등록 완료");
+                window.location.href = "/items"; // 리다이렉트할 URL
+            }
+            else{
+             alert("어라")
             }
         };
-        xhr.send(formData);
-    }
+        xhr.send(new FormData(this));
+    });
 </script>
-
 </body>
 </html>
