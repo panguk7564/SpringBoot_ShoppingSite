@@ -5,7 +5,7 @@
     <title>내가 올린 상품</title>
 </head>
 <body>
-<h2>상점</h2>
+<h2>나의 상품</h2>
 <a th:href="@{/}">
     <button style="background-color: blue; color: white;"> 뒤로가기 </button>
 </a>
@@ -18,7 +18,7 @@
     <tr th:each="item: ${myRegitItem}">
         <td th:text="${item.id}"></td>
         <td>
-            <a th:href="@{|/item/${item.id}|}" th:text="${item.productName}"></a>
+            <a th:href="@{|/useritem/${item.id}|}" th:text="${item.productName}"></a>
         </td>
         <td th:text="${item.price}"></td>
     </tr>

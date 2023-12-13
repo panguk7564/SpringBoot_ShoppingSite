@@ -86,18 +86,6 @@ public class ViewController {
         return "items";
     }
 
-    @GetMapping("/myregistitem/{id}")
-    public String myRegistItem(@PathVariable Long id, Model model){
-        List<Product> productList = pservice.findUserRegitItem(id);
-        model.addAttribute("myRegitItem",productList);
-        return "useritems";
-    }
-
-    @GetMapping("/itemadd")
-    public String additem(){
-    return "itemadd";
-    }
-
     @GetMapping("/item/{id}")
     public String itemdetail(@PathVariable Long id, Model model){
         ProductResponse.FindByIdDto product = pservice.findByid(id);
@@ -108,4 +96,27 @@ public class ViewController {
         return "itemdetails";
     }
 
+    @GetMapping("/myregistitem/{id}")
+    public String myRegistItem(@PathVariable Long id, Model model){
+        List<Product> productList = pservice.findUserRegitItem(id);
+        model.addAttribute("myRegitItem",productList);
+        return "useritems";
+    }
+
+    @GetMapping("/useritem/{id}")
+    public String useritemfound(@PathVariable Long id, Model model){
+        ProductResponse.FindByIdDto product = pservice.findByid(id);
+        List<ImgFile> imges = iservice.findAllByProdutId(id);
+
+
+        model.addAttribute("items",product);
+        model.addAttribute("files",imges);
+
+        return "useritemdetails";
+    }
+
+    @GetMapping("/itemadd")
+    public String additem(){
+    return "itemadd";
+    }
 }
