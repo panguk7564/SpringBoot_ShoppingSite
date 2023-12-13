@@ -142,6 +142,15 @@ public class Pservice {
         return pdto;
     }
 
+    public List<Product> findUserRegitItem(Long id) {
+        List<Product> productList = reposit.findByUserId(id);
+        List<Product> pdto = new ArrayList<>();
+        for(Product product: productList){
+            pdto.add(ProductResponse.listofUser(product));
+        }
+        return pdto;
+    }
+
     @Transactional
     public String update(Long id, ProductResponse.FindAllDto dto) {
 

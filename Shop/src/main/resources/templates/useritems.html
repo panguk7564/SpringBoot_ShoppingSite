@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내가 올린 상품</title>
+</head>
+<body>
+<h2>상점</h2>
+<a th:href="@{/}">
+    <button style="background-color: blue; color: white;"> 뒤로가기 </button>
+</a>
+<table>
+    <tr>
+        <th>상품ID</th>
+        <th>상품 이름</th>
+        <th>가격</th>
+    </tr>
+    <tr th:each="item: ${myRegitItem}">
+        <td th:text="${item.id}"></td>
+        <td>
+            <a th:href="@{|/item/${item.id}|}" th:text="${item.productName}"></a>
+        </td>
+        <td th:text="${item.price}"></td>
+    </tr>
+</table>
+</body>
+</html>

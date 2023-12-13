@@ -86,6 +86,13 @@ public class ViewController {
         return "items";
     }
 
+    @GetMapping("/myregistitem/{id}")
+    public String myRegistItem(@PathVariable Long id, Model model){
+        List<Product> productList = pservice.findUserRegitItem(id);
+        model.addAttribute("myRegitItem",productList);
+        return "useritems";
+    }
+
     @GetMapping("/itemadd")
     public String additem(){
     return "itemadd";
