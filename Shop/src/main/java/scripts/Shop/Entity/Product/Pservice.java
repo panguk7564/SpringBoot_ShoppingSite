@@ -15,6 +15,8 @@ import scripts.Shop.Entity.Uuser.URequest;
 import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.error.exception.Exception404;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,29 +38,15 @@ public class Pservice {
     private final String filePath = "C:/Users/G/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
-    public List<ProductResponse.FindAllDto> findAll(int page) {
-        Pageable pageable = PageRequest.of(page, 3);
-        Page<Product> productPage = reposit.findAll(pageable);
-
-        List<ProductResponse.FindAllDto> productResponses = productPage.getContent().stream().map(ProductResponse.FindAllDto::new)
-                .collect(Collectors.toList());
-
-        return productResponses;
-    }
-
-    public ProductResponse.FindByIdDto findByid(Long Id) {
-        Product product = reposit.findById(Id).orElseThrow(         //-- 상품 및 옵션 검색.
-                () -> new Exception404("상품이 없어요"+"상품 ID: "+Id)
-        );
-
-        List<Option> optionList = oreposit.findByProductId(product.getId());
-
-        // -- 검색결과 반환
-        return new ProductResponse.FindByIdDto(product, optionList);
-    }
-
     @Transactional
-    public Product addProduct(ProductResponse dto, MultipartFile [] files) throws IOException {
+    public Product addProduct(ProductResponse dto, MultipartFile [] files, HttpServletRequest request) throws IOException {
+
+        HttpSession session = request.getSession();
+        Uuser additem_user = (Uuser) session.getAttribute("loginBy");
+
+        System.out.println(additem_user.getName());
+
+        dto.setUserId(additem_user.getId());
 
         Product product = reposit.save(dto.toEntity());
         Option option = Option.builder().optionName(dto.getProductName())
@@ -111,12 +99,25 @@ public class Pservice {
         return product;
     }
 
+    public List<ProductResponse.FindAllDto> findAll(int page) {
+        Pageable pageable = PageRequest.of(page, 3);
+        Page<Product> productPage = reposit.findAll(pageable);
 
+        List<ProductResponse.FindAllDto> productResponses = productPage.getContent().stream().map(ProductResponse.FindAllDto::new)
+                .collect(Collectors.toList());
 
-    @Transactional
-    public String remove(Long id) {
-        reposit.deleteById(id);
-        return "삭제 완료: "+ id;
+        return productResponses;
+    }
+
+    public ProductResponse.FindByIdDto findByid(Long Id) {
+        Product product = reposit.findById(Id).orElseThrow(         //-- 상품 및 옵션 검색.
+                () -> new Exception404("상품이 없어요"+"상품 ID: "+Id)
+        );
+
+        List<Option> optionList = oreposit.findByProductId(product.getId());
+
+        // -- 검색결과 반환
+        return new ProductResponse.FindByIdDto(product, optionList);
     }
 
     public String FindItem(Long id){
@@ -132,6 +133,15 @@ public class Pservice {
        }
     }
 
+    public List<Product> findall() {
+        List<Product> productList = reposit.findAll();
+        List<Product> pdto = new ArrayList<>();
+        for(Product product: productList){
+            pdto.add(ProductResponse.listofUser(product));
+        }
+        return pdto;
+    }
+
     @Transactional
     public String update(Long id, ProductResponse.FindAllDto dto) {
 
@@ -142,8 +152,8 @@ public class Pservice {
             Product product1 = product.get();
             Option product_option1 = options.get(0);
 
-            product1.update(dto.getProductName(),dto.getDescription(),dto.getImg(),dto.getPrice());
-            product_option1.update(dto.getProductName(),dto.getImg(),dto.getPrice(),dto.getStock());
+            product1.update(dto.getProductName(),dto.getDescription(),dto.getPrice());
+            product_option1.update(dto.getProductName(),dto.getPrice(),dto.getStock());
 
             reposit.save(product1);
             oreposit.save(product_option1);
@@ -157,12 +167,9 @@ public class Pservice {
         }
     }
 
-    public List<Product> findall() {
-        List<Product> productList = reposit.findAll();
-        List<Product> pdto = new ArrayList<>();
-        for(Product product: productList){
-            pdto.add(ProductResponse.listofUser(product));
-        }
-        return pdto;
+    @Transactional
+    public String remove(Long id) {
+        reposit.deleteById(id);
+        return "삭제 완료: "+ id;
     }
 }

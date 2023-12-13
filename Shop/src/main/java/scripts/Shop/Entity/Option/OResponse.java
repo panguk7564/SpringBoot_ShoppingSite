@@ -17,8 +17,6 @@ public class OResponse {
 
     private String optionName; //-- 옵션이름
 
-    private String o_img; //-- 옵션 사진
-
     private Long price; //-- 옵션가격
 
     private Long quantity; //-- 옵션수량
@@ -28,7 +26,6 @@ public class OResponse {
                 .id(Id)
                 .product(product)
                 .optionName(optionName)
-                .o_img(o_img)
                 .price(price)
                 .quantity(quantity)
                 .build();
@@ -43,8 +40,6 @@ public class OResponse {
 
         private String optionName;
 
-        private String o_img;
-
         private Long price;
 
         private Long quantity;
@@ -53,7 +48,6 @@ public class OResponse {
             this.Id = option.getId();
             this.productId =  option.getProduct().getId();
             this.optionName =  option.getOptionName();
-            this.o_img =  option.getO_img();
             this.price =  option.getPrice();
             this.quantity =  option.getQuantity();
         }
@@ -68,8 +62,6 @@ public class OResponse {
 
         private String optionName;
 
-        private String o_img;
-
         private Long price;
 
         private Long quantity;
@@ -78,7 +70,6 @@ public class OResponse {
             this.Id = option.getId();
             this.productId =  option.getProduct().getId();
             this.optionName =  option.getOptionName();
-            this.o_img =  option.getO_img();
             this.price =  option.getPrice();
             this.quantity =  option.getQuantity();
         }

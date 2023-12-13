@@ -79,7 +79,7 @@ public class Oservice {
         if (option.isPresent()){
             Option option1 = option.get();
 
-            option1.update(dto.getOptionName(),dto.getO_img(),dto.getPrice(),dto.getQuantity());
+            option1.update(dto.getOptionName(),dto.getPrice(),dto.getQuantity());
             reposit.save(option1);
 
             return option1.getOptionName();

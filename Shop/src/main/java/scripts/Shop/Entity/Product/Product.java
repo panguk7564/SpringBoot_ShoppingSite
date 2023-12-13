@@ -25,12 +25,10 @@ public class Product {
 
     @Column(length = 500)//-- 상품설명 , 입력값 필수
     private String description;
-
-    // -- 상품이미지
-    private String img;
-
     // -- 가격
     private Long price;
+
+    private Long userId;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Option> options = new ArrayList<>();
@@ -39,20 +37,19 @@ public class Product {
     private List<ImgFile> product_img = new ArrayList<>();
 
     @Builder
-    public Product(Long id, String productName, String description, String img, Long price, List<Option> options) {
+    public Product(Long id, String productName, String description, String img, Long price, Long userId, List<Option> options, List<ImgFile> product_img) {
         this.id = id;
         this.productName = productName;
         this.description = description;
-        this.img = img;
         this.price = price;
+        this.userId = userId;
         this.options = options;
+        this.product_img = product_img;
     }
 
-
-    public void update(String productName, String description, String img, Long price) {
+    public void update(String productName, String description, Long price) {
         this.productName = productName;
         this.description = description;
-        this.img = img;
         this.price = price;
     }
 

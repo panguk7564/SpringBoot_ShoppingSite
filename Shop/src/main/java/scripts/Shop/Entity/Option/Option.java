@@ -26,25 +26,21 @@ public class Option {
     @Column(length = 100, nullable = false)
     private String optionName; //-- 옵션이름
 
-    private String o_img; //-- 옵션 사진
-
     private Long price; //-- 옵션가격
 
     private Long quantity; //-- 옵션수량
 
     @Builder
-    public Option(Long id, Product product, String optionName, String o_img, Long price, Long quantity) {
+    public Option(Long id, Product product, String optionName, Long price, Long quantity) {
         Id = id;
         this.product = product;
         this.optionName = optionName;
-        this.o_img = o_img;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public void update(String optionName, String o_img, Long price, Long stock) {
+    public void update(String optionName, Long price, Long stock) {
         this.optionName = optionName;
-        this.o_img = o_img;
         this.price = price;
         this.quantity = stock;
     }

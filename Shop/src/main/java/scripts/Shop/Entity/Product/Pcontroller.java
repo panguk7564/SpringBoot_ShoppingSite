@@ -9,6 +9,7 @@ import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class Pcontroller {
     private final Oservice oservice;
 
     @PostMapping("/add")
-    public ResponseEntity<?>add(@ModelAttribute ProductResponse dto, @RequestParam("file") MultipartFile [] file) throws IOException {
-        service.addProduct(dto,file);
+    public ResponseEntity<?>add(@ModelAttribute ProductResponse dto, @RequestParam("file") MultipartFile [] file, HttpServletRequest request) throws IOException {
+        service.addProduct(dto,file,request);
 
         return ResponseEntity.ok(ApiUtils.success("등록완료"));
     }

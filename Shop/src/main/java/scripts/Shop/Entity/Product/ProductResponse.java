@@ -22,6 +22,8 @@ public class ProductResponse {
 
     private Long stock;
 
+    private Long userId;
+
     private List<OptionDto> optionList;
 
     public Product toEntity() {
@@ -29,11 +31,10 @@ public class ProductResponse {
                 .id(Id)
                 .productName(productName)
                 .description(description)
+                .userId(userId)
                 .price(price)
                 .build();
     }
-
-
 
     public static Product listofUser(Product product) {
         return product.builder()
@@ -41,7 +42,6 @@ public class ProductResponse {
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .description(product.getDescription())
-                .img(product.getImg())
                 .options(product.getOptions())
                 .build();
     }
@@ -78,7 +78,6 @@ public class ProductResponse {
             this.Id = product.getId();
             this.productName = product.getProductName();
             this.description = product.getDescription();
-            this.img = product.getImg();
             this.price = product.getPrice();
             this.stock = getStock();
         }
@@ -106,7 +105,6 @@ public class ProductResponse {
             this.Id = product.getId();
             this.productName = product.getProductName();
             this.description = product.getDescription();
-            this.img = product.getImg();
             this.price = product.getPrice();
 
             Long totalQuantity = optionsList.stream()

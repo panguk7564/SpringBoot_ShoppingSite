@@ -91,6 +91,10 @@
     </style>
 </head>
 <body>
+<a th:href="@{/items}">
+    <button style="background-color: blue; color: white;">뒤로가기</button>
+</a>
+
 <div class="container">
     <p class="product-id">상품 ID: <span th:text="${items.getId}"></span></p>
     <h1 class="product-name" th:text="${items.getProductName}"></h1>
