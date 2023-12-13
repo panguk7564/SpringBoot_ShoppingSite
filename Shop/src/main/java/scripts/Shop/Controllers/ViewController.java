@@ -18,6 +18,7 @@ import scripts.Shop.Entity.Uuser.Uuser;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -108,11 +109,18 @@ public class ViewController {
         ProductResponse.FindByIdDto product = pservice.findByid(id);
         List<ImgFile> imges = iservice.findAllByProdutId(id);
 
-
         model.addAttribute("items",product);
         model.addAttribute("files",imges);
 
         return "useritemdetails";
+    }
+
+    @GetMapping("/useritem/update/{id}")
+    public String useritemedit(@PathVariable Long id, Model model){
+        ProductResponse.FindByIdDto product = pservice.findByid(id);
+        model.addAttribute("item",product);
+
+        return "useritemedit";
     }
 
     @GetMapping("/itemadd")

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import scripts.Shop.Entity.Product.Preposit;
+import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Uuser.Ureposit;
 import scripts.Shop.Entity.Uuser.Uuser;
 
@@ -23,6 +25,7 @@ import java.util.UUID;
 public class ImgService {
     private final ImgReposit reposit;
     private final Ureposit ureposit;
+    private final Preposit preposit;
     private final String filePath = "C:/Users/G/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
@@ -49,9 +52,11 @@ public class ImgService {
 
     @Transactional
     public void update(Long id, MultipartFile file) throws IOException {
+       Optional<Product> productOptional = preposit.findById(id);
 
-        if(reposit.findByUserId(id).isPresent()){
-           deleteimg(id);
+        if(!reposit.findAllByProductId(id).isEmpty()){
+           List<ImgFile> imgFileList = reposit.findAllByProductId(id);
+           reposit.deleteAll(imgFileList);
            System.out.println("기존 이미지 삭제");
         }
 
@@ -87,7 +92,7 @@ public class ImgService {
                     .uuid(uuid)
                     .imgType(formatType)
                     .imgSize(file.getSize())
-                    .userId(id)
+                    .product(productOptional.get())
                     .build();
 
             reposit.save(imgFile);
@@ -99,9 +104,25 @@ public class ImgService {
 
 
     @Transactional
-    public void deleteimg(Long id) {
-        Optional<ImgFile> oldFile = reposit.findByUserId(id);
-        reposit.deleteById(oldFile.get().getId());
-        System.out.println(oldFile.get().getUserId());
+    public void deleteUserimg(Long id) {
+        if(reposit.findByUserId(id).isPresent()){
+
+          Optional<ImgFile> oldFile = reposit.findByUserId(id);
+          reposit.deleteById(oldFile.get().getId());
+
+          System.out.println(oldFile.get().getUserId());}
+        else {
+            System.out.println("제거할 파일이 없어요");
+        }
+    }
+
+    @Transactional
+    public void deleteProductimg(Long id) {
+        if(preposit.findById(id).isPresent()){
+            Optional<Product> optionalProduct = preposit.findById(id);
+
+            List<ImgFile> imgFileList = reposit.findAllByProductId(optionalProduct.get().getId());
+            reposit.deleteAll(imgFileList);
+        }
     }
 }

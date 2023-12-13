@@ -9,6 +9,14 @@
 <a th:href="@{/}">
     <button style="background-color: blue; color: white;"> 뒤로가기 </button>
 </a>
+
+<a th:if="${session.loginBy}" th:href="@{/itemadd}">
+    <button id="itemAddButton" style="background-color: blue; color: white;"> 상품 등록 </button>
+</a>
+
+<a th:unless="${session.loginBy}">
+    <span style="color: red;"> 상품 등록은 로그인이 필요합니다.</span>
+</a>
 <table>
     <tr>
         <th>상품ID</th>

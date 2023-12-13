@@ -56,9 +56,7 @@ public class ProductResponse {
         private String productName;
         //-- 상품설명
         private String description;
-        // -- 상품이미지
-        private String img;
-        //-- 상품 이미지
+
         private Long price;
         // -- 상품 가격
         private Long stock;
@@ -69,7 +67,6 @@ public class ProductResponse {
                     .id(Id)
                     .productName(productName)
                     .description(description)
-                    .img(img)
                     .price(price)
                     .build();
         }
@@ -92,9 +89,7 @@ public class ProductResponse {
         private String productName;
         //-- 상품설명
         private String description;
-        // -- 상품이미지
-        private String img;
-        //-- 상품 이미지
+
         private Long price;
 
         private Long stock;
@@ -117,7 +112,6 @@ public class ProductResponse {
                     .map(OptionDto::new)
                     .collect(Collectors.toList());
         }
-
     }
 
     @Setter

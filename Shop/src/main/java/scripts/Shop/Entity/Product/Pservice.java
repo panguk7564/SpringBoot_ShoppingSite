@@ -12,6 +12,7 @@ import scripts.Shop.Entity.Img.ImgReposit;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oreposit;
 import scripts.Shop.Entity.Uuser.URequest;
+import scripts.Shop.Entity.Uuser.Ureposit;
 import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.error.exception.Exception404;
 
@@ -35,6 +36,7 @@ public class Pservice {
     private final Preposit reposit;
     private final Oreposit oreposit;
     private final ImgReposit ireposit;
+    private final Ureposit ureposit;
     private final String filePath = "C:/Users/G/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
@@ -152,13 +154,15 @@ public class Pservice {
     }
 
     @Transactional
-    public String update(Long id, ProductResponse.FindAllDto dto) {
+    public String update(Long id, ProductResponse dto) {
 
-        Optional<Product> product = reposit.findById(id);
-        List<Option> options = oreposit.findByProductId(id);
+         if(!oreposit.findByProductId(id).isEmpty()){
+             System.out.println(dto.getProductName() +" 수정중");
 
-        if(product.isPresent()){
-            Product product1 = product.get();
+            List<Option> options = oreposit.findByProductId(id);
+            Optional<Product> optionalProduct = reposit.findById(id);
+
+            Product product1 = optionalProduct.get();
             Option product_option1 = options.get(0);
 
             product1.update(dto.getProductName(),dto.getDescription(),dto.getPrice());
@@ -168,17 +172,20 @@ public class Pservice {
             oreposit.save(product_option1);
 
             return product1.getProductName();
-        }
-        else {
-            System.out.println("실패");
-            return null;
-
-        }
+         }
+         else {
+             return null;
+         }
     }
 
     @Transactional
-    public String remove(Long id) {
-        reposit.deleteById(id);
-        return "삭제 완료: "+ id;
+    public void delete(Long id) {
+        if(reposit.findById(id).isPresent()){
+        Optional<Product> product = reposit.findById(id);
+        reposit.delete(product.get());
+        }
+        else {
+            System.out.println("제거할 상품 없음");
+        }
     }
 }

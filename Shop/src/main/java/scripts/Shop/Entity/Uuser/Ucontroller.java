@@ -101,7 +101,7 @@ public class Ucontroller {
         }
         else {
             System.out.println("파일이 없습니다.");
-            iservice.deleteimg(id);
+            iservice.deleteUserimg(id);
         }
 
         return ResponseEntity.ok().body(dto.getEmail());

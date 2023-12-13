@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>게시글 작성</title>
+    <title>상품 수정</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,45 +53,29 @@
         }
     </style>
 </head>
-
 <body>
-<form id="additem" action="/add" method="POST" enctype="multipart/form-data">
+<form id="updateitem" method="POST" enctype="multipart/form-data" onsubmit="sendata(${item.Id}, this); return false;" th:action="@{'/updateitem/' + ${item.Id}}">
+
+    <h1>상품 ID <span th:text="${item.Id}"></span><br> </h1>
+    <br>
+
     <label for="productName">상품명:</label>
-    <input type="text" name="productName" id="productName">
+    <input type="text" name="productName" id="productName" th:value="${item.productName}">
 
     <label for="description">설명:</label>
-    <textarea name="description" id="description" cols="30" rows="6"></textarea>
+    <textarea name="description" id="description" style="width: 300px; height: 100px;">[[${item.description}]]</textarea>
 
     <label for="price">가격:</label>
-    <input type="text" name="price" id="price">
+    <input type="text" name="price" id="price"  th:value="${item.price}" >
 
     <label for="stock">재고수:</label>
-    <input type="text" name="stock" id="stock">
+    <input type="text" name="stock" id="stock" th:value="${item.stock}" >
 
     <label for="file">파일 첨부:</label>
     <input type="file" id="file" name="file" multiple >
     <br>
 
-    <input type="submit" value="글 작성">
+    <input type="submit" value="글 작성" >
 </form>
-<script>
-    document.getElementById("additem").addEventListener("submit", function(event) {
-        event.preventDefault(); // 폼 기본 동작 중단
-
-        // 폼 데이터를 전송하는 비동기 요청
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/updateitem/" + itemId);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                alert("상품 등록 완료");
-                window.location.href = "/items"; // 리다이렉트할 URL
-            }
-            else{
-             alert("어라")
-            }
-        };
-        xhr.send(new FormData(this));
-    });
-</script>
 </body>
 </html>
