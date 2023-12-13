@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgReposit;
+import scripts.Shop.Entity.Product.Preposit;
+import scripts.Shop.Entity.Product.Product;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import java.util.UUID;
 public class Uservice {
     private final Ureposit ureposit;
     private final ImgReposit ireposit;
+    private final Preposit preposit;
     private final String filePath = "C:/Users/G/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
@@ -40,104 +43,6 @@ public class Uservice {
     private HttpPost post = null;
 
  */
-
-    @Transactional
-    public Uuser update(Long id, URequest.JoinDTO dto){
-        Optional<Uuser> findId = ureposit.findById(id);
-        if(findId.isPresent()){
-
-        Uuser uuser = findId.get();
-            String enPass = passwordEncoder.encode(dto.getPassword());
-            dto.setPassword(enPass);
-
-        uuser.update(dto.getName(),dto.getEmail(), dto.getPassword());
-        ureposit.save(uuser);
-
-        return uuser;
-        }
-        else {
-            return null;
-        }
-    }
-
-    @Transactional
-    public Uuser tokensave(Long id, URequest.JoinDTO requestDTO){
-        Optional<Uuser> findId = ureposit.findById(id);
-
-        if(findId.isPresent()){
-
-            Uuser uuser = findId.get();
-            uuser.setToken(requestDTO.getToken());
-
-            ureposit.save(uuser);
-            return uuser;
-        }
-        else {
-            return null;
-        }
-    }
-
-    public List<Uuser> findall() {
-        List<Uuser> memlist = ureposit.findAll();
-        List<Uuser> memedto = new ArrayList<>();
-        for(Uuser uuser1: memlist){
-            memedto.add(URequest.listofUser(uuser1));
-        }
-        return memedto;
-    }
-
-    public Uuser findByid(Long id) {
-        Optional<Uuser> byid = ureposit.findById(id);
-        if(byid.isPresent()){
-            return URequest.listofUser(byid.get());
-        }
-        else {return null;}
-    }
-
-    @Transactional
-    public void deleteById(Long id) {
-        ureposit.deleteById(id);
-        System.out.println("잘가시게" + id);
-    }
-/*
-    public String tokencall(Long id){
-        Optional<Uuser> user = ureposit.findById(id);
-        String token = user.get().getToken();
-        return token;
-    }
-
-    public JsonNode tokenThrower(String token, String url) {
-
-        try{
-            System.out.println(token);
-            post = new HttpPost("http://localhost:8080"+url);
-            post.addHeader("Authorization", token);
-
-            final HttpResponse response = client.execute(post);
-
-            return jsonResponse(response);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-
-    public JsonNode jsonResponse(HttpResponse response){
-        try{
-            JsonNode returnNode = null;
-            ObjectMapper mapper = new ObjectMapper();
-            returnNode = mapper.readTree(response.getEntity().getContent());
-
-            return  returnNode;
-        } catch (Exception e){
-            e.printStackTrace();
-        } return null;
-    }
-
- */
-
 
     @Transactional
     public void save(URequest dto, MultipartFile file) throws IOException{
@@ -183,6 +88,109 @@ public class Uservice {
         }
         System.out.println("저장완료");
     }
+
+    @Transactional
+    public Uuser tokensave(Long id, URequest.JoinDTO requestDTO){
+        Optional<Uuser> findId = ureposit.findById(id);
+
+        if(findId.isPresent()){
+
+            Uuser uuser = findId.get();
+            uuser.setToken(requestDTO.getToken());
+
+            ureposit.save(uuser);
+            return uuser;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public List<Uuser> findall() {
+        List<Uuser> memlist = ureposit.findAll();
+        List<Uuser> memedto = new ArrayList<>();
+        for(Uuser uuser1: memlist){
+            memedto.add(URequest.listofUser(uuser1));
+        }
+        return memedto;
+    }
+
+    public Uuser findByid(Long id) {
+        Optional<Uuser> byid = ureposit.findById(id);
+        if(byid.isPresent()){
+            return URequest.listofUser(byid.get());
+        }
+        else {return null;}
+    }
+
+    @Transactional
+    public Uuser update(Long id, URequest.JoinDTO dto){
+        Optional<Uuser> findId = ureposit.findById(id);
+        if(findId.isPresent()){
+
+            Uuser uuser = findId.get();
+            String enPass = passwordEncoder.encode(dto.getPassword());
+            dto.setPassword(enPass);
+
+            uuser.update(dto.getName(),dto.getEmail(), dto.getPassword());
+            ureposit.save(uuser);
+
+            return uuser;
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        ureposit.deleteById(id);
+        List<Product> productList = preposit.findAllByUserId(id);
+        Optional<ImgFile> imgFile = ireposit.findByUserId(id);
+
+        preposit.deleteAll(productList);
+        ireposit.delete(imgFile.get());
+
+        System.out.println("잘가시게" + id);
+    }
+/*
+    public String tokencall(Long id){
+        Optional<Uuser> user = ureposit.findById(id);
+        String token = user.get().getToken();
+        return token;
+    }
+
+    public JsonNode tokenThrower(String token, String url) {
+
+        try{
+            System.out.println(token);
+            post = new HttpPost("http://localhost:8080"+url);
+            post.addHeader("Authorization", token);
+
+            final HttpResponse response = client.execute(post);
+
+            return jsonResponse(response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+    public JsonNode jsonResponse(HttpResponse response){
+        try{
+            JsonNode returnNode = null;
+            ObjectMapper mapper = new ObjectMapper();
+            returnNode = mapper.readTree(response.getEntity().getContent());
+
+            return  returnNode;
+        } catch (Exception e){
+            e.printStackTrace();
+        } return null;
+    }
+
+ */
 
     public Uuser findByEmail(String email) {
         Optional<Uuser> user = ureposit.findByEmail(email);

@@ -26,9 +26,8 @@ public class ImgFile {
 
 
     @ManyToOne
-    @JoinColumn(name = "product")
+    @JoinColumn(name = "product" )
     private Product product;
-
 
 
     @Builder
