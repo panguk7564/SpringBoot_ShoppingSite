@@ -2,6 +2,7 @@ package scripts.Shop.Entity.Product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,9 +23,13 @@ public class Pcontroller {
 
     @PostMapping("/add")
     public ResponseEntity<?>add(@ModelAttribute ProductResponse dto, @RequestParam("file") MultipartFile [] file, HttpServletRequest request) throws IOException {
-        service.addProduct(dto,file,request);
 
-        return ResponseEntity.ok(ApiUtils.success("등록완료"));
+        if(service.addProduct(dto,file,request) != null){
+            return ResponseEntity.ok(ApiUtils.success("등록완료"));}
+
+        else {
+            return ResponseEntity.ok(ApiUtils.error("누구세요?", HttpStatus.UNAUTHORIZED));
+        }
     }
 
    @GetMapping("/products")

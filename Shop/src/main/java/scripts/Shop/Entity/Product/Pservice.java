@@ -43,7 +43,12 @@ public class Pservice {
     @Transactional
     public Product addProduct(ProductResponse dto, MultipartFile [] files, HttpServletRequest request) throws IOException {
 
+
         HttpSession session = request.getSession();
+
+        if(session.getAttribute("loginBy") != null){
+
+        System.out.println(session.getAttribute("loginBy"));
         Uuser additem_user = (Uuser) session.getAttribute("loginBy");
 
 
@@ -90,6 +95,10 @@ public class Pservice {
             else { System.out.println("파일이 엄서요");}
         }
         return product;
+        }
+        else {
+            return null;
+        }
     }
 
     public List<ProductResponse.FindAllDto> findAll(int page) {

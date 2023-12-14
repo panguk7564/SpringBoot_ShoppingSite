@@ -111,6 +111,21 @@
             </li>
         </ul>
     </div>
+
+    <h1>옵션 선택</h1>
+
+    <div class="options-container">
+        <select onchange="handleSelection(this)" required>
+            <option value="" disabled selected>옵션을 선택하세요</option>
+            <option th:each="model : ${options}" th:value="${model.price}" th:text="${model.productName} + ' 선택'"></option>
+        </select>
+    </div>
+
+
+    <div class="selected-info">
+        <p th:text="${selectedModel}"></p>
+    </div>
+
     <div class="button-container">
         <button class="buy">장바구니에 담기</button>
         <button class="back">뒤로가기</button>
@@ -126,6 +141,15 @@
         window.location.href = "/items";
         history.back();
     });
+
+     function handleSelection(radioElement) {
+        const selectedValue = radioElement.value;
+        const selectedLabel = radioElement.nextSibling.textContent.trim();
+        const selectedInfo = `선택한 모델: ${selectedLabel} (${selectedValue})`;
+
+        const selectedInfoElement = document.querySelector('.selected-info p');
+        selectedInfoElement.textContent = selectedInfo;
+    }
 </script>
 </html>
 

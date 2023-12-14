@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgService;
+import scripts.Shop.Entity.Option.Option;
+import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Product.ProductResponse;
 import scripts.Shop.Entity.Product.Pservice;
@@ -26,6 +28,7 @@ public class ViewController {
     private final Uservice service;
     private final Pservice pservice;
     private final ImgService iservice;
+    private final Oservice oservice;
 
     @GetMapping("/")
     public String index(){
@@ -128,5 +131,11 @@ public class ViewController {
     return "itemadd";
     }
 
+    @GetMapping("/test")
+    public String test(Model model){
+        List<Product> productList = pservice.findall();
 
+        model.addAttribute("models", productList);
+        return "test";
+    }
 }
