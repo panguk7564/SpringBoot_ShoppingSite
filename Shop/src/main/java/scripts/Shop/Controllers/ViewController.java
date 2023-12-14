@@ -92,13 +92,27 @@ public class ViewController {
 
     @GetMapping("/item/{id}")
     public String itemdetail(@PathVariable Long id, Model model){
-        ProductResponse.FindByIdDto product = pservice.findByid(id);
+        Product product = pservice.findByid(id);
+        Long stock = oservice.calculateSum(product);
         List<ImgFile> imges = iservice.findAllByProdutId(id);
+        List<Option> optionList = oservice.findByProduct(product);
+
         model.addAttribute("items",product);
         model.addAttribute("files",imges);
+        model.addAttribute("stock",stock);
+        model.addAttribute("models",optionList);
         System.out.println(id);
         return "itemdetails";
     }
+
+    @GetMapping("/test")
+    public String test(Model model){
+        List<Product> productList = pservice.findall();
+
+        model.addAttribute("models", productList);
+        return "test";
+    }
+
 
     @GetMapping("/myregistitem/{id}")
     public String myRegistItem(@PathVariable Long id, Model model){
@@ -109,19 +123,24 @@ public class ViewController {
 
     @GetMapping("/useritem/{id}")
     public String useritemfound(@PathVariable Long id, Model model){
-        ProductResponse.FindByIdDto product = pservice.findByid(id);
+        Product product = pservice.findByid(id);
         List<ImgFile> imges = iservice.findAllByProdutId(id);
+        Long stock = oservice.calculateSum(product);
 
         model.addAttribute("items",product);
         model.addAttribute("files",imges);
+        model.addAttribute("stock",stock);
 
         return "useritemdetails";
     }
 
     @GetMapping("/useritem/update/{id}")
     public String useritemedit(@PathVariable Long id, Model model){
-        ProductResponse.FindByIdDto product = pservice.findByid(id);
+        Product product = pservice.findByid(id);
         model.addAttribute("item",product);
+
+        Long stock = oservice.productStock(product);
+        model.addAttribute("stock",stock);
 
         return "useritemedit";
     }
@@ -131,11 +150,5 @@ public class ViewController {
     return "itemadd";
     }
 
-    @GetMapping("/test")
-    public String test(Model model){
-        List<Product> productList = pservice.findall();
 
-        model.addAttribute("models", productList);
-        return "test";
-    }
 }

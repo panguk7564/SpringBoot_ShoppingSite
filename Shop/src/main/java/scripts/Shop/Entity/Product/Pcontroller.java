@@ -42,7 +42,7 @@ public class Pcontroller {
 
    @GetMapping("/products/{id}")
     public ResponseEntity<?> findByid(@PathVariable Long id){
-       ProductResponse.FindByIdDto productDtos = service.findByid(id);
+       Product productDtos = service.findByid(id);
        ApiUtils.ApiResult<?> apiResult = ApiUtils.success(productDtos);
        return ResponseEntity.ok(apiResult);
    }

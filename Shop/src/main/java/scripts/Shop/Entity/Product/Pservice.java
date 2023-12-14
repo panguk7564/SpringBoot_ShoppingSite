@@ -55,6 +55,14 @@ public class Pservice {
         dto.setUuser(additem_user);
         Product product = reposit.save(dto.toEntity());
 
+            Option option = Option.builder().optionName(dto.getProductName())
+                    .price(dto.getPrice())
+                    .product(product)
+                    .quantity(dto.getStock())
+                    .build();
+
+            oreposit.save(option);
+
         for (MultipartFile file : files) {
             Path uploadpath = Paths.get(filePath);
 
@@ -111,24 +119,17 @@ public class Pservice {
         return productResponses;
     }
 
-    public ProductResponse.FindByIdDto findByid(Long Id) {
+    public Product findByid(Long Id) {
         Product product = reposit.findById(Id).orElseThrow(         //-- 상품 및 옵션 검색.
                 () -> new Exception404("상품이 없어요"+"상품 ID: "+Id)
         );
-
-        List<Option> optionList = oreposit.findByProductId(product.getId());
-
         // -- 검색결과 반환
-        return new ProductResponse.FindByIdDto(product, optionList);
+        return product;
     }
 
     public List<Product> findall() {
         List<Product> productList = reposit.findAll();
-        List<Product> pdto = new ArrayList<>();
-        for(Product product: productList){
-            pdto.add(ProductResponse.listofUser(product));
-        }
-        return pdto;
+        return productList;
     }
 
     public List<Product> findUserRegitItem(Long id) {

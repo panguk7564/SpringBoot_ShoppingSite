@@ -89,4 +89,25 @@ public class Oservice {
             return null;
         }
     }
+
+    public Long calculateSum(Product product) {
+        Long sum = 0L;
+        List<Option> optionList = reposit.findAllByProduct(product);
+
+        for (Option option : optionList) {
+            Long value = option.getQuantity(); // Option 객체에서 특정 값을 받아옵니다.
+            sum += value; // 값을 누적하여 합산합니다.
+        }
+        return sum;
+    }
+
+    public Long productStock(Product product){
+        List<Option> optionList = reposit.findAllByProduct(product);
+
+        return  optionList.get(0).getQuantity();
+    }
+
+    public List<Option> findByProduct(Product product) {
+        return reposit.findAllByProduct(product);
+    }
 }
