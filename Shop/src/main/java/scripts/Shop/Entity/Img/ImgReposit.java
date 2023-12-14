@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImgReposit extends JpaRepository<ImgFile, Long> {
-    Optional<ImgFile> findByUuid(String uuid);
 
     List<ImgFile> findAllByProductId(Long id);
 

@@ -36,7 +36,7 @@ public class Pservice {
     private final Preposit reposit;
     private final Oreposit oreposit;
     private final ImgReposit ireposit;
-    private final Ureposit ureposit;
+
     private final String filePath = "C:/Users/G/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
@@ -49,15 +49,6 @@ public class Pservice {
 
         dto.setUuser(additem_user);
         Product product = reposit.save(dto.toEntity());
-
-        Option option = Option.builder().optionName(dto.getProductName())
-                .price(dto.getPrice())
-                .product(product)
-                .quantity(dto.getStock())
-                .build();
-
-        oreposit.save(option);
-
 
         for (MultipartFile file : files) {
             Path uploadpath = Paths.get(filePath);
@@ -120,19 +111,6 @@ public class Pservice {
 
         // -- 검색결과 반환
         return new ProductResponse.FindByIdDto(product, optionList);
-    }
-
-    public String FindItem(Long id){
-       Optional<Product> name = reposit.findById(id);
-
-       if(name.isPresent())
-       {Product product = name.get();
-
-        return product.getProductName();
-       }
-       else {
-           return null;
-       }
     }
 
     public List<Product> findall() {

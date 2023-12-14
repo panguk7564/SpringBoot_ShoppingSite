@@ -29,12 +29,6 @@ public class ImgService {
     private final String filePath = "C:/Users/G/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
-    @Transactional
-    public Long saveImg(imgDto dto){
-     ImgFile imgFile = reposit.save(dto.toen());
-        return imgFile.getId();
-    }
-
     public ImgFile findByUserid(Long id) {
         Optional<ImgFile> imgFile = reposit.findByUuserId(id);
         if(imgFile.isPresent()){
