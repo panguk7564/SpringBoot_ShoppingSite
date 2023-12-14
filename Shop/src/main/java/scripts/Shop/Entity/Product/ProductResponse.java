@@ -22,7 +22,7 @@ public class ProductResponse {
 
     private Long stock;
 
-    private Long userId;
+    private Uuser uuser;
 
     private List<OptionDto> optionList;
 
@@ -31,7 +31,7 @@ public class ProductResponse {
                 .id(Id)
                 .productName(productName)
                 .description(description)
-                .userId(userId)
+                .uuser(uuser)
                 .price(price)
                 .build();
     }
@@ -42,7 +42,6 @@ public class ProductResponse {
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .description(product.getDescription())
-                .options(product.getOptions())
                 .build();
     }
 

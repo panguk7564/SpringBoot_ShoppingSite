@@ -46,11 +46,10 @@ public class Pservice {
         HttpSession session = request.getSession();
         Uuser additem_user = (Uuser) session.getAttribute("loginBy");
 
-        System.out.println(additem_user.getName());
 
-        dto.setUserId(additem_user.getId());
-
+        dto.setUuser(additem_user);
         Product product = reposit.save(dto.toEntity());
+
         Option option = Option.builder().optionName(dto.getProductName())
                 .price(dto.getPrice())
                 .product(product)
@@ -58,6 +57,7 @@ public class Pservice {
                 .build();
 
         oreposit.save(option);
+
 
         for (MultipartFile file : files) {
             Path uploadpath = Paths.get(filePath);
@@ -145,7 +145,7 @@ public class Pservice {
     }
 
     public List<Product> findUserRegitItem(Long id) {
-        List<Product> productList = reposit.findByUserId(id);
+        List<Product> productList = reposit.findByUuserId(id);
         List<Product> pdto = new ArrayList<>();
         for(Product product: productList){
             pdto.add(ProductResponse.listofUser(product));

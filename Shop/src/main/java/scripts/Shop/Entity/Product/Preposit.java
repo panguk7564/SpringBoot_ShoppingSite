@@ -5,7 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface Preposit extends JpaRepository<Product,Long> {
-    List<Product> findByUserId(Long id);
-
-    List<Product> findAllByUserId(Long id);
+    List<Product> findByUuserId(Long id);
 }

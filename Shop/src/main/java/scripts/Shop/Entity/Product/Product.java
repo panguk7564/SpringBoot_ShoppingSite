@@ -29,8 +29,6 @@ public class Product {
     // -- 가격
     private Long price;
 
-    private Long userId;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Option> options = new ArrayList<>();
 
@@ -42,14 +40,12 @@ public class Product {
     private Uuser uuser;
 
     @Builder
-    public Product(Long id, String productName, String description, String img, Long price, Long userId, List<Option> options, List<ImgFile> product_img) {
+    public Product(Long id, String productName, String description, Long price, Uuser uuser) {
         this.id = id;
         this.productName = productName;
         this.description = description;
         this.price = price;
-        this.userId = userId;
-        this.options = options;
-        this.product_img = product_img;
+        this.uuser = uuser;
     }
 
     public void update(String productName, String description, Long price) {
