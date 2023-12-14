@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Img.ImgService;
-import scripts.Shop.Entity.Option.Oservice;
-import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,21 +44,27 @@ public class Pcontroller {
 
    @PostMapping("/updateitem/{id}")
     public ResponseEntity<?> updateitem(@ModelAttribute ProductResponse dto, @PathVariable Long id,
-                                        @RequestParam(value = "file", required = false) MultipartFile file) throws IOException
+                                        @RequestParam(value = "file", required = false) MultipartFile [] file) throws IOException
    {
         if(dto != null){
-            System.out.println("업데이트중...");
             String name = service.update(id,dto);
-            System.out.println(dto);
+            if(!file[0].isEmpty()){
 
-            if (file != null && !file.isEmpty()) {
-                System.out.println("파일이요기잉네");
+                System.out.println("기존파일을 삭제합니다");
+                iservice.deleteProductimg(id);
+
+                if(file != null){
+                System.out.println("업데이트중...");
                 iservice.update(id, file);
+                }
             }
             else {
-                System.out.println("파일이 없습니다.");
+                System.out.println("파일이 첨부되지 않았습니다.");
                 iservice.deleteProductimg(id);
             }
+
+
+
         return ResponseEntity.ok(ApiUtils.success("업데이트 성공: "+ name));}
 
         else {

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Option.Option;
+import scripts.Shop.Entity.Uuser.Uuser;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<ImgFile> product_img = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "uuser")
+    private Uuser uuser;
 
     @Builder
     public Product(Long id, String productName, String description, String img, Long price, Long userId, List<Option> options, List<ImgFile> product_img) {

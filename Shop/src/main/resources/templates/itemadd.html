@@ -80,7 +80,7 @@
 
         // 폼 데이터를 전송하는 비동기 요청
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/updateitem/" + itemId);
+        xhr.open("POST", "/add");
         xhr.onload = function() {
             if (xhr.status === 200) {
                 alert("상품 등록 완료");

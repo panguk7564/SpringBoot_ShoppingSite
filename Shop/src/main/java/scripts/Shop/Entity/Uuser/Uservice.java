@@ -48,7 +48,8 @@ public class Uservice {
     public void save(URequest dto, MultipartFile file) throws IOException{
 
         Path uploadpath = Paths.get(filePath);
-        Long userid = ureposit.save(dto.toEntity()).getId();
+        Uuser user = ureposit.save(dto.toEntity());
+
 
         if (!Files.exists(uploadpath)) {
             Files.createDirectories(uploadpath);
@@ -78,7 +79,7 @@ public class Uservice {
                     .uuid(uuid)
                     .imgType(formatType)
                     .imgSize(file.getSize())
-                    .userId(userid)
+                    .uuser(user)
                     .build();
 
             ireposit.save(imgFile);
@@ -145,12 +146,6 @@ public class Uservice {
     @Transactional
     public void deleteById(Long id) {
         ureposit.deleteById(id);
-        List<Product> productList = preposit.findAllByUserId(id);
-        Optional<ImgFile> imgFile = ireposit.findByUserId(id);
-
-        preposit.deleteAll(productList);
-        ireposit.delete(imgFile.get());
-
         System.out.println("잘가시게" + id);
     }
 /*

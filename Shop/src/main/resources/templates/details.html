@@ -75,7 +75,7 @@
                 <ul>
                     <li th:each="file : ${file}">
                         <!-- 이미지 표시 -->
-                        <img th:src="@{|/download/${file.uuid}/${file.imgName}|}" alt="첨부 이미지">
+                        <img th:src="@{|/download/${file.Uuid}/${file.ImgName}|}" alt="첨부 이미지">
                     </li>
                 </ul>
             </div>

@@ -36,7 +36,7 @@ public class ImgService {
     }
 
     public ImgFile findByUserid(Long id) {
-        Optional<ImgFile> imgFile = reposit.findByUserId(id);
+        Optional<ImgFile> imgFile = reposit.findByUuserId(id);
         if(imgFile.isPresent()){
             return imgFile.get();
         }
@@ -51,8 +51,8 @@ public class ImgService {
     }
 
     @Transactional
-    public void update(Long id, MultipartFile file) throws IOException {
-       Optional<Product> productOptional = preposit.findById(id);
+    public void update(Long id, MultipartFile [] file) throws IOException {
+
 
         if(!reposit.findAllByProductId(id).isEmpty()){
            List<ImgFile> imgFileList = reposit.findAllByProductId(id);
@@ -67,7 +67,63 @@ public class ImgService {
         }
 
 
+        for (MultipartFile files : file) {
+
+            if (file.length != 0) {
+
+                Optional<Product> productOptional = preposit.findById(id);
+                // -- 파일명 추출
+                String originFileName = files.getOriginalFilename();
+
+
+                // -- 확장자 추출
+                assert originFileName != null;
+                String formatType = originFileName.substring(originFileName.lastIndexOf("."));
+
+                System.out.println("파일명: " + originFileName);
+                System.out.println("확장자: " + formatType);
+
+                //-- UUID 생성
+                String uuid = UUID.randomUUID().toString();
+
+                String path = filePath + uuid + originFileName;
+
+                files.transferTo(new File(path)); // -- 경로에 파일을 저장(파일이름: uuid+원본이름)
+
+                ImgFile imgFile = ImgFile.builder() // -- 파일 객체 생성
+                        .filePath(filePath)
+                        .imgName(originFileName)
+                        .uuid(uuid)
+                        .imgType(formatType)
+                        .imgSize(files.getSize())
+                        .product(productOptional.get())
+                        .build();
+
+                reposit.save(imgFile);
+
+            } else {
+                System.out.println("파일이 엄서요");
+            }
+        }
+    }
+
+    @Transactional
+    public void user_imgupdate(Long id, MultipartFile file) throws IOException {
+
+        if(reposit.findByUuserId(id).isPresent()){
+            Optional<ImgFile> imgFile = reposit.findByUuserId(id);
+            reposit.delete(imgFile.get());
+            System.out.println("기존 이미지 삭제");
+        }
+
+        Path uploadpath = Paths.get(filePath);
+
+        if (!Files.exists(uploadpath)) {
+            Files.createDirectories(uploadpath);
+        }
+
         if (!file.isEmpty()) {
+            Optional<Uuser> uuser = ureposit.findById(id);
             // -- 파일명 추출
             String originFileName = file.getOriginalFilename();
 
@@ -92,25 +148,25 @@ public class ImgService {
                     .uuid(uuid)
                     .imgType(formatType)
                     .imgSize(file.getSize())
-                    .product(productOptional.get())
+                    .uuser(uuser.get())
                     .build();
 
             reposit.save(imgFile);
 
         } else {
             System.out.println("파일이 엄서요");
-           }
+        }
     }
 
 
     @Transactional
     public void deleteUserimg(Long id) {
-        if(reposit.findByUserId(id).isPresent()){
+        if(reposit.findByUuserId(id).isPresent()){
 
-          Optional<ImgFile> oldFile = reposit.findByUserId(id);
+          Optional<ImgFile> oldFile = reposit.findByUuserId(id);
           reposit.deleteById(oldFile.get().getId());
 
-          System.out.println(oldFile.get().getUserId());}
+          System.out.println(oldFile.get().getImgName());}
         else {
             System.out.println("제거할 파일이 없어요");
         }

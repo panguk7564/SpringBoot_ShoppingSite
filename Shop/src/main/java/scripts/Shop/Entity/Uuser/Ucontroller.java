@@ -48,9 +48,11 @@ public class Ucontroller {
     }
 
     private void valideuser(String email){
-        Optional<Uuser> uuser1 = ureposit.findByEmail(email);
-        if(uuser1.isPresent()){
-            throw new RuntimeException("이미 있는 계정입니다.");
+        if(ureposit.findByEmail(email).isPresent()) {
+            Optional<Uuser> uuser1 = ureposit.findByEmail(email);
+            if (uuser1.isPresent()) {
+                throw new RuntimeException("이미 있는 계정입니다.");
+            }
         }
     }
 
@@ -97,7 +99,7 @@ public class Ucontroller {
 
         if (file != null && !file.isEmpty()) {
             System.out.println("파일이요기잉네");
-            iservice.update(id, file);
+            iservice.user_imgupdate(id, file);
         }
         else {
             System.out.println("파일이 없습니다.");
