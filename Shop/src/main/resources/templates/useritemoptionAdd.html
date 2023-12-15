@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        form {
+            width: 500px; /* 크기 조정 */
+            float: left;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        form input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #006bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+<form th:action="@{/useritem/options/save/{id}(id=${id})}" method="post">
+    <label for="optionName">옵션명:</label>
+    <input type="text" name="optionName" id="optionName">
+
+    <label for="price">옵션가격:</label>
+    <input type="text" name="price" id="price">
+
+    <label for="quantity">옵션수량:</label>
+    <input type="text" name="quantity" id="quantity"><br>
+
+
+
+    <input type="submit" value="글 작성">
+</form>
+</body>
+</html>

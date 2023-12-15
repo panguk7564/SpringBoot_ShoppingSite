@@ -1,6 +1,9 @@
 package scripts.Shop.Entity.Option;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Product.Preposit;
@@ -39,24 +42,7 @@ public class Oservice {
         return findAllDtos;
     }
 
-    @Transactional
-    public String add(Long id, OResponse dto){
-        Optional<Product> product = preposit.findById(id);
 
-        if(product.isPresent()){
-
-            dto.setProduct(product.get());
-            dto.setProductId(product.get().getId());
-
-         Option option = dto.toEn();
-
-            reposit.save(option);
-            return dto.getOptionName();
-        }
-        else {
-            return "주 상품이 없어요";
-        }
-    }
 
     @Transactional
     public String delete(Long id) {
@@ -109,5 +95,35 @@ public class Oservice {
 
     public List<Option> findByProduct(Product product) {
         return reposit.findAllByProduct(product);
+    }
+
+
+    public Page<Option> paging(Pageable pageable, Long id) {
+        int page = pageable.getPageNumber() - 1; // - 시작 인덱스
+        int size = 3; // -- 페이지 표시 게시물 개수
+
+        Page<Option> options = reposit.findAllByProductId(id, PageRequest.of(page, size)); ///-- 전체게시물 불러오기(정렬및 조건에 맞게[page, size]출력)
+
+        return options.map(option -> new Option( // -- 람다 人
+                option.getId(),
+                option.getProduct(),
+                option.getOptionName(),
+                option.getPrice(),
+                option.getQuantity()
+                ));
+    }
+
+    @Transactional
+    public Long save(OResponse dto,Long id) {
+        if(preposit.findById(id).isPresent()){
+        Optional<Product> product = preposit.findById(id);
+        dto.setProduct(product.get());
+        reposit.save(dto.toEn());
+
+        return product.get().getId();
+        }
+        else {
+            return null;
+        }
     }
 }

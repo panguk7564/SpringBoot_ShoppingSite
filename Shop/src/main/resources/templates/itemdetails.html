@@ -122,15 +122,15 @@
         </ul>
     </div>
 
-    <h1>옵션 선택</h1>
+
 
     <div class="container2">
-        <h1>모델 정보 선택</h1>
+        <h1>옵션 선택</h1>
 
         <div class="options-container">
             <select onchange="handleSelection(this)" required>
                 <option value="" disabled selected>옵션을 선택하세요</option>
-                <option th:each="model : ${models}" th:value="${model.price}" th:text="${model.optionName} + ' 선택'"></option>
+                <option th:each="model : ${models}" th:value="${model.price}" th:text="${model.optionName} + '  ' + (${model.price} - ${items.price})"></option>
             </select>
         </div>
 
@@ -151,7 +151,7 @@
     function handleSelection(radioElement) {
         const selectedValue = radioElement.value;
         const selectedLabel = radioElement.nextSibling.textContent.trim();
-        const selectedInfo = `선택한 모델: ${selectedLabel} (${selectedValue})`;
+        const selectedInfo = `가격: ${selectedLabel} ${selectedValue}`;
 
         const selectedInfoElement = document.querySelector('.selected-info p');
         selectedInfoElement.textContent = selectedInfo;

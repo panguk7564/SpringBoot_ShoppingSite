@@ -2,12 +2,17 @@ package scripts.Shop.Controllers;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgService;
+import scripts.Shop.Entity.Option.OResponse;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.Entity.Product.Product;
@@ -105,22 +110,24 @@ public class ViewController {
         return "itemdetails";
     }
 
-    @GetMapping("/myregistitem/{id}")
+    @GetMapping("/myregistitem/{id}") // -- 사용자가 등록한 상품목록
     public String myRegistItem(@PathVariable Long id, Model model){
         List<Product> productList = pservice.findUserRegitItem(id);
         model.addAttribute("myRegitItem",productList);
         return "useritems";
     }
 
-    @GetMapping("/useritem/{id}")
+    @GetMapping("/useritem/{id}") // -- 사용자 상품목록 상세
     public String useritemfound(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         List<ImgFile> imges = iservice.findAllByProdutId(id);
         Long stock = oservice.calculateSum(product);
+        List<Option> optionList = oservice.findByProduct(product);
 
         model.addAttribute("items",product);
         model.addAttribute("files",imges);
         model.addAttribute("stock",stock);
+        model.addAttribute("models",optionList);
 
         return "useritemdetails";
     }
@@ -136,10 +143,36 @@ public class ViewController {
         return "useritemedit";
     }
 
+    @GetMapping("/useritem/options/{id}") // -- 옵션 전체출력 페이지
+    public String paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
+        Page<Option> options = oservice.paging(pageable, id);
+        System.out.println(options.getTotalElements());
+
+        int blockLimit = 3;
+        int startPage = (int)Math.ceil((double)pageable.getPageNumber()/blockLimit - 1) * blockLimit + 1;
+        int endPage = ((startPage+blockLimit - 1) < options.getTotalPages()) ? (startPage + blockLimit - 1) : options.getTotalPages();
+
+        model.addAttribute("optionList",options);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage",endPage);
+        model.addAttribute("pid",id);
+        return "useritemoptionList";
+    }
+
     @GetMapping("/itemadd")
     public String additem(){
     return "itemadd";
     }
 
+    @GetMapping("/useritem/options/create/{id}")
+    public String option_save(@PathVariable Long id, Model model) {
+        model.addAttribute("pid",id);
+        return "useritemoptionAdd";
+    }
 
+    @GetMapping("/useritem/option/update/{id}")
+    public String option_update(@PathVariable Long id, Model model){
+       model.addAttribute("oid",id);
+        return "useritemoptionUpdate";
+    }
 }

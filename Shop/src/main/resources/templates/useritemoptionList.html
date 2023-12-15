@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>옵션목록</title>
+    <style>
+
+        footer {
+     background-color: #006bff;
+     padding: 10px;
+     color: #fff;
+     position: fixed;
+     left: 0;
+     bottom: 0;
+     width: 100%;
+     text-align: center;
+ }
+
+ table {
+     border: 1px solid black;
+     border-collapse: collapse;
+ }
+ th, td {
+     border: 1px solid black;
+     padding: 10px;
+ }
+    </style>
+</head>
+<body>
+<button onclick="goBack()">뒤로가기</button>
+<table>
+    <a th:href="@{'/useritem/options/create/' + ${pid}}">옵션 추가</a>
+    <tr th:each="option: ${optionList}">
+        <td th:text="${option.getId}"></td>
+        <td th:text="${option.getOptionName()}"></td>
+        <td>
+            <a th:href="@{'/useritem/option/delete/' + ${option.getId}}">삭제</a>
+            <a th:href="@{'/useritem/option/update/' + ${option.getId}}">수정</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
