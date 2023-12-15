@@ -29,15 +29,16 @@
 <body>
 <button onclick="goBack()">뒤로가기</button>
 <table>
-    <a th:href="@{'/useritem/options/create/' + ${pid}}">옵션 추가</a>
+    <a th:href="@{/mem/registitem/options/create/{pid}(pid=${pid})}">옵션 추가</a>
     <tr th:each="option: ${optionList}">
-        <td th:text="${option.getId}"></td>
+        <td th:text="${option.getId()}"></td>
         <td th:text="${option.getOptionName()}"></td>
         <td>
-            <a th:href="@{'/useritem/option/delete/' + ${option.getId}}">삭제</a>
-            <a th:href="@{'/useritem/option/update/' + ${option.getId}}">수정</a>
+            <a th:href="@{/mem/registitem/option/delete/{id}(id=${option.getId()})}">삭제</a>
+            <a th:href="@{/mem/registitem/option/update/{id}(id=${option.getId()})}">수정</a>
         </td>
     </tr>
 </table>
+
 </body>
 </html>

@@ -10,7 +10,7 @@
     <button style="background-color: blue; color: white;"> 뒤로가기 </button>
 </a>
 
-<a th:if="${session.loginBy}" th:href="@{/itemadd}">
+<a th:if="${session.loginBy}" th:href="@{/mem/itemadd}">
     <button id="itemAddButton" style="background-color: blue; color: white;"> 상품 등록 </button>
 </a>
 
@@ -26,7 +26,7 @@
     <tr th:each="item: ${myRegitItem}">
         <td th:text="${item.id}"></td>
         <td>
-            <a th:href="@{|/useritem/${item.id}|}" th:text="${item.productName}"></a>
+            <a th:href="@{|/mem/registitem/detail/${item.id}|}" th:text="${item.productName}"></a>
         </td>
         <td th:text="${item.price}"></td>
     </tr>

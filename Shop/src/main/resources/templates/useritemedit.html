@@ -54,7 +54,7 @@
     </style>
 </head>
 <body>
-<form id="updateitem" method="POST" enctype="multipart/form-data" onsubmit="sendata(${item.Id}, this); return false;" th:action="@{'/updateitem/' + ${item.Id}}">
+<form id="updateitem" method="POST" enctype="multipart/form-data" onsubmit="sendata(${item.Id}, this); return false;" th:action="@{'/mem/registitem/update/' + ${item.Id}}">
 
     <h1>상품 ID <span th:text="${item.Id}"></span><br> </h1>
     <br>

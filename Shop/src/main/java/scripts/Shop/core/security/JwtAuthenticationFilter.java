@@ -16,11 +16,13 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
 @Slf4j
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
+
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
 
         super(authenticationManager);
@@ -31,7 +33,13 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        String prefixJwt = request.getHeader(JwtTokenProvider.HEADER);
+
+
+        //String prefixJwt = request.getHeader(JwtTokenProvider.HEADER);
+        HttpSession session = request.getSession();
+        String prefixJwt = (String) session.getAttribute("loginToken");
+
+        System.out.println(prefixJwt);
 
         // ** 헤더가 없다면 더이상 이 메서드에서 할 일은 없음. 다음으로 넘김.
 
@@ -69,6 +77,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             );
             System.out.println(customUserDetails.getAuthorities());
             System.out.println(customUserDetails.getUser().getId());
+            System.out.println("인증됨");
 
             // ** SecurityContext에 저장.
             SecurityContextHolder.getContext().setAuthentication(authentication);

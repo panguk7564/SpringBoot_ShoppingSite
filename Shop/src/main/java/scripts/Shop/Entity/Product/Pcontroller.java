@@ -47,7 +47,7 @@ public class Pcontroller {
        return ResponseEntity.ok(apiResult);
    }
 
-   @PostMapping("/updateitem/{id}")
+   @PostMapping("/mem/registitem/update/{id}")
     public ResponseEntity<?> updateitem(@ModelAttribute ProductResponse dto, @PathVariable Long id,
                                         @RequestParam(value = "file", required = false) MultipartFile [] file) throws IOException
    {
@@ -77,7 +77,7 @@ public class Pcontroller {
             return ResponseEntity.ok("상품없음");
         }
    }
-    @GetMapping("/useritem/delete/{id}")
+    @GetMapping("/mem/registitem/delete/{id}")
     public ResponseEntity<?> deleteitem(@PathVariable Long id){
         service.delete(id);
 

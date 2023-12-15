@@ -46,20 +46,20 @@ public class Ocontroller {
     public ResponseEntity<?> findAll(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         System.out.println(customUserDetails.getUser().getId());
 
-        List<OResponse.FindAllDto> optionsResponse = service.findAll(); //-- 수정요망
+        List<OResponse.FindAllDto> optionsResponse = service.findAll();
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(optionsResponse);
 
         return ResponseEntity.ok(apiResult);
     }
 
-    @PostMapping("/useritem/option/update/save/{id}")
+    @PostMapping("/mem/registitem/option/update/save/{id}")// --옵션 업데이트
     public ResponseEntity<?> option_update(@PathVariable Long id, @ModelAttribute OResponse dto){
         String result = service.update(id,dto);
 
         return ResponseEntity.ok().body("업데이트 성공: "+ "옵션명 = "+result);
     }
 
-    @GetMapping("/useritem/option/delete/{id}")
+    @GetMapping("/mem/registitem/option/delete/{id}") // --옵션 삭제
     public ResponseEntity<?> option_delete(@PathVariable Long id){
         String name = service.delete(id);
         if(name != null){

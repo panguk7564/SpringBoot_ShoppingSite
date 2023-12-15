@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.security.JwtTokenProvider;
 import scripts.Shop.core.utils.ApiUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
@@ -57,7 +59,7 @@ public class Ucontroller {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid URequest.JoinDTO requestDTO, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody @Valid URequest.JoinDTO requestDTO, HttpSession session, HttpServletRequest request) {
 
         String jwt = "";
 
@@ -80,12 +82,15 @@ public class Ucontroller {
 
             requestDTO.setToken(jwt);
             service.tokensave(customUserDetails.getUser().getId(), requestDTO);
+            service.tokenThrower(customUserDetails.getUser().getToken(),request.getRequestURL().toString());
 
             Uuser logined_user =  service.findByEmail(customUserDetails.getUser().getEmail());
-            System.out.println(logined_user.getId());
+            System.out.println(logined_user.getName());
 
             session.setAttribute("loginBy", logined_user);
-            session.setAttribute("loginToken", customUserDetails.getUserToken());
+            session.setAttribute("loginToken", jwt);
+            System.out.println(customUserDetails.getUserToken());
+
 
         } catch (Exception e) {
 
@@ -93,7 +98,7 @@ public class Ucontroller {
         }
         return ResponseEntity.ok().header(JwtTokenProvider.HEADER, jwt).body(ApiUtils.success("로그인 완료"));
     }
-    @PostMapping("edit/{id}") //-- 회원정보 수정
+    @PostMapping("mem/edit/{id}") //-- 회원정보 수정
     public ResponseEntity<?> user_update(@PathVariable Long id, @ModelAttribute URequest.JoinDTO dto, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         service.update(id, dto);
 
@@ -108,6 +113,4 @@ public class Ucontroller {
 
         return ResponseEntity.ok().body(dto.getEmail());
     }
-
-
 }

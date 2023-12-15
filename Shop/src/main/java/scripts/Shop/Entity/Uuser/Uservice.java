@@ -39,10 +39,10 @@ public class Uservice {
 
     private final PasswordEncoder passwordEncoder;
 
-/*    private final HttpClient client = HttpClientBuilder.create().build();
+   private final HttpClient client = HttpClientBuilder.create().build();
     private HttpPost post = null;
 
- */
+
 
     @Transactional
     public void save(URequest dto, MultipartFile file) throws IOException{
@@ -93,12 +93,10 @@ public class Uservice {
     @Transactional
     public Uuser tokensave(Long id, URequest.JoinDTO requestDTO){
         Optional<Uuser> findId = ureposit.findById(id);
-
         if(findId.isPresent()){
 
             Uuser uuser = findId.get();
             uuser.setToken(requestDTO.getToken());
-
             ureposit.save(uuser);
             return uuser;
         }
@@ -122,6 +120,12 @@ public class Uservice {
             return URequest.listofUser(byid.get());
         }
         else {return null;}
+    }
+
+
+    public Uuser findByEmail(String email) {
+        Optional<Uuser> user = ureposit.findByEmail(email);
+        return user.get();
     }
 
     @Transactional
@@ -148,7 +152,7 @@ public class Uservice {
         ureposit.deleteById(id);
         System.out.println("잘가시게" + id);
     }
-/*
+
     public String tokencall(Long id){
         Optional<Uuser> user = ureposit.findById(id);
         String token = user.get().getToken();
@@ -159,7 +163,7 @@ public class Uservice {
 
         try{
             System.out.println(token);
-            post = new HttpPost("http://localhost:8080"+url);
+            post = new HttpPost(url);
             post.addHeader("Authorization", token);
 
             final HttpResponse response = client.execute(post);
@@ -170,8 +174,6 @@ public class Uservice {
         }
         return null;
     }
-
-
 
     public JsonNode jsonResponse(HttpResponse response){
         try{
@@ -185,10 +187,9 @@ public class Uservice {
         } return null;
     }
 
- */
-
-    public Uuser findByEmail(String email) {
-        Optional<Uuser> user = ureposit.findByEmail(email);
-        return user.get();
+    @Transactional
+    public void signout(Uuser uuser) {
+        uuser.setToken("");
+        ureposit.save(uuser);
     }
 }

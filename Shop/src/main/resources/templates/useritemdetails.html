@@ -156,10 +156,10 @@
     </div>
 
     <div class="button-container">
-        <a th:href="@{/useritem/update/{id}(id=${items.getId})}" class="button update">수정하기</a>
+        <a th:href="@{/mem/registitem/update/{id}(id=${items.getId})}" class="button update">수정하기</a>
         <a href="#" class="button delete" th:onclick="'confirmDelete(\'' + ${items.getId} + '\')'">삭제하기</a>
         <a href="#" class="button back" onclick="goBack()">뒤로가기</a>
-        <a th:href="@{/useritem/options/{id}(id=${items.getId})}" class="button option">상품 옵션</a>
+        <a th:href="@{/mem/registitem/options/{id}(id=${items.getId})}" class="button option">상품 옵션</a>
     </div>
 </div>
 </body>
@@ -167,7 +167,7 @@
     function confirmDelete(itemId) {
           if (confirm("정말로 삭제 하시겠습니까?")) {
               alert("상품이 삭제되었습니다");
-              window.location.href = "/useritem/delete/" + itemId;
+              window.location.href = "/mem/registitem/delete/" + itemId;
           }
       }
     function goBack() {

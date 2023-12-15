@@ -5,27 +5,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgService;
-import scripts.Shop.Entity.Option.OResponse;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.Entity.Product.Product;
-import scripts.Shop.Entity.Product.ProductResponse;
 import scripts.Shop.Entity.Product.Pservice;
-import scripts.Shop.Entity.Uuser.URequest;
 import scripts.Shop.Entity.Uuser.Uservice;
 import scripts.Shop.Entity.Uuser.Uuser;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -66,10 +59,12 @@ public class ViewController {
         model.addAttribute("users",userDto);
         model.addAttribute("file",imgFile);
 
+
+
         return "details";
     }
 
-    @GetMapping("/memedit/{id}")
+    @GetMapping("/mem/edit/{id}")
     public String editor(@PathVariable Long id, Model model){
         Uuser user = service.findByid(id);
         model.addAttribute("user",user);
@@ -84,6 +79,8 @@ public class ViewController {
 
     @GetMapping("/signout")
     public String logout(HttpSession session){
+        Uuser uuser = (Uuser) session.getAttribute("loginBy");
+        service.signout(uuser);
         session.invalidate();
         return "redirect:/";
     }
@@ -110,14 +107,14 @@ public class ViewController {
         return "itemdetails";
     }
 
-    @GetMapping("/myregistitem/{id}") // -- 사용자가 등록한 상품목록
+    @GetMapping("/mem/registitem/{id}") // -- 사용자가 등록한 상품목록
     public String myRegistItem(@PathVariable Long id, Model model){
         List<Product> productList = pservice.findUserRegitItem(id);
         model.addAttribute("myRegitItem",productList);
         return "useritems";
     }
 
-    @GetMapping("/useritem/{id}") // -- 사용자 상품목록 상세
+    @GetMapping("/mem/registitem/detail/{id}") // -- 사용자 상품목록 상세
     public String useritemfound(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         List<ImgFile> imges = iservice.findAllByProdutId(id);
@@ -132,7 +129,7 @@ public class ViewController {
         return "useritemdetails";
     }
 
-    @GetMapping("/useritem/update/{id}")
+    @GetMapping("/mem/registitem/update/{id}")
     public String useritemedit(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         model.addAttribute("item",product);
@@ -143,7 +140,7 @@ public class ViewController {
         return "useritemedit";
     }
 
-    @GetMapping("/useritem/options/{id}") // -- 옵션 전체출력 페이지
+    @GetMapping("/mem/registitem/options/{id}") // -- 옵션 전체출력 페이지
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
         Page<Option> options = oservice.paging(pageable, id);
         System.out.println(options.getTotalElements());
@@ -159,18 +156,18 @@ public class ViewController {
         return "useritemoptionList";
     }
 
-    @GetMapping("/itemadd")
+    @GetMapping("/mem/itemadd")
     public String additem(){
     return "itemadd";
     }
 
-    @GetMapping("/useritem/options/create/{id}")
+    @GetMapping("/mem/registitem/options/create/{id}")
     public String option_save(@PathVariable Long id, Model model) {
         model.addAttribute("pid",id);
         return "useritemoptionAdd";
     }
 
-    @GetMapping("/useritem/option/update/{id}")
+    @GetMapping("/mem/registitem/option/update/{id}")
     public String option_update(@PathVariable Long id, Model model){
        model.addAttribute("oid",id);
         return "useritemoptionUpdate";

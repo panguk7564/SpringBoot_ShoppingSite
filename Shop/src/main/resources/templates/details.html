@@ -82,9 +82,9 @@
         </td>
     </tr>
 
-    <a th:href="@{/memedit/{id}(id=${users.Id})}" class="button">회원정보 수정</a>
+    <a th:href="@{/mem/edit/{id}(id=${users.Id})}" class="button">회원정보 수정</a>
     <a href="#" class="button" style="background-color: #f44336;" th:onclick="'confirmDelete(\'' + ${users.Id} + '\')'">회원탈퇴</a>
-    <a th:href="@{/myregistitem/{id}(id=${users.Id})}" class="button">등록한 상품</a>
+    <a th:href="@{/mem/registitem/{id}(id=${users.Id})}" class="button">등록한 상품</a>
 </div>
 
 <script>
