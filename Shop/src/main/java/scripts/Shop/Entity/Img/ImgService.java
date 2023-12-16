@@ -26,8 +26,8 @@ public class ImgService {
     private final ImgReposit reposit;
     private final Ureposit ureposit;
     private final Preposit preposit;
-    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
-    //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
+    //private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
     public ImgFile findByUserid(Long id) {
         Optional<ImgFile> imgFile = reposit.findByUuserId(id);
