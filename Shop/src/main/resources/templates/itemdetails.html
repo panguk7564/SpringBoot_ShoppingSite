@@ -142,7 +142,7 @@
 
     <div class="button-container">
         <button class="buy" onclick="buyFunction()">장바구니에 담기</button>
-        <button class="back">뒤로가기</button>
+        <button class="go-back" onclick="goBack()">뒤로가기</button>
     </div>
 </div>
 </body>
@@ -186,10 +186,9 @@
         });
     }
 
-    document.querySelector('.back').addEventListener('click', function() {
-        window.location.href = "/items";
-        history.back();
-    });
+function goBack() {
+    window.history.back();
+}
 
 
 </script>
