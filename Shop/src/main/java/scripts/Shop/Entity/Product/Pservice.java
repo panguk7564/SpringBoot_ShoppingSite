@@ -37,12 +37,11 @@ public class Pservice {
     private final Oreposit oreposit;
     private final ImgReposit ireposit;
 
-   // private final String filePath = "C:/Users/G/Desktop/DB_Files/";
-    private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
+   private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
     @Transactional
     public Product addProduct(ProductResponse dto, MultipartFile [] files, HttpServletRequest request) throws IOException {
-
 
         HttpSession session = request.getSession();
 

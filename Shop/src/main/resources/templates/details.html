@@ -22,6 +22,23 @@
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        .header-buttons {
+             display: flex;
+             justify-content: space-between;
+             margin-bottom: 20px;
+         }
+        .back-button, .cart-button {
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .back-button {
+            margin-right: 10px;
+        }
         h1 {
             margin-top: 0;
         }
@@ -57,9 +74,15 @@
     </style>
 </head>
 <body>
-<a th:href="@{/}">
-    <button style="background-color: blue; color: white;">뒤로가기</button>
-</a>
+    <div class="header-buttons">
+        <a th:href="@{/}">
+            <button class="back-button">뒤로가기</button>
+        </a>
+
+        <a th:href="@{/mem/cart/{id}(id=${users.Id})}">
+            <button class="cart-button">장바구니</button>
+        </a>
+    </div>
 
 
 <div class="container">

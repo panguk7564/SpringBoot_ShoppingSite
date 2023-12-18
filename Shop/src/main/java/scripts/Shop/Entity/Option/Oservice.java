@@ -21,7 +21,11 @@ public class Oservice {
     private final Oreposit reposit;
     private final Preposit preposit;
 
-
+    @Transactional
+    public void save(OResponse dto, Product product) {
+        dto.setProduct(product);
+        reposit.save(dto.toEn());
+    }
 
     public List<OResponse.FindProductIdDto> findByProductId(Long id) {
         List<Option> optionList = reposit.findByProductId(id);
@@ -111,19 +115,5 @@ public class Oservice {
                 option.getPrice(),
                 option.getQuantity()
                 ));
-    }
-
-    @Transactional
-    public Long save(OResponse dto,Long id) {
-        if(preposit.findById(id).isPresent()){
-        Optional<Product> product = preposit.findById(id);
-        dto.setProduct(product.get());
-        reposit.save(dto.toEn());
-
-        return product.get().getId();
-        }
-        else {
-            return null;
-        }
     }
 }

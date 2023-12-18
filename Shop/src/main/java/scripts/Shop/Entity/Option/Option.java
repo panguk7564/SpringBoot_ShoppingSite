@@ -3,6 +3,7 @@ package scripts.Shop.Entity.Option;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import scripts.Shop.Entity.Cart.Cart;
 import scripts.Shop.Entity.Product.Product;
 
 import javax.persistence.*;

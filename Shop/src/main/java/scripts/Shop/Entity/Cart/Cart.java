@@ -24,7 +24,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //--pk
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY) // -- 본 상품
+    @OneToOne(fetch = FetchType.LAZY,orphanRemoval = true) // -- 본 상품
     private Option option;
 
     @ManyToOne(fetch = FetchType.LAZY) //-- 유저 별로 카트에 몪임
@@ -35,6 +35,8 @@ public class Cart {
 
     @Column(nullable = false) // -- 상품 가격
     private Long price;
+
+
 
     @Builder
     public Cart(Long id, Option option, Uuser user, Long item_Quantity, Long price) {

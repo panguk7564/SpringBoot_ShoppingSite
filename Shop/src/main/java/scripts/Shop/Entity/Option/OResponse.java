@@ -11,8 +11,6 @@ public class OResponse {
 
     private Long Id;
 
-    private Long productId;
-
     private Product product;
 
     private String optionName; //-- 옵션이름
@@ -23,7 +21,6 @@ public class OResponse {
 
     public Option toEn(){
         return Option.builder()
-                .id(Id)
                 .product(product)
                 .optionName(optionName)
                 .price(price)

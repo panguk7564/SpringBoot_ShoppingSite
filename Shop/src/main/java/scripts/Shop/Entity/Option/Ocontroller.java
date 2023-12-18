@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import scripts.Shop.Entity.Product.Product;
+import scripts.Shop.Entity.Product.Pservice;
 import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @RestController
 public class Ocontroller {
     private final Oservice service;
+    private final Pservice pservice;
 
     /*
      *
@@ -27,9 +30,10 @@ public class Ocontroller {
 
     @PostMapping("/useritem/options/save/{id}") // -- 옵션 등록
     public ResponseEntity<?> save(@ModelAttribute OResponse dto, @PathVariable Long id) {
-        Long pid = service.save(dto,id);
+        Product product = pservice.findByid(id);
+        service.save(dto,product);
 
-        ApiUtils.ApiResult<?> apiResult = ApiUtils.success("옵션추가 완료 : 상품ID ="+pid);
+        ApiUtils.ApiResult<?> apiResult = ApiUtils.success("옵션추가 완료 : 상품 ="+ product.getProductName());
 
         return ResponseEntity.ok(apiResult);
     }
