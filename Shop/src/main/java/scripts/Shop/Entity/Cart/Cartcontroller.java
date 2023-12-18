@@ -11,7 +11,7 @@ import scripts.Shop.core.utils.ApiUtils;
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class Cartcontroller {
     private final Cartservice service;

@@ -23,7 +23,6 @@ public class Oorder {
     private Uuser user;
 
     @Builder
-
     public Oorder(Long id, Uuser user) {
         this.id = id;
         this.user = user;

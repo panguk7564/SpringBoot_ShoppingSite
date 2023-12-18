@@ -3,9 +3,23 @@ package scripts.Shop.Entity.Cart;
 import lombok.Getter;
 import lombok.Setter;
 import scripts.Shop.Entity.Option.Option;
+import scripts.Shop.Entity.Order.Oorder;
 import scripts.Shop.Entity.Uuser.Uuser;
 
 public class Cartrequest {
+
+    @Getter
+    @Setter
+    public static class orderto{
+        private String cartId;
+        private String quantity;
+
+        public Oorder toOrderEn(Uuser user){
+            return Oorder.builder()
+                    .user(user)
+                    .build();
+        }
+    }
 
     @Getter
     @Setter
@@ -29,9 +43,5 @@ public class Cartrequest {
     public static class updateDto{
         private Long cartid;
         private Long quantity;
-    }
-
-    public class deleteDto {
-        private Long cartid;
     }
 }

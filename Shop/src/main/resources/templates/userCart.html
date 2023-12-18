@@ -4,40 +4,98 @@
     <meta charset="UTF-8">
     <title>장바구니</title>
     <style>
-
         footer {
-     background-color: #006bff;
-     padding: 10px;
-     color: #fff;
-     position: fixed;
-     left: 0;
-     bottom: 0;
-     width: 100%;
-     text-align: center;
- }
+            background-color: #006bff;
+            padding: 10px;
+            color: #fff;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
 
- table {
-     border: 1px solid black;
-     border-collapse: collapse;
- }
- th, td {
-     border: 1px solid black;
-     padding: 10px;
- }
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
-<button onclick="goBack()">뒤로가기</button>
 <table>
+    <button onclick="goBack()">뒤로가기</button>
     <tr th:each="option: ${cartList}">
         <td th:text="${option.getCartedName()}"></td>
-        <td th:text="${option.getPrice()}"></td>
+        <td>
+            <select  data-id="${option.getId()}"  quantity="${option.getItem_Quantity()}"  onchange="updateQuantity(this.value, '${option.getId()}')">
+                <option th:each="i : ${#numbers.sequence(1, 10)}"
+                        th:value="${i}"
+                        th:text="${i}"
+                        th:selected="${option.getItem_Quantity() == i}"></option>
+            </select>
+        </td>
         <td th:text="${option.getItem_Quantity()}"></td>
+
         <td>
             <a th:href="@{/mem/cart/delete/{id}(id=${option.getId()})}">삭제</a>
+            <button onclick="placeOrder()">주문하기</button>
         </td>
     </tr>
 </table>
 
+<script>
+    function updateQuantity(quantity, id) {
+        // 선택된 수량을 업데이트
+        console.log("수량 업데이트:", quantity);
+        console.log("상품 ID:", id);
+    }
+
+    function placeOrder() {
+    const selectElement = document.querySelector(`select[quantity]`);
+    const cartids = document.querySelector(`select[data-id]`);
+    if (selectElement) {
+        const quantity = selectElement.value;
+        const ids = cartids.value;
+
+        const data = {
+            cartId: ids,
+            quantity: quantity
+        };
+
+        fetch('/mem/cart/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("주문이 성공적으로 처리되었습니다.");
+                    alert("주문한다?");
+                } else {
+                    // 주문 처리가 실패한 경우에 대한 처리
+                    console.error("주문 처리에 실패했습니다.");
+                }
+            })
+            .catch(error => {
+                // 오류 처리
+                console.error("오류가 발생했습니다.", error);
+            });
+    } else {
+        console.error("selectElement가 null입니다. 요소를 찾을 수 없습니다.");
+    }
+}
+
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>
+

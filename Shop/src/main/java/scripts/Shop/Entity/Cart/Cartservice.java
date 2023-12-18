@@ -111,4 +111,9 @@ public class Cartservice {
     public void deletecart(Long cartid) { // -- 상품 아이디별 삭제
             cartreposit.deleteById(cartid);
     }
+
+    public Cart findById(Long id) {
+        Optional<Cart> optionalCart = cartreposit.findById(id);
+        return optionalCart.get();
+    }
 }
