@@ -179,9 +179,7 @@ public class ViewController {
     @GetMapping("/mem/cart/{id}") // -- 옵션 전체출력 페이지
     public String cart_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
         Page<Cart> carts = cservice.paging(pageable, id);
-        List<Option> optionList = carts.stream()
-                .map(Cart::getOption)
-                .collect(Collectors.toList());
+
 
         int blockLimit = 3;
         int startPage = (int)Math.ceil((double)pageable.getPageNumber()/blockLimit - 1) * blockLimit + 1;
@@ -190,7 +188,6 @@ public class ViewController {
         model.addAttribute("cartList",carts);
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
-        model.addAttribute("option",optionList);
 
         return "userCart";
     }

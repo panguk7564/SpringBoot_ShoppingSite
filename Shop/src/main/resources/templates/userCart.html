@@ -29,9 +29,13 @@
 <body>
 <button onclick="goBack()">뒤로가기</button>
 <table>
-    <tr th:each="cart, option : ${cartList}, ${option}">
-        <td th:text="${cart.option.optionName}"></td>
-        <!-- 다른 필드들도 필요에 따라 표시 -->
+    <tr th:each="option: ${cartList}">
+        <td th:text="${option.getCartedName()}"></td>
+        <td th:text="${option.getPrice()}"></td>
+        <td th:text="${option.getItem_Quantity()}"></td>
+        <td>
+            <a th:href="@{/mem/cart/delete/{id}(id=${option.getId()})}">삭제</a>
+        </td>
     </tr>
 </table>
 
