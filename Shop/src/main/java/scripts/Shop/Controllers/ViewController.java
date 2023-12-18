@@ -8,6 +8,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import scripts.Shop.Entity.Cart.Cart;
+import scripts.Shop.Entity.Cart.Cartservice;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgService;
 import scripts.Shop.Entity.Option.Option;
@@ -19,6 +21,7 @@ import scripts.Shop.Entity.Uuser.Uuser;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +30,7 @@ public class ViewController {
     private final Pservice pservice;
     private final ImgService iservice;
     private final Oservice oservice;
+    private final Cartservice cservice;
 
     @GetMapping("/")
     public String index(){
@@ -115,7 +119,7 @@ public class ViewController {
     }
 
     @GetMapping("/mem/registitem/detail/{id}") // -- 사용자 상품목록 상세
-    public String useritemfound(@PathVariable Long id, Model model){
+    public String useritem_findAll(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         List<ImgFile> imges = iservice.findAllByProdutId(id);
         Long stock = oservice.calculateSum(product);
@@ -130,7 +134,7 @@ public class ViewController {
     }
 
     @GetMapping("/mem/registitem/update/{id}")
-    public String useritemedit(@PathVariable Long id, Model model){
+    public String useritem_edit(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         model.addAttribute("item",product);
 
@@ -141,9 +145,8 @@ public class ViewController {
     }
 
     @GetMapping("/mem/registitem/options/{id}") // -- 옵션 전체출력 페이지
-    public String paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
+    public String option_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
         Page<Option> options = oservice.paging(pageable, id);
-        System.out.println(options.getTotalElements());
 
         int blockLimit = 3;
         int startPage = (int)Math.ceil((double)pageable.getPageNumber()/blockLimit - 1) * blockLimit + 1;
@@ -171,5 +174,24 @@ public class ViewController {
     public String option_update(@PathVariable Long id, Model model){
        model.addAttribute("oid",id);
         return "useritemoptionUpdate";
+    }
+
+    @GetMapping("/mem/cart/{id}") // -- 옵션 전체출력 페이지
+    public String cart_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
+        Page<Cart> carts = cservice.paging(pageable, id);
+        List<Option> optionList = carts.stream()
+                .map(Cart::getOption)
+                .collect(Collectors.toList());
+
+        int blockLimit = 3;
+        int startPage = (int)Math.ceil((double)pageable.getPageNumber()/blockLimit - 1) * blockLimit + 1;
+        int endPage = ((startPage+blockLimit - 1) < carts.getTotalPages()) ? (startPage + blockLimit - 1) : carts.getTotalPages();
+
+        model.addAttribute("cartList",carts);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage",endPage);
+        model.addAttribute("option",optionList);
+
+        return "userCart";
     }
 }

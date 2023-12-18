@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import scripts.Shop.Entity.Cart.Cart;
 import scripts.Shop.Entity.Product.Product;
+import scripts.Shop.Entity.Uuser.Uuser;
 
 import javax.persistence.*;
 

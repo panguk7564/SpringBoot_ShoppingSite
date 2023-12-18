@@ -49,7 +49,7 @@ public class Cartcontroller {
     }
 
 
-    @GetMapping("/carts/delete/{id}")
+    @GetMapping("/mem/cart/delete/{id}")
     public ResponseEntity<?> delete_cart(@PathVariable Long id,
                                          Error error,
                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) // -- 인증후 실행

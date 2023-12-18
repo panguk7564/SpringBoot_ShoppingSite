@@ -25,7 +25,7 @@ public class Orervices {
 
     @Transactional
     public Orderesponse.FindbyIdDto save(Uuser user) {
-        List<Cart> cartList = creposit.findAllByUserId(user.getId());
+        List<Cart> cartList = creposit.findByUserId(user.getId());
 
         if(cartList.size() == 0){
             throw new Exception404("장바구니에 상품이 없어요");

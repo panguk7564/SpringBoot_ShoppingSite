@@ -19,6 +19,7 @@ public class Cartrequest {
                     .user(user) //-- 유저정보 fk
                     .item_Quantity(quantity) //-- 담을수 있는 최대 수
                     .price(option.getPrice() * quantity) // -- 전체 상품 가격
+                    .cartedName(option.getOptionName())
                     .build();
         }
     }

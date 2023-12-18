@@ -1,6 +1,9 @@
 package scripts.Shop.Entity.Cart;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Option.Option;
@@ -32,14 +35,11 @@ public class Cartservice {
 
         Set<Long> optionId = new HashSet<>(); //-- 동일한 데이터를 묶어줌
 
-
        /* for(Cartrequest.saveDto cart : saveDtos){ // -- 동일상품 예외처리 (잠시 보류)
             if(!optionId.add(cart.getOptionId()));
             throw new Exception400("동일 상품 옵션 중복됨: "+cart.getOptionId());
         }
-
         */
-
         List<Cart> cartList = saveDtos.stream().map(cartdto -> //-- 상품 존재유무 확인
         {
             Option option = oreposit.findById(cartdto.getOptionId()).orElseThrow(
@@ -60,10 +60,26 @@ public class Cartservice {
         });
     }
 
+    public Page<Cart> paging(Pageable pageable, Long id) {
+        int page = pageable.getPageNumber() - 1; // - 시작 인덱스
+        int size = 3; // -- 페이지 표시 게시물 개수
+
+        Page<Cart> carts = cartreposit.findAllByUserId(id, PageRequest.of(page, size)); ///-- 전체게시물 불러오기(정렬및 조건에 맞게[page, size]출력)
+
+        return carts.map(option -> new Cart( // -- 람다 人
+                option.getId(),
+                option.getOption(),
+                option.getUser(),
+                option.getPrice(),
+                option.getItem_Quantity(),
+                option.getCartedName()
+        ));
+    }
+
     @Transactional
     public Cartresponse.updateDto update(List<Cartrequest.updateDto> requestDto, Uuser user) { // -- 상품 업데이트
 
-        List<Cart> cartList = cartreposit.findAllByUserId(user.getId());
+        List<Cart> cartList = cartreposit.findByUserId(user.getId());
 
         List<Long> cartId = cartList.stream().map(cart -> cart.getId()).collect(Collectors.toList());
         List<Long> requestIds = requestDto.stream().map(dto -> dto.getCartid()).collect(Collectors.toList());

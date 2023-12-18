@@ -36,15 +36,16 @@ public class Cart {
     @Column(nullable = false) // -- 상품 가격
     private Long price;
 
-
+    private String cartedName;
 
     @Builder
-    public Cart(Long id, Option option, Uuser user, Long item_Quantity, Long price) {
+    public Cart(Long id, Option option, Uuser user, Long item_Quantity, Long price, String cartedName) {
         this.id = id;
         this.option = option;
         this.user = user;
         this.item_Quantity = item_Quantity;
         this.price = price;
+        this.cartedName = cartedName;
     }
 
     public void update(Long quantity, Long price){
