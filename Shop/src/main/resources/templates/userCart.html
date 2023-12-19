@@ -28,76 +28,51 @@
 </head>
 <body>
 <table>
-    <button onclick="goBack()">뒤로가기</button>
-    <tr th:each="option: ${cartList}">
-        <td th:text="${option.getCartedName()}"></td>
+    <tr th:each="cart: ${cartList}">
+        <td th:text="${cart.getId}"></td>
+        <td><a th:text="${cart.getCartedName()}"></a></td>
+        <td th:text="${cart.getPrice}"></td>
         <td>
-            <select  quantity="[[${option.item_Quantity}]]" th:attr="onchange='updateQuantity(this.value, \'' + ${option.id} + '\')'">
-                <option th:each="i : ${#numbers.sequence(1, 10)}"
-                        th:value="${i}"
-                        th:text="${i}"
-                        th:selected="${option.item_Quantity == i}"> </option>
-            </select>
-        </td>
-        <td th:text="${option.getItem_Quantity()}"></td>
-
-        <td>
-            <a th:href="@{/mem/cart/delete/{id}(id=${option.getId()})}">삭제</a>
-            <button onclick="placeOrder()">주문하기</button>
+            <a th:href="@{'/mem/cart/delete/' + ${cart.getId}}">삭제</a>
         </td>
     </tr>
 </table>
 
+<button onclick="goBack()">뒤로가기</button>
+<button onclick="sendData()">구매하기</button>
+
 <script>
-    let cartId;
-
-    function updateQuantity(quantity, id) {
-        console.log("수량 업데이트:", quantity);
-        console.log("상품 ID:", id);
-        cartId = id; // updateQuantity 함수 내에서 cartId 값을 할당
-    }
-
-    function placeOrder() {
-        const selectElement = document.querySelector(`select[quantity]`);
-
-        if (selectElement) {
-            const quantity = selectElement.value;
-
-            const data = {
-                cartId: cartId, // updateQuantity 함수에서 할당한 cartId 값을 사용
-                quantity: quantity
-            };
-
-            fetch('/mem/cart/order', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-                .then(response => {
-                 const confirmation = confirm("주문한다?");
-                    if (response.ok) {
-                        console.log("주문이 성공적으로 처리되었습니다.");
-                    } else {
-                        // 주문 처리가 실패한 경우에 대한 처리
-                        alert("뭔가 잘못되었습니다");
-                        console.error("주문 처리에 실패했습니다.");
-                    }
-                })
-                .catch(error => {
-                    // 오류 처리
-                    console.error("오류가 발생했습니다.", error);
-                });
-        } else {
-            console.error("selectElement가 null입니다. 요소를 찾을 수 없습니다.");
-        }
-    }
-
     function goBack() {
         window.history.back();
     }
+
+   function sendData() {
+    const confirmation = confirm("주문하시겠습니까?");
+    if (confirmation) {
+        var cartListData = [];
+        var rows = document.querySelectorAll('table tr');
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var id = row.cells[0].textContent;
+            var cartedName = row.cells[1].textContent;
+            var price = row.cells[2].textContent;
+
+            var cartData = {
+                "id": id,
+                "cartedName": cartedName,
+                "price": price
+            };
+
+            cartListData.push(cartData);
+        }
+
+        var jsonData = JSON.stringify(cartListData);
+        console.log("전송할 JSON 데이터:", jsonData);
+    } else {
+        console.log("주문이 취소되었습니다.");
+            }
+    }
 </script>
+
 </body>
 </html>
-

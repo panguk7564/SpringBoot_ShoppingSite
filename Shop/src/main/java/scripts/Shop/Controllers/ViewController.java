@@ -176,18 +176,10 @@ public class ViewController {
         return "useritemoptionUpdate";
     }
 
-    @GetMapping("/mem/cart/{id}") // -- 옵션 전체출력 페이지
+    @GetMapping("/mem/cart/{id}") //-- 장바구니 상품 전체 출력
     public String cart_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
         Page<Cart> carts = cservice.paging(pageable, id);
-
-
-        int blockLimit = 3;
-        int startPage = (int)Math.ceil((double)pageable.getPageNumber()/blockLimit - 1) * blockLimit + 1;
-        int endPage = ((startPage+blockLimit - 1) < carts.getTotalPages()) ? (startPage + blockLimit - 1) : carts.getTotalPages();
-
         model.addAttribute("cartList",carts);
-        model.addAttribute("startPage",startPage);
-        model.addAttribute("endPage",endPage);
 
         return "userCart";
     }

@@ -62,7 +62,7 @@ public class Cartservice {
 
     public Page<Cart> paging(Pageable pageable, Long id) {
         int page = pageable.getPageNumber() - 1; // - 시작 인덱스
-        int size = 3; // -- 페이지 표시 게시물 개수
+        int size = 10; // -- 페이지 표시 게시물 개수
 
         Page<Cart> carts = cartreposit.findAllByUserId(id, PageRequest.of(page, size)); ///-- 전체게시물 불러오기(정렬및 조건에 맞게[page, size]출력)
 
