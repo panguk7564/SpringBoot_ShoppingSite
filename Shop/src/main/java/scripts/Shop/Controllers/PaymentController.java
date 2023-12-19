@@ -8,26 +8,45 @@ import java.util.UUID;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import scripts.Shop.Entity.Cart.Cartrequest;
+import scripts.Shop.Entity.Order.Orderesponse;
+import scripts.Shop.Entity.Order.Orervices;
+import scripts.Shop.core.security.CustomUserDetails;
 
 @Controller
+@RequiredArgsConstructor
 public class PaymentController {
+    private final Orervices services;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final String CLIENT_ID = "S2_3084233975714f5097de55fd4a540e8c";
     private final String SECRET_KEY = "28254058abd141488521056c7b489c78";
 
+
     @RequestMapping("/payindex")
-    public String indexDemo(Model model){
-        UUID id = UUID.randomUUID();
-        model.addAttribute("orderId", id);
+    public String indexDemo(@AuthenticationPrincipal CustomUserDetails userDetails,
+                            Model model){
+        Orderesponse.FindbyIdDto idDto = services.save(userDetails.getUser());
+        int amount = idDto.getProductDtos().size();
+        System.out.println("주문번호:"+ idDto.getId()+ " 주문상품수 :"+amount+ " 총 결제금액: "+idDto.getTotalPrice());
+
+        if(idDto.getProductDtos().size() == 1){
+        idDto.getProductDtos().get(0).getProductName();
+        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName());
+        }else {
+        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName() +" 외 "+(idDto.getProductDtos().size()- 1)+" 개의 상품");
+        }
+        model.addAttribute("orderId", idDto.getId());
+        model.addAttribute("totalPrice", idDto.getTotalPrice());
+        model.addAttribute("count", amount);
         model.addAttribute("clientId", CLIENT_ID);
         return "/payindex";
     }

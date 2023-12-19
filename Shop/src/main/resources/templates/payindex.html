@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<head>
+    <title>Nicepay spring-boot</title>
+    <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .image {
+            width: 50%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+<div class="center">
+    <h1>NICEPAY TEST</h1>
+    <img class="image" src="https://i.ytimg.com/vi/tX3fcXRjSGg/maxresdefault.jpg" alt="이미지">
+    <p>결제 중입니다.</p>
+    <button onclick="serverAuth()">다시 결제하기</button>
+    <button onclick="goBack()">뒤로가기</button>
+</div>
+
+<script src="https://pay.nicepay.co.kr/v1/js/"></script>
+
+<script>
+    function serverAuth() {
+     var orderId = [[${orderId}]];
+     var totalPrice = [[${totalPrice}]];
+     var count = [[${count}]];
+     var name = "[[${orderName}]]";
+
+
+      AUTHNICE.requestPay({
+        clientId: 'S2_3084233975714f5097de55fd4a540e8c',
+        method: 'card',
+        orderId: orderId,
+        amount: totalPrice,
+        goodsName: name,
+        returnUrl: 'http://localhost:8080/serverAuth',
+        fnError: function (result) {
+          alert('알림 : ' + result.errorMsg + '')
+        }
+      });
+    }
+
+    window.onload = function() {
+        serverAuth();
+    };
+
+     function goBack() {
+        window.history.back();
+    }
+</script>
+</body>
+</html>

@@ -54,6 +54,7 @@ public class Orervices {
         return new Orderesponse.FindbyIdDto(order,itmelist);
     }
 
+
     public Orderesponse.FindbyIdDto findByid(Long id) {
         Oorder order = reposit.findById(id).orElseThrow(
         () -> new Exception404("해당 주문내역 없음: 주문ID: "+ id));

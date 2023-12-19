@@ -32,6 +32,7 @@
         <td th:text="${cart.getId}"></td>
         <td><a th:text="${cart.getCartedName()}"></a></td>
         <td th:text="${cart.getPrice}"></td>
+        <td th:text="${cart.getItem_Quantity}"></td>
         <td>
             <a th:href="@{'/mem/cart/delete/' + ${cart.getId}}">삭제</a>
         </td>
@@ -47,30 +48,46 @@
     }
 
    function sendData() {
-    const confirmation = confirm("주문하시겠습니까?");
-    if (confirmation) {
-        var cartListData = [];
-        var rows = document.querySelectorAll('table tr');
-        for (var i = 0; i < rows.length; i++) {
-            var row = rows[i];
-            var id = row.cells[0].textContent;
-            var cartedName = row.cells[1].textContent;
-            var price = row.cells[2].textContent;
+        const confirmation = confirm("주문하시겠습니까?");
+        if (confirmation) {
+            var cartListData = [];
+            var rows = document.querySelectorAll('table tr');
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var id = row.cells[0].textContent;
+                var quantity = row.cells[3].textContent;
 
-            var cartData = {
-                "id": id,
-                "cartedName": cartedName,
-                "price": price
-            };
+                var cartData = {
+                    "id": id,
+                    "quantity": quantity,
+                };
 
-            cartListData.push(cartData);
-        }
-
-        var jsonData = JSON.stringify(cartListData);
-        console.log("전송할 JSON 데이터:", jsonData);
-    } else {
-        console.log("주문이 취소되었습니다.");
+                cartListData.push(cartData);
             }
+
+            var jsonData = JSON.stringify(cartListData);
+
+            fetch('/payindex', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log("주문이 성공적으로 전송되었습니다.");
+                    window.location.href = "/payindex";
+                } else {
+                    console.log("주문 전송에 실패했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error("주문 전송 중 오류가 발생했습니다:", error);
+            });
+        } else {
+            console.log("주문이 취소되었습니다.");
+        }
     }
 </script>
 

@@ -12,6 +12,7 @@ import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,25 +20,22 @@ public class Orcontroller {
     private final Orervices services;
     private final Cartservice cartservice;
 
-    /*
-    @PostMapping("/orders/save")
-    public ResponseEntity<?> ordersave(@AuthenticationPrincipal CustomUserDetails userDetails){
-        Orderesponse.FindbyIdDto findbyIdDto = services.save(userDetails.getUser());
-        return ResponseEntity.ok(ApiUtils.success("주문중: "+findbyIdDto));
-    }
 
-     */
-
+/*
     @PostMapping("/mem/cart/order")
-    public ResponseEntity<?> order(@RequestBody @Valid Cartrequest.orderto dto,
-                                   @AuthenticationPrincipal CustomUserDetails userDetails){
+    public ResponseEntity<?> order(@AuthenticationPrincipal CustomUserDetails userDetails){
 
-        Long id = dto.getCartId();
+        Orderesponse.FindbyIdDto idDto = services.save(userDetails.getUser());
+        int amount = idDto.getProductDtos().size();
 
+
+        System.out.println("주문번호:"+ idDto.getId()+ " 주문상품수 :"+amount+ " 총 결제금액: "+idDto.getTotalPrice());
 
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success("");
         return ResponseEntity.ok(apiResult);
     }
+
+ */
 
     @GetMapping("/orders/{id}")
     public ResponseEntity<?> findByid(@PathVariable Long id){
