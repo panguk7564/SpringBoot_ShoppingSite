@@ -70,8 +70,8 @@ public class Cartservice {
                 option.getId(),
                 option.getOption(),
                 option.getUser(),
-                option.getPrice(),
                 option.getItem_Quantity(),
+                option.getPrice(),
                 option.getCartedName()
         ));
     }
@@ -110,10 +110,5 @@ public class Cartservice {
     @Transactional
     public void deletecart(Long cartid) { // -- 상품 아이디별 삭제
             cartreposit.deleteById(cartid);
-    }
-
-    public Cart findById(Long id) {
-        Optional<Cart> optionalCart = cartreposit.findById(id);
-        return optionalCart.get();
     }
 }

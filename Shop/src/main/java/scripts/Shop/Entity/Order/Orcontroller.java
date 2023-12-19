@@ -43,8 +43,8 @@ public class Orcontroller {
 
     @PostMapping("/mem/cart/order")
     public ResponseEntity<?> order(@RequestBody @Valid Cartrequest.orderto dto){
-        System.out.println(dto.getQuantity() + dto.getCartId());
-        //Cart cart = cartservice.findById(dto.getCartId());
+
+
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(null);
         return ResponseEntity.ok(apiResult);
     }
