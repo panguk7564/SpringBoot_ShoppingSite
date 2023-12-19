@@ -19,10 +19,24 @@ public class Orcontroller {
     private final Orervices services;
     private final Cartservice cartservice;
 
+    /*
     @PostMapping("/orders/save")
     public ResponseEntity<?> ordersave(@AuthenticationPrincipal CustomUserDetails userDetails){
         Orderesponse.FindbyIdDto findbyIdDto = services.save(userDetails.getUser());
         return ResponseEntity.ok(ApiUtils.success("주문중: "+findbyIdDto));
+    }
+
+     */
+
+    @PostMapping("/mem/cart/order")
+    public ResponseEntity<?> order(@RequestBody @Valid Cartrequest.orderto dto,
+                                   @AuthenticationPrincipal CustomUserDetails userDetails){
+
+        Long id = dto.getCartId();
+
+
+        ApiUtils.ApiResult<?> apiResult = ApiUtils.success();
+        return ResponseEntity.ok(apiResult);
     }
 
     @GetMapping("/orders/{id}")
@@ -38,14 +52,6 @@ public class Orcontroller {
         services.delete();
 
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success("삭제");
-        return ResponseEntity.ok(apiResult);
-    }
-
-    @PostMapping("/mem/cart/order")
-    public ResponseEntity<?> order(@RequestBody @Valid Cartrequest.orderto dto){
-
-
-        ApiUtils.ApiResult<?> apiResult = ApiUtils.success(null);
         return ResponseEntity.ok(apiResult);
     }
 }

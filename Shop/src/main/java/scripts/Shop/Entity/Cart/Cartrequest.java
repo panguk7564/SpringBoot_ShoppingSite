@@ -11,8 +11,8 @@ public class Cartrequest {
     @Getter
     @Setter
     public static class orderto{
-        private String cartId;
-        private String quantity;
+        private Long cartId;
+        private Long quantity;
 
         public Oorder toOrderEn(Uuser user){
             return Oorder.builder()
