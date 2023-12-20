@@ -13,6 +13,7 @@ import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oreposit;
 import scripts.Shop.Entity.Uuser.URequest;
 import scripts.Shop.Entity.Uuser.Ureposit;
+import scripts.Shop.Entity.Uuser.Uservice;
 import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.error.exception.Exception404;
 
@@ -36,6 +37,7 @@ public class Pservice {
     private final Preposit reposit;
     private final Oreposit oreposit;
     private final ImgReposit ireposit;
+    private final Uservice uservice;
 
    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
@@ -47,8 +49,10 @@ public class Pservice {
 
         if(session.getAttribute("loginBy") != null){
 
-        System.out.println(session.getAttribute("loginBy"));
-        Uuser additem_user = (Uuser) session.getAttribute("loginBy");
+        System.out.println(session.getAttribute("loginName"));
+        Long uid = (Long) session.getAttribute("loginBy");
+
+        Uuser additem_user = uservice.findByid(uid);
 
 
         dto.setUuser(additem_user);

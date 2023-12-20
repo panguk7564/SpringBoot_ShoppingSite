@@ -44,14 +44,14 @@
 </head>
 <body>
 
-<a th:if="${session.loginBy}" th:href="@{'mem/' + ${session.loginBy.getId}}">
-    나의 정보(<span th:text="${session.loginBy.getName}"></span>)
+<a th:if="${session.loginBy}" th:href="@{'mem/' + ${session.loginBy}}">
+    나의 정보(<span th:text="${session.loginName}"></span>)
 </a>
 <span th:unless="${session.loginBy}" onclick="location.href='/signup'" class="button">회원가입</span>
 
 
 <h1> 어서오시오
-    <p th:if="${session.loginBy}" th:text="${session.loginBy.getName}"></p>,
+    <p th:if="${session.loginBy}" th:text="${session.loginName}"></p>,
     천천히 둘러보시오
 </h1>
 <div>

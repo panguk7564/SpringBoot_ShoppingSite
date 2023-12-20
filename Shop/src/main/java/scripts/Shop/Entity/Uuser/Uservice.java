@@ -117,7 +117,7 @@ public class Uservice {
     public Uuser findByid(Long id) {
         Optional<Uuser> byid = ureposit.findById(id);
         if(byid.isPresent()){
-            return URequest.listofUser(byid.get());
+            return byid.get();
         }
         else {return null;}
     }
@@ -188,7 +188,8 @@ public class Uservice {
     }
 
     @Transactional
-    public void signout(Uuser uuser) {
+    public void signout(Long id) {
+        Uuser uuser = findByid(id);
         uuser.setToken("");
         ureposit.save(uuser);
     }

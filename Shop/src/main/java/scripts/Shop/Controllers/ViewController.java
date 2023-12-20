@@ -83,8 +83,8 @@ public class ViewController {
 
     @GetMapping("/signout")
     public String logout(HttpSession session){
-        Uuser uuser = (Uuser) session.getAttribute("loginBy");
-        service.signout(uuser);
+        Long userid = (Long) session.getAttribute("loginBy");
+        service.signout(userid);
         session.invalidate();
         return "redirect:/";
     }

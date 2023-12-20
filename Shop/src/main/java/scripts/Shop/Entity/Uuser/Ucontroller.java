@@ -87,9 +87,9 @@ public class Ucontroller {
             Uuser logined_user =  service.findByEmail(customUserDetails.getUser().getEmail());
             System.out.println(logined_user.getName());
 
-            session.setAttribute("loginBy", logined_user);
+            session.setAttribute("loginBy", logined_user.getId());
+            session.setAttribute("loginName", logined_user.getName());
             session.setAttribute("loginToken", jwt);
-            System.out.println(customUserDetails.getUserToken());
 
 
         } catch (Exception e) {

@@ -10,7 +10,7 @@
     <button style="background-color: blue; color: white;"> 뒤로가기 </button>
 </a>
 
-<a th:if="${session.loginBy}" th:href="@{/mem/itemadd}">
+<a th:if="${session.loginName}" th:href="@{/mem/itemadd}">
     <button id="itemAddButton" style="background-color: blue; color: white;"> 상품 등록 </button>
 </a>
 
