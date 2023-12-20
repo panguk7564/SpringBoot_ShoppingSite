@@ -60,6 +60,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             // ** 사용자 정보 추출.
             Long id = decodedJWT.getClaim("id").asLong();
             String roles = decodedJWT.getClaim("roles").asString();
+            String name = decodedJWT.getClaim("name").asString();
 
             // ** 권한 정보를 문자열 리스트로 변환.
             StringArrayConverter stringArrayConverter = new StringArrayConverter();
@@ -77,6 +78,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             );
             System.out.println(customUserDetails.getAuthorities());
             System.out.println(customUserDetails.getUser().getId());
+            System.out.println(name);
             System.out.println("인증됨");
 
             // ** SecurityContext에 저장.

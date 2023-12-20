@@ -41,6 +41,7 @@ public class JwtTokenProvider {
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXP)) // ** 시간 설정
                 .withClaim("id", user.getId()) // ** id설정
                 .withClaim("roles", roles) // ** 권한정보 설정
+                .withClaim("name", user.getName())
                 .sign(Algorithm.HMAC512(SECRET)); // ** jwt 생성 알고리즘 설정
 
         return TOKEN_PREFIX + jwt;
