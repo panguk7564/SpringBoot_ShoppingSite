@@ -16,6 +16,7 @@ public class Orderesponse {
         private Long id;
         private List<ProductDto> productDtos;
         private Long totalPrice;
+        private Long totalQunatity;
 
         public FindbyIdDto(Oorder order, List<Item> itemList) {
             this.id = order.getId();
@@ -26,6 +27,7 @@ public class Orderesponse {
 
 
             this.totalPrice = itemList.stream().mapToLong(item -> item.getOption().getPrice() * item.getQuantity()).sum() ;
+            this.totalQunatity = itemList.stream().mapToLong(item -> item.getQuantity()).sum();
         }
 
         @Setter
@@ -43,7 +45,7 @@ public class Orderesponse {
 
             @Getter
             @Setter
-            private class ItemDto {
+            public class ItemDto {
                 private Long id;
                 private String optionName;
                 private Long quantity;

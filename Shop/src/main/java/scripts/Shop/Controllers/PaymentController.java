@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import scripts.Shop.Entity.Cart.Cartrequest;
+import scripts.Shop.Entity.Order.Items.Item;
 import scripts.Shop.Entity.Order.Orderesponse;
 import scripts.Shop.Entity.Order.Orervices;
 import scripts.Shop.core.security.CustomUserDetails;
@@ -35,14 +36,16 @@ public class PaymentController {
     public String indexDemo(@AuthenticationPrincipal CustomUserDetails userDetails,
                             Model model){
         Orderesponse.FindbyIdDto idDto = services.save(userDetails.getUser());
-        int amount = idDto.getProductDtos().size();
+        Long amount = idDto.getTotalQunatity();
         System.out.println("주문번호:"+ idDto.getId()+ " 주문상품수 :"+amount+ " 총 결제금액: "+idDto.getTotalPrice());
 
-        if(idDto.getProductDtos().size() == 1){
+        if(amount == 1){
         idDto.getProductDtos().get(0).getProductName();
-        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName());
+        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName());
+        System.out.println(idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName());
         }else {
-        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName() +" 외 "+(idDto.getProductDtos().size()- 1)+" 개의 상품");
+        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName() +" 외 "+(idDto.getProductDtos().size()- 1)+" 개의 상품");
+        System.out.println(idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName() +" 외 "+(amount - 1)+" 개의 상품");
         }
         model.addAttribute("orderId", idDto.getId());
         model.addAttribute("totalPrice", idDto.getTotalPrice());
