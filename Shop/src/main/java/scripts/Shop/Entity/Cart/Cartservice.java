@@ -33,31 +33,33 @@ public class Cartservice {
     @Transactional
     public void addCartList(List<Cartrequest.saveDto> saveDtos, Uuser user) { // -- 장바구니 담기
 
-        Set<Long> optionId = new HashSet<>(); //-- 동일한 데이터를 묶어줌
-
-       /* for(Cartrequest.saveDto cart : saveDtos){ // -- 동일상품 예외처리 (잠시 보류)
-            if(!optionId.add(cart.getOptionId()));
-            throw new Exception400("동일 상품 옵션 중복됨: "+cart.getOptionId());
-        }
-        */
         List<Cart> cartList = saveDtos.stream().map(cartdto -> //-- 상품 존재유무 확인
         {
             Option option = oreposit.findById(cartdto.getOptionId()).orElseThrow(
                     () -> new Exception404("해당 상품 옵션 못찾음: "+ cartdto.getOptionId()));
 
             if(option.getQuantity() == 0){
-                System.out.println("해당 상품재고 없음");
-                throw new Exception404("해당 상품재고 없음");
+                throw new Exception400("해당 상품재고 없음");
             }
-
             return cartdto.toEn(option, user);
 
         }).collect(Collectors.toList());
 
-        cartList.forEach( cart -> {
+        List<Cart> usercart = cartreposit.findAllByUser(user);
 
+
+        cartList.forEach( cart -> {
             try {
-                cartreposit.save(cart);
+                boolean hasSameValue = usercart.stream().anyMatch(otherCart -> {
+                    //
+                    return cart.getOption().equals(otherCart.getOption());
+                });
+
+                if (hasSameValue) {
+                    throw new Exception400("이미 장바구니에 있습니다");
+                } else {
+                    cartreposit.save(cart);
+                }
             }
             catch (Exception e){
                 throw new Exception500("장바구니에서 흘려 내렸습니다: "+e.getMessage());

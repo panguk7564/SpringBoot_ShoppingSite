@@ -13,4 +13,6 @@ public interface Cartreposit extends JpaRepository<Cart,Long> {
     Page<Cart> findAllByUserId(Long id, PageRequest of); // -- 유저아이디로 찾기
 
     List<Cart> findByUserId(Long id);
+
+    List<Cart> findAllByUser(Uuser user);
 }

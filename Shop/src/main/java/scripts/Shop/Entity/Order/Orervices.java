@@ -43,6 +43,11 @@ public class Orervices {
                     .price(cart.getOption().getPrice() * cart.getItem_Quantity())
                     .build();
 
+            if(item.getOption().getQuantity() == 0 || item.getOption().getQuantity() <= cart.getItem_Quantity()){
+                reposit.deleteByUser(user);
+                throw new Exception404("주문하려는 상품의 재고가 부족합니다.");
+            }
+
             itmelist.add(item);
         }
         try {

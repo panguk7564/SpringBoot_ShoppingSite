@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
         System.out.println(prefixJwt);
 
-        // ** 헤더가 없다면 더이상 이 메서드에서 할 일은 없음. 다음으로 넘김.
+        // ** 헤더가 없다면 더이상 진행 x
 
         if(prefixJwt == null) {
             chain.doFilter(request, response);
