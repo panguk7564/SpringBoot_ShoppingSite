@@ -45,6 +45,11 @@ public class Cartservice {
             Option option = oreposit.findById(cartdto.getOptionId()).orElseThrow(
                     () -> new Exception404("해당 상품 옵션 못찾음: "+ cartdto.getOptionId()));
 
+            if(option.getQuantity() == 0){
+                System.out.println("해당 상품재고 없음");
+                throw new Exception404("해당 상품재고 없음");
+            }
+
             return cartdto.toEn(option, user);
 
         }).collect(Collectors.toList());
