@@ -23,7 +23,7 @@
 
 <body>
 <div class="center">
-    <h1>NICEPAY TEST</h1>
+    <h1>NICEPAY</h1>
     <img class="image" src="https://i.ytimg.com/vi/tX3fcXRjSGg/maxresdefault.jpg" alt="이미지">
     <p>결제 중입니다.</p>
     <button onclick="serverAuth()">다시 결제하기</button>
@@ -38,6 +38,8 @@
      var totalPrice = [[${totalPrice}]];
      var count = [[${count}]];
      var name = "[[${orderName}]]";
+     var userID = "[[${userId}]]";
+     var userName = "[[${userName}]]";
 
 
       AUTHNICE.requestPay({
@@ -46,7 +48,10 @@
         orderId: orderId,
         amount: totalPrice,
         goodsName: name,
-        returnUrl: 'http://localhost:8080/serverAuth',
+        buyerName: userName,
+        mallUserId: userID,
+        logoImgUrl: 'https://i.namu.wiki/i/R4hF44_j_u_aexrdlsQRi-OrUcNWLU-AS8Y5FxmXEUbnin3xliS6s0GTXEVD45es0WfWtuu_dJQcZKcOPWMleg.webp',
+        returnUrl: 'http://localhost:8080/payed/'+ orderId,
         fnError: function (result) {
           alert('알림 : ' + result.errorMsg + '')
         }

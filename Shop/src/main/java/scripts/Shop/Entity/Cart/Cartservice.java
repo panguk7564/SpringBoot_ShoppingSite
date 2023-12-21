@@ -118,4 +118,13 @@ public class Cartservice {
     public void deletecart(Long cartid) { // -- 상품 아이디별 삭제
             cartreposit.deleteById(cartid);
     }
+
+    public List<Cart> findById(Uuser user) {
+        if(!cartreposit.findAllByUser(user).isEmpty()){
+
+       List<Cart> cartList = cartreposit.findAllByUser(user);
+       return cartList;
+        }
+        else {return null;}
+    }
 }

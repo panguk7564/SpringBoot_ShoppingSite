@@ -1,9 +1,7 @@
 package scripts.Shop.Controllers;
 
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,8 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import scripts.Shop.Entity.Cart.Cart;
 import scripts.Shop.Entity.Cart.Cartrequest;
+import scripts.Shop.Entity.Cart.Cartservice;
 import scripts.Shop.Entity.Order.Items.Item;
+import scripts.Shop.Entity.Order.Oorder;
 import scripts.Shop.Entity.Order.Orderesponse;
 import scripts.Shop.Entity.Order.Orervices;
 import scripts.Shop.core.security.CustomUserDetails;
@@ -25,6 +26,7 @@ import scripts.Shop.core.security.CustomUserDetails;
 @RequiredArgsConstructor
 public class PaymentController {
     private final Orervices services;
+    private final Cartservice cartservice;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -32,25 +34,33 @@ public class PaymentController {
     private final String SECRET_KEY = "28254058abd141488521056c7b489c78";
 
 
-    @RequestMapping("/payindex")
+    @GetMapping("/payment")
     public String indexDemo(@AuthenticationPrincipal CustomUserDetails userDetails,
                             Model model){
-        Orderesponse.FindbyIdDto idDto = services.save(userDetails.getUser());
-        Long amount = idDto.getTotalQunatity();
-        System.out.println("주문번호:"+ idDto.getId()+ " 주문상품수 :"+amount+ " 총 결제금액: "+idDto.getTotalPrice());
+
+
+        List<Cart> cartList = cartservice.findById(userDetails.getUser());
+        Oorder oorder = services.ordersave(userDetails.getUser());
+
+        Long orderId = oorder.getId();
+        int amount = cartList.size();
+        Cart cart0 = cartList.get(0);
+        Long totalPrice = cartList.stream().mapToLong(cart -> cart.getPrice() * cart.getItem_Quantity()).sum();
+
 
         if(amount == 1){
-        idDto.getProductDtos().get(0).getProductName();
-        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName());
-        System.out.println(idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName());
+        model.addAttribute("orderName", cart0.getCartedName());
+        System.out.println(cart0.getCartedName());
         }else {
-        model.addAttribute("orderName", idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName() +" 외 "+(idDto.getProductDtos().size()- 1)+" 개의 상품");
-        System.out.println(idDto.getProductDtos().get(0).getProductName() + idDto.getProductDtos().get(0).getItemDtos().get(0).getOptionName() +" 외 "+(amount - 1)+" 개의 상품");
+        model.addAttribute("orderName", cart0.getCartedName() +" 외 "+ (amount - 1) +" 개의 상품");
+        System.out.println(cart0.getCartedName() +" 외 "+ (amount - 1) +" 개의 상품");
         }
-        model.addAttribute("orderId", idDto.getId());
-        model.addAttribute("totalPrice", idDto.getTotalPrice());
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("count", amount);
         model.addAttribute("clientId", CLIENT_ID);
+        model.addAttribute("userName", userDetails.getUser().getName());
+        model.addAttribute("userid", userDetails.getUser().getId());
         return "/payindex";
     }
 
@@ -59,10 +69,12 @@ public class PaymentController {
         return "/cancel";
     }
 
-    @RequestMapping("/serverAuth")
+    @RequestMapping("/payed/{id}")
     public String requestPayment(
             @RequestParam String tid,
             @RequestParam Long amount,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long id,
             Model model) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
@@ -84,12 +96,13 @@ public class PaymentController {
         System.out.println(responseNode.toPrettyString());
 
         if (resultCode.equalsIgnoreCase("0000")) {
-            // 결제 성공 비즈니스 로직 구현
+            Oorder oorder = services.findOrderByid(id);
+            services.save(userDetails.getUser(),oorder);
         } else {
-            // 결제 실패 비즈니스 로직 구현
+            services.deleteById(id);
         }
 
-        return "/response";
+        return "/payed";
     }
 
     @RequestMapping("/cancelAuth")
