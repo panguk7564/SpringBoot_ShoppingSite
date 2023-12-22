@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import scripts.Shop.Entity.Cart.Cart;
 import scripts.Shop.Entity.Cart.Cartservice;
 import scripts.Shop.Entity.Order.Items.Item;
+import scripts.Shop.Entity.Order.Items.ItemService;
 import scripts.Shop.Entity.Order.Oorder;
 import scripts.Shop.Entity.Order.Ordservices;
 import scripts.Shop.Entity.Uuser.Uservice;
@@ -27,6 +28,7 @@ public class PaymentController {
     private final Ordservices services;
     private final Cartservice cartservice;
     private final Uservice uservice;
+    private final ItemService itemService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -34,7 +36,7 @@ public class PaymentController {
     private final String SECRET_KEY = "28254058abd141488521056c7b489c78";
 
 
-    @GetMapping("/payment")
+    @GetMapping("/payment") // -- 결제창 호출및 장바구니 상품 정보 전달
     public String indexDemo(@AuthenticationPrincipal CustomUserDetails userDetails,
                             Model model){
 
@@ -72,7 +74,7 @@ public class PaymentController {
         return "/cancel";
     }
 
-    @RequestMapping("/payed/{id}")
+    @RequestMapping("/payed/{id}") // -- 결제 인증 완료시 작업
     public String requestPayment(
             @RequestParam String tid,
             @RequestParam Long amount,
@@ -103,7 +105,9 @@ public class PaymentController {
             Uuser user = uservice.findByid(userDetails.getUserId());
             services.payed(oorder);
             services.save(userDetails.getUser(),oorder);
-            cartservice.deleteAll(user);
+            cartservice.deleteAll(user);                // -- 결제가 완료된 장바구니 목록 제거
+            itemService.payedItemStockAdjust(oorder);
+
         } else {
             System.out.println("결제 실패");
             // -- 결제 실패
@@ -112,22 +116,9 @@ public class PaymentController {
         return "/payed";
     }
 
-    @RequestMapping("/cancelAuth/{id}")
+    @RequestMapping("/cancelAuth/{id}") // -- 결제 취소
     public String requestCancel(@PathVariable Long id){
-        services.deleteOrder(id);
+        services.deleteOrder(id); // -- 생성된 주문객체 삭제
         return "redirect:/";
-    }
-
-    @RequestMapping("/hook")
-    public ResponseEntity<String> hook(@RequestBody HashMap<String, Object> hookMap) throws Exception {
-        String resultCode = hookMap.get("resultCode").toString();
-
-        System.out.println(hookMap);
-
-        if(resultCode.equalsIgnoreCase("0000")){
-            return ResponseEntity.status(HttpStatus.OK).body("ok");
-        }
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

@@ -21,7 +21,7 @@ public class Pcontroller {
     private final Pservice service;
     private final ImgService iservice;
 
-    @PostMapping("/add")
+    @PostMapping("/mem/registitem/create") //-- 사용자 상품등록
     public ResponseEntity<?>add(@ModelAttribute ProductResponse dto, @RequestParam("file") MultipartFile [] file, HttpServletRequest request) throws IOException {
 
         if(service.addProduct(dto,file,request) != null){
@@ -32,22 +32,7 @@ public class Pcontroller {
         }
     }
 
-   @GetMapping("/products")
-   public ResponseEntity<?> findall(@RequestParam(defaultValue = "0")int page){
-
-       List<ProductResponse.FindAllDto> productResponses = service.findAll(page);
-       ApiUtils.ApiResult<?> apiResult = ApiUtils.success(productResponses);
-       return ResponseEntity.ok(apiResult);
-   }
-
-   @GetMapping("/products/{id}")
-    public ResponseEntity<?> findByid(@PathVariable Long id){
-       Product productDtos = service.findByid(id);
-       ApiUtils.ApiResult<?> apiResult = ApiUtils.success(productDtos);
-       return ResponseEntity.ok(apiResult);
-   }
-
-   @PostMapping("/mem/registitem/update/{id}")
+   @PostMapping("/mem/registitem/update/{id}") // -- 사용자 등록상품 업데이트
     public ResponseEntity<?> updateitem(@ModelAttribute ProductResponse dto, @PathVariable Long id,
                                         @RequestParam(value = "file", required = false) MultipartFile [] file) throws IOException
    {
@@ -68,8 +53,6 @@ public class Pcontroller {
                 iservice.deleteProductimg(id);
             }
 
-
-
         return ResponseEntity.ok(ApiUtils.success("업데이트 성공: "+ name));}
 
         else {
@@ -77,7 +60,8 @@ public class Pcontroller {
             return ResponseEntity.ok("상품없음");
         }
    }
-    @GetMapping("/mem/registitem/delete/{id}")
+
+    @GetMapping("/mem/registitem/delete/{id}") // -- 사용자 등록 상품 삭제
     public ResponseEntity<?> deleteitem(@PathVariable Long id){
         service.delete(id);
 

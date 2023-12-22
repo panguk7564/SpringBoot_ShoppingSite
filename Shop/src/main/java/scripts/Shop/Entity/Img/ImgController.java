@@ -13,11 +13,11 @@ import java.nio.file.Paths;
 @RestController
 public class ImgController {
 
-    @GetMapping("/download/{uuid}/{imgName}") // --> 파일 다운로드 기능
+    @GetMapping("/download/{uuid}/{imgName}") // --> 파일 다운로드 기능(서버 PC에 저장한후 요청때 불러오는 방식)
     public ResponseEntity<Resource> downloadFile(@PathVariable String uuid,
                                                  @PathVariable String imgName){
         Path filepath = Paths.get("C:/Users/G/Desktop/DB_Files/"+uuid+imgName); // -- 경로설정 +파일이름(uuid + 파일이름)
-        //Path filepath = Paths.get("C:/Users/bongd/Desktop/DB_Files/"+uuid+imgName);
+        //Path filepath = Paths.get("C:/Users/bongd/Desktop/DB_Files/"+uuid+imgName); // -- 집에서 작업할때 주소
 
         try{
             Resource ressource = new UrlResource(filepath.toUri());

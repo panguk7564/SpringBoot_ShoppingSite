@@ -23,7 +23,6 @@ public class Cartcontroller {
     {
         service.addCartList(requestDto, customUserDetails.getUser()); // -- 인증된 유저에게 상품 추가
 
-
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success(null);
         return ResponseEntity.ok(apiResult);
     }
@@ -50,7 +49,7 @@ public class Cartcontroller {
     }
 
 
-    @GetMapping("/mem/cart/delete/{id}")
+    @GetMapping("/mem/cart/delete/{id}") // -- 장바구니 삭제
     public ResponseEntity<?> delete_cart(@PathVariable Long id,
                                          Error error,
                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) // -- 인증후 실행
@@ -60,6 +59,4 @@ public class Cartcontroller {
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success("장바구니 목록이 삭제됨: 번호."+id);
         return ResponseEntity.ok(apiResult);
     }
-
-
 }

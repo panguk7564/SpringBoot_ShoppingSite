@@ -23,6 +23,9 @@ public class Oservice {
 
     @Transactional
     public void save(OResponse dto, Product product) {
+        if(dto.getQuantity() == null){
+            dto.setQuantity(0L);
+        }
         dto.setProduct(product);
         reposit.save(dto.toEn());
     }
@@ -46,7 +49,14 @@ public class Oservice {
         return findAllDtos;
     }
 
+    public Option findById(Long id) {
+        Optional<Option> optionOptional =  reposit.findById(id);
+        if(optionOptional.isPresent()){
+            Option option = optionOptional.get();
 
+            return option;
+        }else {return null;}
+    }
 
     @Transactional
     public String delete(Long id) {
@@ -70,6 +80,10 @@ public class Oservice {
         if (option.isPresent()){
             Option option1 = option.get();
 
+            if(dto.getQuantity() == null){  // -- 수량 항목을 비웠을때 0으로 저장
+                dto.setQuantity(0L);
+            }
+
             option1.update(dto.getOptionName(),dto.getPrice(),dto.getQuantity());
             reposit.save(option1);
 
@@ -78,6 +92,13 @@ public class Oservice {
         else {
             return null;
         }
+    }
+
+    @Transactional
+    public void quantity_update(Option option, Long quantity){
+        option.update(option.getOptionName(), option.getPrice(), (option.getQuantity() - quantity));
+        System.out.println(quantity);
+        reposit.save(option);
     }
 
     public Long calculateSum(Product product) {

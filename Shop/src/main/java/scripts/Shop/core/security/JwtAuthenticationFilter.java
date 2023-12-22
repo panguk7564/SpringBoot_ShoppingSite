@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         HttpSession session = request.getSession();
         String prefixJwt = (String) session.getAttribute("loginToken");
 
-        System.out.println(prefixJwt);
+        System.out.println(response);
 
         // ** 헤더가 없다면 더이상 진행 x
 

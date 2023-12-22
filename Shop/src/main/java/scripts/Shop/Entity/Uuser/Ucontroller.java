@@ -37,7 +37,7 @@ public class Ucontroller {
     private final AuthenticationManager authenticationManager;
 
 
-    @PostMapping("/join")
+    @PostMapping("/join") // -- 회원가입
     public ResponseEntity join(@ModelAttribute @Valid URequest dto, @RequestParam("file") MultipartFile file) throws IOException {
         valideuser(dto.getEmail());
 
@@ -58,7 +58,7 @@ public class Ucontroller {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login") //-- 로그인
     public ResponseEntity<?> login(@RequestBody @Valid URequest.JoinDTO requestDTO, HttpSession session, HttpServletRequest request) {
 
         String jwt = "";

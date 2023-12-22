@@ -14,6 +14,7 @@ import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgService;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oservice;
+import scripts.Shop.Entity.Order.Items.ItemService;
 import scripts.Shop.Entity.Order.Oorder;
 import scripts.Shop.Entity.Order.Ordservices;
 import scripts.Shop.Entity.Product.Product;
@@ -34,72 +35,33 @@ public class ViewController {
     private final Oservice oservice;
     private final Ordservices orservice;
     private final Cartservice cservice;
+    private final ItemService itemService;
 
-    @GetMapping("/")
+    @GetMapping("/") // -- 메인화면
     public String index(){
         return "main";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/login") // -- 로그인
     public String login(){
         return "login";
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/signup") // -- 회원가입
     public String signup(){return "signup";}
 
-    @GetMapping("/img")
-    public String img(){return "img";}
+    @GetMapping("/img") // -- 테스트용 잉여
+    public String img(){
+        return "img";}
 
-    @GetMapping("/mem")
-    public String findmem(Model model){
-        List<Uuser> memlist = service.findall();
-        model.addAttribute("userlist", memlist);
-        return "mem";
-    }
-
-    @GetMapping("/mem/{id}")
-    public String findbyId(@PathVariable Long id, Model model){
-        Uuser userDto = service.findByid(id);
-        ImgFile imgFile = iservice.findByUserid(id);
-
-        model.addAttribute("users",userDto);
-        model.addAttribute("file",imgFile);
-
-
-
-        return "details";
-    }
-
-    @GetMapping("/mem/edit/{id}")
-    public String editor(@PathVariable Long id, Model model){
-        Uuser user = service.findByid(id);
-        model.addAttribute("user",user);
-        return "userupdate";
-    }
-
-    @GetMapping("/mem/delete/{id}")
-    public String delete(@PathVariable Long id){
-        service.deleteById(id);
-        return "redirect:/signout";
-    }
-
-    @GetMapping("/signout")
-    public String logout(HttpSession session){
-        Long userid = (Long) session.getAttribute("loginBy");
-        service.signout(userid);
-        session.invalidate();
-        return "redirect:/";
-    }
-
-    @GetMapping("/items")
+    @GetMapping("/items") // -- 상점
     public String shop(Model model){
         List<Product> productList = pservice.findall();
         model.addAttribute("itemlist",productList);
         return "items";
     }
 
-    @GetMapping("/item/{id}")
+    @GetMapping("/item/{id}") //-- 상품 상세출력
     public String itemdetail(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         Long stock = oservice.calculateSum(product);
@@ -114,14 +76,49 @@ public class ViewController {
         return "itemdetails";
     }
 
-    @GetMapping("/mem/registitem/{id}") // -- 사용자가 등록한 상품목록
+    //------------------------------------------ mem : 회원(로그인 한 유저) 만 엑세스 가능
+
+    @GetMapping("/mem/{id}") //-- 회원상세페이 출력
+    public String findbyId(@PathVariable Long id, Model model){
+        Uuser userDto = service.findByid(id);
+        ImgFile imgFile = iservice.findByUserid(id);
+
+        model.addAttribute("users",userDto);
+        model.addAttribute("file",imgFile);
+
+        return "details";
+    }
+
+    @GetMapping("/mem/edit/{id}") // -- 회원 정보 수정페이지 출력
+    public String editor(@PathVariable Long id, Model model){
+        Uuser user = service.findByid(id);
+        model.addAttribute("user",user);
+        return "userupdate";
+    }
+
+    @GetMapping("/mem/delete/{id}") // -- 회원삭제시 로그인 세션만료(자동 로그아웃)
+    public String delete(@PathVariable Long id, HttpSession session){
+        service.deleteById(id);
+        session.invalidate();
+        return "redirect:/";
+    }
+
+    @GetMapping("/signout")// -- 로그아웃 (세션 만료 및 토큰 삭제)
+    public String logout(HttpSession session){
+        Long userid = (Long) session.getAttribute("loginBy");
+        service.signout(userid);
+        session.invalidate();
+        return "redirect:/";
+    }
+
+    @GetMapping("/mem/registitem/{id}") // -- 사용자가 등록한 상품목록페이지 출력
     public String myRegistItem(@PathVariable Long id, Model model){
         List<Product> productList = pservice.findUserRegitItem(id);
         model.addAttribute("myRegitItem",productList);
         return "useritems";
     }
 
-    @GetMapping("/mem/registitem/detail/{id}") // -- 사용자 상품목록 상세
+    @GetMapping("/mem/registitem/detail/{id}") // -- 사용자 상품목록 상세페이지 출력
     public String useritem_findAll(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         List<ImgFile> imges = iservice.findAllByProdutId(id);
@@ -136,7 +133,7 @@ public class ViewController {
         return "useritemdetails";
     }
 
-    @GetMapping("/mem/registitem/update/{id}")
+    @GetMapping("/mem/registitem/update/{id}") //-- 사용자 등록 상품 수정페이지 출력
     public String useritem_edit(@PathVariable Long id, Model model){
         Product product = pservice.findByid(id);
         model.addAttribute("item",product);
@@ -147,7 +144,7 @@ public class ViewController {
         return "useritemedit";
     }
 
-    @GetMapping("/mem/registitem/options/{id}") // -- 옵션 전체출력 페이지
+    @GetMapping("/mem/registitem/options/{id}") // -- 사용자 등록 상품 옵션 전체출력 페이지 출력
     public String option_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
         Page<Option> options = oservice.paging(pageable, id);
 
@@ -162,24 +159,26 @@ public class ViewController {
         return "useritemoptionList";
     }
 
-    @GetMapping("/mem/itemadd")
+    @GetMapping("/mem/itemadd") // -- 사용자 상품 등록페이지 출력
     public String additem(){
     return "itemadd";
     }
 
-    @GetMapping("/mem/registitem/options/create/{id}")
+    @GetMapping("/mem/registitem/options/create/{id}") //-- 사용자 상품 옵션 등록페이지 출력
     public String option_save(@PathVariable Long id, Model model) {
         model.addAttribute("pid",id);
         return "useritemoptionAdd";
     }
 
-    @GetMapping("/mem/registitem/option/update/{id}")
+    @GetMapping("/mem/registitem/option/update/{id}") // -- 사용자 상품 옵션 수정페이지 출력
     public String option_update(@PathVariable Long id, Model model){
-       model.addAttribute("oid",id);
+        Option option = oservice.findById(id);
+        model.addAttribute("option",option);
+        model.addAttribute("oid",id);
         return "useritemoptionUpdate";
     }
 
-    @GetMapping("/mem/cart/{id}") //-- 장바구니 상품 전체 출력
+    @GetMapping("/mem/cart/{id}") //-- 장바구니 상품 전체 출력페이지
     public String cart_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
         Page<Cart> carts = cservice.paging(pageable, id);
         model.addAttribute("cartList",carts);
@@ -187,7 +186,7 @@ public class ViewController {
         return "userCart";
     }
 
-    @GetMapping("/mem/order/{id}") //-- 유저 주문 전체 출력
+    @GetMapping("/mem/order/{id}") //-- 유저 주문 전체 출력페이지
     public String order_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
 
         Page<Oorder> orders = orservice.paging(id,pageable);

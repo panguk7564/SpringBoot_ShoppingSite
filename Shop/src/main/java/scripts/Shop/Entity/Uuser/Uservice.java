@@ -85,7 +85,6 @@ public class Uservice {
             ireposit.save(imgFile);
         } else {
             System.out.println("파일이 엄서요");
-            ureposit.save(dto.toEntity());
         }
         System.out.println("저장완료");
     }

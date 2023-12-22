@@ -57,14 +57,13 @@
 <body>
 <form th:action="@{/mem/registitem/option/update/save/{id}(id=${id})}" method="post">
     <label for="optionName">옵션명:</label>
-    <input type="text" name="optionName" id="optionName">
+    <input type="text" name="optionName" id="optionName" th:value="${option.optionName}">
 
     <label for="price">옵션가격:</label>
-    <input type="text" name="price" id="price">
+    <input type="text" name="price" id="price" th:value="${option.price}">
 
     <label for="quantity">옵션수량:</label>
-    <input type="text" name="quantity" id="quantity"><br>
-
+    <input type="text" name="quantity" id="quantity" th:value="${option.quantity}"><br>
 
 
     <input type="submit" value="글 작성">

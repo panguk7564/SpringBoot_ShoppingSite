@@ -143,7 +143,7 @@
         <div class="options-container">
             <select onchange="handleSelection(this)" required>
                 <option value="" disabled selected>옵션을 선택하세요</option>
-                <option th:each="model : ${models}" th:value="${model.price}" th:text="${model.optionName} + '  ' + (${model.price} - ${items.price})"></option>
+                <option th:each="model : ${models}" th:value="${model.price}" th:text="${model.optionName} + ' ||추가금액: ' + (${model.price} - ${items.price}) + ' 재고수: ' + ${model.quantity}" th:data-id="${model.id}"></option>
 
 
             </select>
