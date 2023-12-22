@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문내역</title>
+    <style> body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header {
+        background-color: #006bff;
+        padding: 10px;
+        color: #fff;
+        text-align: center;
+    }
+
+    footer {
+        background-color: #006bff;
+        padding: 10px;
+        color: #fff;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+    }
+
+    button {
+        background-color: #006bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+    </style>
+</head>
+<body>
+<button class="go-back" onclick="goBack()">뒤로가기</button>
+<table>
+    <tr th:each="order: ${orderList}">
+        <td th:text="${order.getId()}"></td>
+        <td th:text="${order.getOrderName()}"></td>
+        <td>
+            <a th:href="@{/mem/order/delete/{id}(id=${order.getId()})}">삭제</a>
+        </td>
+    </tr>
+</table>
+
+<a th:href="@{/mem/order/{userId}(userId=${userId}, page=1)}">처음</a>
+<a th:href="${orderList.first} ? '#' : @{/mem/order/{userId}(userId=${userId},page=${orderList.number})}" th:unless="${orderList.first} and not orderList.empty">이전</a>
+<span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+    <span th:if="${page == orderList.number + 1 and not orderList.empty}" th:text="${page}"></span>
+    <span th:unless="${page == orderList.number + 1 or orderList.empty}">
+        <a th:href="@{/mem/order/{userId}(userId=${userId}, page=${page})}" th:text="${page}"></a>
+    </span>
+</span>
+<a th:href="${orderList.last} ? '#' : @{/mem/order/{userId}(userId=${userId},page=${orderList.number + 2})}" th:unless="${orderList.last} and not orderList.empty">다음</a>
+<a th:href="@{/mem/order/{userId}(userId=${userId}, page=${orderList.totalPages})}">마지막</a>
+<script>
+    function goBack() {
+    window.history.back();
+}
+</script>
+</body>
+</html>

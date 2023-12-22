@@ -2,23 +2,14 @@ package scripts.Shop.Entity.Order;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import scripts.Shop.Entity.Cart.Cart;
-import scripts.Shop.Entity.Cart.Cartrequest;
 import scripts.Shop.Entity.Cart.Cartservice;
-import scripts.Shop.core.security.CustomUserDetails;
 import scripts.Shop.core.utils.ApiUtils;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class Orcontroller {
-    private final Orervices services;
-    private final Cartservice cartservice;
+    private final Ordservices services;
 
 
 /*
@@ -50,6 +41,13 @@ public class Orcontroller {
         services.delete();
 
         ApiUtils.ApiResult<?> apiResult = ApiUtils.success("삭제");
+        return ResponseEntity.ok(apiResult);
+    }
+    @GetMapping("/mem/order/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        services.deleteOrder(id);
+
+        ApiUtils.ApiResult<?> apiResult = ApiUtils.success(id + " 주문내역 삭제");
         return ResponseEntity.ok(apiResult);
     }
 }

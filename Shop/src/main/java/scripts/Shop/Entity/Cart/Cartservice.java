@@ -56,7 +56,9 @@ public class Cartservice {
                 });
 
                 if (hasSameValue) {
+                    System.out.println("이미있는 상품");
                     throw new Exception400("이미 장바구니에 있습니다");
+
                 } else {
                     cartreposit.save(cart);
                 }
@@ -69,7 +71,7 @@ public class Cartservice {
 
     public Page<Cart> paging(Pageable pageable, Long id) {
         int page = pageable.getPageNumber() - 1; // - 시작 인덱스
-        int size = 10; // -- 페이지 표시 게시물 개수
+        int size = 5; // -- 페이지 표시 게시물 개수
 
         Page<Cart> carts = cartreposit.findAllByUserId(id, PageRequest.of(page, size)); ///-- 전체게시물 불러오기(정렬및 조건에 맞게[page, size]출력)
 
@@ -81,6 +83,15 @@ public class Cartservice {
                 option.getPrice(),
                 option.getCartedName()
         ));
+    }
+
+    public List<Cart> findById(Uuser user) {
+        if(!cartreposit.findAllByUser(user).isEmpty()){
+
+            List<Cart> cartList = cartreposit.findAllByUser(user);
+            return cartList;
+        }
+        else {return null;}
     }
 
     @Transactional
@@ -119,12 +130,8 @@ public class Cartservice {
             cartreposit.deleteById(cartid);
     }
 
-    public List<Cart> findById(Uuser user) {
-        if(!cartreposit.findAllByUser(user).isEmpty()){
-
-       List<Cart> cartList = cartreposit.findAllByUser(user);
-       return cartList;
-        }
-        else {return null;}
+    @Transactional
+    public void deleteAll(Uuser user){
+        cartreposit.deleteAllByUser(user);
     }
 }

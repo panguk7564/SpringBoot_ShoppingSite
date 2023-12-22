@@ -54,6 +54,7 @@
         returnUrl: 'http://localhost:8080/payed/'+ orderId,
         fnError: function (result) {
           alert('알림 : ' + result.errorMsg + '')
+          window.location.href = "/cancelAuth/" + orderId
         }
       });
     }

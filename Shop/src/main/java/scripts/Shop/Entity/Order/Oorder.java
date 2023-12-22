@@ -22,9 +22,19 @@ public class Oorder {
     @ManyToOne(fetch = FetchType.LAZY)
     private Uuser user;
 
+    private String orderName;
+
+    private boolean is_payed;
+
     @Builder
-    public Oorder(Long id, Uuser user) {
+    public Oorder(Long id, Uuser user, String orderName, boolean is_payed) {
         this.id = id;
         this.user = user;
+        this.orderName = orderName;
+        this.is_payed = is_payed;
     }
+
+    public void payed(Boolean is_payed) {
+        this.is_payed = is_payed;
+    }//-- 결제여부 업데이트
 }

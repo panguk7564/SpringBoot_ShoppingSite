@@ -14,6 +14,8 @@ import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgService;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oservice;
+import scripts.Shop.Entity.Order.Oorder;
+import scripts.Shop.Entity.Order.Ordservices;
 import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.Entity.Product.Pservice;
 import scripts.Shop.Entity.Uuser.Uservice;
@@ -30,6 +32,7 @@ public class ViewController {
     private final Pservice pservice;
     private final ImgService iservice;
     private final Oservice oservice;
+    private final Ordservices orservice;
     private final Cartservice cservice;
 
     @GetMapping("/")
@@ -182,5 +185,22 @@ public class ViewController {
         model.addAttribute("cartList",carts);
 
         return "userCart";
+    }
+
+    @GetMapping("/mem/order/{id}") //-- 유저 주문 전체 출력
+    public String order_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
+
+        Page<Oorder> orders = orservice.paging(id,pageable);
+
+        int blockLimit = 3;
+        int startPage = (int)Math.ceil((double)pageable.getPageNumber()/blockLimit - 1) * blockLimit + 1;
+        int endPage = ((startPage+blockLimit - 1) < orders.getTotalPages()) ? (startPage + blockLimit - 1) : orders.getTotalPages();
+
+        model.addAttribute("orderList",orders);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage",endPage);
+        model.addAttribute("userId",id);
+
+        return "userOrderList";
     }
 }

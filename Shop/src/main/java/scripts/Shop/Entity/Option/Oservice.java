@@ -103,8 +103,9 @@ public class Oservice {
 
 
     public Page<Option> paging(Pageable pageable, Long id) {
+
         int page = pageable.getPageNumber() - 1; // - 시작 인덱스
-        int size = 3; // -- 페이지 표시 게시물 개수
+        int size = 5; // -- 페이지 표시 게시물 개수
 
         Page<Option> options = reposit.findAllByProductId(id, PageRequest.of(page, size)); ///-- 전체게시물 불러오기(정렬및 조건에 맞게[page, size]출력)
 

@@ -1,7 +1,6 @@
 package scripts.Shop.Controllers;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,19 +13,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import scripts.Shop.Entity.Cart.Cart;
-import scripts.Shop.Entity.Cart.Cartrequest;
 import scripts.Shop.Entity.Cart.Cartservice;
 import scripts.Shop.Entity.Order.Items.Item;
 import scripts.Shop.Entity.Order.Oorder;
-import scripts.Shop.Entity.Order.Orderesponse;
-import scripts.Shop.Entity.Order.Orervices;
+import scripts.Shop.Entity.Order.Ordservices;
+import scripts.Shop.Entity.Uuser.Uservice;
+import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.security.CustomUserDetails;
 
 @Controller
 @RequiredArgsConstructor
 public class PaymentController {
-    private final Orervices services;
+    private final Ordservices services;
     private final Cartservice cartservice;
+    private final Uservice uservice;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -38,23 +38,26 @@ public class PaymentController {
     public String indexDemo(@AuthenticationPrincipal CustomUserDetails userDetails,
                             Model model){
 
-
         List<Cart> cartList = cartservice.findById(userDetails.getUser());
-        Oorder oorder = services.ordersave(userDetails.getUser());
 
-        Long orderId = oorder.getId();
         int amount = cartList.size();
         Cart cart0 = cartList.get(0);
         Long totalPrice = cartList.stream().mapToLong(cart -> cart.getPrice() * cart.getItem_Quantity()).sum();
+        Long orderId = null;
+
 
 
         if(amount == 1){
         model.addAttribute("orderName", cart0.getCartedName());
-        System.out.println(cart0.getCartedName());
-        }else {
-        model.addAttribute("orderName", cart0.getCartedName() +" 외 "+ (amount - 1) +" 개의 상품");
-        System.out.println(cart0.getCartedName() +" 외 "+ (amount - 1) +" 개의 상품");
+        Oorder oorder = services.ordersave(userDetails.getUser(),cart0.getCartedName());
+        orderId = oorder.getId();
         }
+        else {
+        model.addAttribute("orderName", cart0.getCartedName() +" 외 "+ (amount - 1) +" 개의 상품");
+        Oorder oorder = services.ordersave(userDetails.getUser(),cart0.getCartedName() +" 외 "+ (amount - 1) +" 개의 상품");
+        orderId = oorder.getId();
+        }
+
         model.addAttribute("orderId", orderId);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("count", amount);
@@ -95,49 +98,24 @@ public class PaymentController {
 
         System.out.println(responseNode.toPrettyString());
 
-        if (resultCode.equalsIgnoreCase("0000")) {
+        if (resultCode.equalsIgnoreCase("0000")) { //-- 결제완료시 결제됨으로 주문객체 업데이트 밎 주문 상품객체 저장
             Oorder oorder = services.findOrderByid(id);
+            Uuser user = uservice.findByid(userDetails.getUserId());
+            services.payed(oorder);
             services.save(userDetails.getUser(),oorder);
+            cartservice.deleteAll(user);
         } else {
-            services.deleteById(id);
+            System.out.println("결제 실패");
+            // -- 결제 실패
         }
 
         return "/payed";
     }
 
-    @RequestMapping("/cancelAuth")
-    public String requestCancel(
-            @RequestParam String tid,
-            @RequestParam String amount,
-            Model model) throws Exception {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((CLIENT_ID + ":" + SECRET_KEY).getBytes()));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        Map<String, Object> AuthenticationMap = new HashMap<>();
-        AuthenticationMap.put("amount", amount);
-        AuthenticationMap.put("reason", "test");
-        AuthenticationMap.put("orderId", UUID.randomUUID().toString());
-
-        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(AuthenticationMap), headers);
-
-        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
-                "https://sandbox-api.nicepay.co.kr/v1/payments/"+ tid +"/cancel", request, JsonNode.class);
-
-        JsonNode responseNode = responseEntity.getBody();
-        String resultCode = responseNode.get("resultCode").asText();
-        model.addAttribute("resultMsg", responseNode.get("resultMsg").asText());
-
-        System.out.println(responseNode.toPrettyString());
-
-        if (resultCode.equalsIgnoreCase("0000")) {
-            // 취소 성공 비즈니스 로직 구현
-        } else {
-            // 취소 실패 비즈니스 로직 구현
-        }
-
-        return "/response";
+    @RequestMapping("/cancelAuth/{id}")
+    public String requestCancel(@PathVariable Long id){
+        services.deleteOrder(id);
+        return "redirect:/";
     }
 
     @RequestMapping("/hook")
