@@ -104,15 +104,6 @@ public class Uservice {
         }
     }
 
-    public List<Uuser> findall() {
-        List<Uuser> memlist = ureposit.findAll();
-        List<Uuser> memedto = new ArrayList<>();
-        for(Uuser uuser1: memlist){
-            memedto.add(URequest.listofUser(uuser1));
-        }
-        return memedto;
-    }
-
     public Uuser findByid(Long id) {
         Optional<Uuser> byid = ureposit.findById(id);
         if(byid.isPresent()){
@@ -152,11 +143,14 @@ public class Uservice {
         System.out.println("잘가시게" + id);
     }
 
+    /*
     public String tokencall(Long id){
         Optional<Uuser> user = ureposit.findById(id);
         String token = user.get().getToken();
         return token;
     }
+
+     */
 
     public JsonNode tokenThrower(String token, String url) {
 
