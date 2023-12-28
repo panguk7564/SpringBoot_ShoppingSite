@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>유저 상세</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             display: flex;
@@ -23,21 +23,21 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .header-buttons {
-             display: flex;
-             justify-content: space-between;
-             margin-bottom: 20px;
-         }
-        .back-button, .cart-button {
-            background-color: blue;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
-
-        .back-button {
-            margin-right: 10px;
+        .back-button, .cart-button, .order-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .back-button i {
+            color: blue;
+        }
+        .cart-button i, .order-button i {
+            color: green;
         }
         h1 {
             margin-top: 0;
@@ -74,22 +74,21 @@
     </style>
 </head>
 <body>
+<div class="container">
     <div class="header-buttons">
         <a th:href="@{/}">
-            <button class="back-button">뒤로가기</button>
+            <button class="back-button"><i class="fas fa-arrow-left"></i></button>
         </a>
 
         <a th:href="@{/mem/cart/{id}(id=${users.Id})}">
-            <button class="cart-button">장바구니</button>
+            <button class="cart-button"><i class="fas fa-shopping-cart"></i></button>
         </a>
 
         <a th:href="@{/mem/order/{id}(id=${users.Id})}">
-            <button class="cart-button">주문내역</button>
+            <button class="order-button"><i class="fas fa-file-alt"></i></button>
         </a>
     </div>
 
-
-<div class="container">
     <h1>유저 id: <span th:text="${users.Id}"></span></h1>
     <p>
         이름: <span th:text="${users.getName}"></span><br>
@@ -114,6 +113,7 @@
     <a th:href="@{/mem/registitem/{id}(id=${users.Id})}" class="button">등록한 상품</a>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 <script>
     function confirmDelete(userId) {
         if (confirm("정말로 회원탈퇴를 하시겠습니까?")) {
