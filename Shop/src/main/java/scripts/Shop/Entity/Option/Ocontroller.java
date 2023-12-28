@@ -26,7 +26,7 @@ public class Ocontroller {
      * @return
      * -- 반환값에 대한 설명(List<OResponse.FindProductIdDto>)
      */
-    @PostMapping("/mem/registitem/options/save/{id}") // -- 유저 등록상품 옵션 등록
+    @PostMapping("/mem/registitem/options/save/{id}") // -- 유저 등록상품 옵션 등록{상품 ID}
     public ResponseEntity<?> save(@ModelAttribute OResponse dto, @PathVariable Long id) {
         Product product = pservice.findByid(id);
         service.save(dto,product);

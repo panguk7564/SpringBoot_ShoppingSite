@@ -30,6 +30,7 @@ public class Uuser {
 
     private String token;
 
+    @Column(length = 30, nullable = false)
     private String name;
 
     @Convert(converter = StringArrayConverter.class)

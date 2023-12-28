@@ -113,4 +113,12 @@ public class Ucontroller {
 
         return ResponseEntity.ok().body(dto.getEmail());
     }
+
+    @GetMapping("/mem/delete/{id}") // -- 회원삭제시 로그인 세션만료(자동 로그아웃)
+    public ResponseEntity<?> delete(@PathVariable Long id, HttpSession session){
+        service.deleteById(id);
+        String name = session.getAttribute("loginName").toString();
+        session.invalidate();
+        return ResponseEntity.ok().body("회원삭제: "+ id + "" + name);
+    }
 }

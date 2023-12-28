@@ -22,6 +22,7 @@ public class Oorder {
     @ManyToOne(fetch = FetchType.LAZY)
     private Uuser user;
 
+    @Column(nullable = false)
     private String orderName;
 
     private boolean is_payed;

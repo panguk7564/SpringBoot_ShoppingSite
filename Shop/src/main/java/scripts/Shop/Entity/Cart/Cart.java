@@ -36,6 +36,7 @@ public class Cart {
     @Column(nullable = false) // -- 상품 가격
     private Long price;
 
+    @Column(nullable = false)
     private String cartedName;
 
     @Builder

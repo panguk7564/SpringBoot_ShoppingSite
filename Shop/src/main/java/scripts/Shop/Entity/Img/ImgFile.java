@@ -17,9 +17,11 @@ public class ImgFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String imgName;
     private Long imgSize;
     private String imgType;
+    @Column(nullable = false)
     private String uuid;
     private String filePath;
 

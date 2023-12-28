@@ -48,7 +48,6 @@ public class PaymentController {
         Long orderId = null;
 
 
-
         if(amount == 1){
         model.addAttribute("orderName", cart0.getCartedName());
         Oorder oorder = services.ordersave(userDetails.getUser(),cart0.getCartedName());
@@ -67,11 +66,6 @@ public class PaymentController {
         model.addAttribute("userName", userDetails.getUser().getName());
         model.addAttribute("userid", userDetails.getUser().getId());
         return "/payindex";
-    }
-
-    @RequestMapping(value="/cancel")
-    public String cancelDemo(){
-        return "/cancel";
     }
 
     @RequestMapping("/payed/{id}") // -- 결제 인증 완료시 작업

@@ -27,28 +27,6 @@ public class Cartcontroller {
         return ResponseEntity.ok(apiResult);
     }
 
-
-    @PostMapping("/carts/update") // -- 장바구니 업데이트
-    public ResponseEntity<?> update(@RequestBody @Valid List<Cartrequest.updateDto> requestDto,
-                                    Error error,
-                                    @AuthenticationPrincipal CustomUserDetails customUserDetails){
-
-        Cartresponse.updateDto updatedto = service.update(requestDto, customUserDetails.getUser()); //--인증된 유저의 상품 업데이트
-
-        ApiUtils.ApiResult<?> apiResult = ApiUtils.success(updatedto);
-        return ResponseEntity.ok(apiResult);
-    }
-
-
-    @GetMapping("/carts") // -- 장바구니 불러오기
-    public ResponseEntity<?> carts(@AuthenticationPrincipal CustomUserDetails customUserDetails){
-        Cartresponse.findAllDto dto = service.findAll();//-- 인증된 유저의 상품 전체 불러오기
-
-        ApiUtils.ApiResult<?> apiResult = ApiUtils.success(dto);
-        return ResponseEntity.ok(apiResult);
-    }
-
-
     @GetMapping("/mem/cart/delete/{id}") // -- 장바구니 삭제
     public ResponseEntity<?> delete_cart(@PathVariable Long id,
                                          Error error,

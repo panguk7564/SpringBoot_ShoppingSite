@@ -28,15 +28,7 @@ public class Orcontroller {
 
  */
 
-    @GetMapping("/orders/{id}")
-    public ResponseEntity<?> findByid(@PathVariable Long id){
-        Orderesponse.FindbyIdDto findbyIdDto = services.findByid(id);
-
-        ApiUtils.ApiResult<?> apiResult = ApiUtils.success(findbyIdDto);
-        return ResponseEntity.ok(apiResult);
-    }
-
-    @PostMapping("/orders/clear")
+    @GetMapping("/mem/orders/clear")
     public ResponseEntity<?> clear() {
         services.delete();
 

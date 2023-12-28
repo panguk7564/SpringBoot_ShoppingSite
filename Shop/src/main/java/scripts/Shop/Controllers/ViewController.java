@@ -50,10 +50,6 @@ public class ViewController {
     @GetMapping("/signup") // -- 회원가입
     public String signup(){return "signup";}
 
-    @GetMapping("/img") // -- 테스트용 잉여
-    public String img(){
-        return "img";}
-
     @GetMapping("/items") // -- 상점
     public String shop(Model model){
         List<Product> productList = pservice.findall();
@@ -78,7 +74,15 @@ public class ViewController {
 
     //------------------------------------------ mem : 회원(로그인 한 유저) 만 엑세스 가능
 
-    @GetMapping("/mem/{id}") //-- 회원상세페이 출력
+    @GetMapping("/signout")// -- 로그아웃 (세션 만료 및 토큰 삭제)
+    public String logout(HttpSession session){
+        Long userid = (Long) session.getAttribute("loginBy");
+        service.signout(userid);
+        session.invalidate();
+        return "redirect:/";
+    }
+
+    @GetMapping("/mem/{id}") //-- 회원상세페이지 출력
     public String findbyId(@PathVariable Long id, Model model){
         Uuser userDto = service.findByid(id);
         ImgFile imgFile = iservice.findByUserid(id);
@@ -94,21 +98,6 @@ public class ViewController {
         Uuser user = service.findByid(id);
         model.addAttribute("user",user);
         return "userupdate";
-    }
-
-    @GetMapping("/mem/delete/{id}") // -- 회원삭제시 로그인 세션만료(자동 로그아웃)
-    public String delete(@PathVariable Long id, HttpSession session){
-        service.deleteById(id);
-        session.invalidate();
-        return "redirect:/";
-    }
-
-    @GetMapping("/signout")// -- 로그아웃 (세션 만료 및 토큰 삭제)
-    public String logout(HttpSession session){
-        Long userid = (Long) session.getAttribute("loginBy");
-        service.signout(userid);
-        session.invalidate();
-        return "redirect:/";
     }
 
     @GetMapping("/mem/registitem/{id}") // -- 사용자가 등록한 상품목록페이지 출력
@@ -164,7 +153,7 @@ public class ViewController {
     return "itemadd";
     }
 
-    @GetMapping("/mem/registitem/options/create/{id}") //-- 사용자 상품 옵션 등록페이지 출력
+    @GetMapping("/mem/registitem/options/create/{id}") //-- 사용자 상품 옵션 등록페이지 출력 {상품ID}
     public String option_save(@PathVariable Long id, Model model) {
         model.addAttribute("pid",id);
         return "useritemoptionAdd";
