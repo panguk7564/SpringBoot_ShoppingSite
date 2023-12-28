@@ -75,15 +75,20 @@ __※ 3. 수정 처리__
  - 이미지가 추가된 객체를 수정할때 이미지 첨부 부재시 기존 이미지 삭제
  - 이미지가 존재하는 객체 수정시 기존의 이미지 삭제후 새로운 이미지 저장
 
+__※ 4. 프로젝트 구조__
 
- __※ 4. API 명세__
+  <img src="./노인과 바다_프로젝트 구조.jpg" alt="image_00"><br><br>
+
+
+
+ __※ 5. API 명세__
 
   <img src="./API-doc/1.jpg" alt="image_01"><br><br>
   <img src="./API-doc/2.jpg" alt="image_01"><br><br>
   <img src="./API-doc/3.jpg" alt="image_01"><br><br>
 
 ---
-  #### ※ 5.화면구성
+  #### ※ 6. 화면구성
 <br><br>
 
   <img src="./img/1.jpg" alt="image_01"><br>
@@ -182,3 +187,5 @@ __10. 주문내역__
 <img src="./img/5-1.jpg" alt="image_18"><br>
 
 ---
+
+__※ 7. 버전 정보__
