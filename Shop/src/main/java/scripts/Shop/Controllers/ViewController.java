@@ -170,20 +170,25 @@ public class ViewController {
     @GetMapping("/mem/cart/{id}") //-- 장바구니 상품 전체 출력페이지
     public String cart_paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id){
         Page<Cart> carts = cservice.paging(pageable, id);
-        List<Cart> cartList = cservice.findAllById(id);
 
         int blockLimit = 3;
         int startPage = (int)Math.ceil((double)pageable.getPageNumber()/blockLimit - 1) * blockLimit + 1;
         int endPage = ((startPage+blockLimit - 1) < carts.getTotalPages()) ? (startPage + blockLimit - 1) : carts.getTotalPages();
-        Long Tp = cartList.stream().mapToLong(cart -> cart.getPrice()).sum();
-        Long Tq = cartList.stream().mapToLong(cart -> cart.getItem_Quantity()).sum();
 
+        if(cservice.findAllById(id) != null) {
+            List<Cart> cartList = cservice.findAllById(id);
+
+            Long Tp = cartList.stream().mapToLong(cart -> cart.getPrice()).sum();
+            Long Tq = cartList.stream().mapToLong(cart -> cart.getItem_Quantity()).sum();
+
+            model.addAttribute("totalPrice",Tp);
+            model.addAttribute("totalQuantity",Tq);
+        }
         model.addAttribute("cartList",carts);
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("userId",id);
-        model.addAttribute("totalPrice",Tp);
-        model.addAttribute("totalQuantity",Tq);
+
 
         return "userCart";
     }
