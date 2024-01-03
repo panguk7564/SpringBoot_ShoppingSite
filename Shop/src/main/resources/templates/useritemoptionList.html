@@ -4,45 +4,141 @@
     <meta charset="UTF-8">
     <title>옵션목록</title>
     <style>
+        /* 스타일 수정 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            max-width: 800px; /* 전체 크기를 조정 */
+            margin: 0 auto; /* 가운데 정렬 */
+        }
+
+        header {
+            background-color: #006bff;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+        }
+
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        a {
+            color: #006bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #006bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border: 2px solid black; /* 검은 태두리 추가 */
+        }
+
+        button:hover {
+            background-color: #0056cc;
+        }
 
         footer {
-     background-color: #006bff;
-     padding: 10px;
-     color: #fff;
-     position: fixed;
-     left: 0;
-     bottom: 0;
-     width: 100%;
-     text-align: center;
- }
+            background-color: #006bff;
+            padding: 10px;
+            color: #fff;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
 
- table {
-     border: 1px solid black;
-     border-collapse: collapse;
- }
- th, td {
-     border: 1px solid black;
-     padding: 10px;
- }
+        .content {
+            margin-top: 20px; /* 헤더와 본문 사이 간격 추가 */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .button-container button:first-child {
+            background-color: #006bff; /* 뒤로가기 버튼 파란색으로 유지 */
+        }
+
+        .button-container button:last-child {
+            background-color: #00b300; /* 초록색 배경색으로 변경 */
+        }
     </style>
 </head>
 <body>
-<button onclick="goBack()">뒤로가기</button>
-<table>
-    <a th:href="@{/mem/registitem/options/create/{pid}(pid=${pid})}">옵션 추가</a>
-    <tr th:each="option: ${optionList}">
-        <td th:text="${option.getId()}"></td>
-        <td th:text="${option.getOptionName()}"></td>
-        <td>
-            <a th:href="@{/mem/registitem/option/delete/{id}(id=${option.getId()})}">삭제</a>
-            <a th:href="@{/mem/registitem/option/update/{id}(id=${option.getId()})}">수정</a>
-        </td>
-    </tr>
-</table>
+<header>
+    <h1>옵션목록</h1>
+</header>
+
+<div class="content">
+    <div class="button-container">
+        <button onclick="goBack()">뒤로가기</button>
+        <a th:href="@{/mem/registitem/options/create/{pid}(pid=${pid})}"><button>옵션 추가</button></a>
+    </div>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>ID</th>
+            <th>옵션명</th>
+            <th>작업</th>
+        </tr>
+        <tr th:each="option: ${optionList}">
+            <td th:text="${option.getId()}"></td>
+            <td th:text="${option.getOptionName()}"></td>
+            <td>
+                <a th:href="@{/mem/registitem/option/delete/{id}(id=${option.getId()})}">삭제</a>
+                <a th:href="@{/mem/registitem/option/update/{id}(id=${option.getId()})}">수정</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <a th:href="@{/mem/registitem/options/{itemId}(itemId=${pid}, page=1)}">처음</a>
+        <a th:href="${optionList.first} ? '#' : @{/mem/registitem/options/{itemId}(itemId=${pid},page=${optionList.number})}" th:unless="${optionList.first} and not optionList.empty">이전</a>
+        <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+        <span th:if="${page == optionList.number + 1 and not optionList.empty}" th:text="${page}"></span>
+        <span th:unless="${page == optionList.number + 1 or optionList.empty}">
+            <a th:href="@{/mem/registitem/options/{itemId}(itemId=${pid}, page=${page})}" th:text="${page}"></a>
+        </span>
+    </span>
+        <a th:href="${optionList.last} ? '#' : @{/mem/registitem/options/{itemId}(itemId=${pid},page=${optionList.number + 2})}" th:unless="${optionList.last} and not optionList.empty">다음</a>
+        <a th:href="@{/mem/registitem/options/{itemId}(itemId=${pid}, page=${optionList.totalPages})}">마지막</a>
+    </div>
+</div>
+
 <script>
     function goBack() {
-    window.history.back();
-}
+        window.history.back();
+    }
 </script>
+
+<footer>
+    © 2024. GreenComputer Academy. Kwang Yu Lee
+</footer>
 </body>
 </html>

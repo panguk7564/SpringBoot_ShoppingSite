@@ -8,6 +8,30 @@
             font-family: Arial, sans-serif;
         }
 
+        header {
+            background-color: #006bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer {
+            background-color: #006bff;
+            padding: 20px;
+            color: #fff;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 60px auto 20px;
+            padding: 20px;
+        }
+
         h2 {
             color: #333;
         }
@@ -15,6 +39,7 @@
         table {
             width: 80%;
             border-collapse: collapse;
+            margin-bottom: 20px; /* 버튼과 본문 사이 간격 조정 */
         }
 
         th, td {
@@ -31,15 +56,19 @@
         }
 
         button {
-            background-color: blue;
             color: white;
-            border: none;
+            border: 1px solid black;
             padding: 6px 12px;
             cursor: pointer;
+            margin-bottom: 10px; /* 버튼과 본문 사이 간격 조정 */
+        }
+
+        .back-button {
+            background-color: #006bff; /* 뒤로가기 버튼의 배경색을 #006bff로 수정 */
         }
 
         .item-add-button {
-            margin-bottom: 12px;
+            background-color: green;
         }
 
         .login-notice {
@@ -48,32 +77,42 @@
     </style>
 </head>
 <body>
-<h2>상점</h2>
-<a th:href="@{/}">
-    <button>뒤로가기</button>
-</a>
+<header>
+    <h1>상점</h1>
+</header>
 
-<a th:if="${session.loginBy}" th:href="@{/mem/itemadd}">
-    <button class="item-add-button">상품 등록</button>
-</a>
+<div class="container">
+    <a th:href="@{/}">
+        <button class="back-button">뒤로가기</button>
+    </a>
 
-<a th:unless="${session.loginBy}">
-    <span class="login-notice">상품 등록은 로그인이 필요합니다.</span>
-</a>
+    <a th:if="${session.loginBy}" th:href="@{/mem/itemadd}">
+        <button class="item-add-button">상품 등록</button>
+    </a>
 
-<table>
-    <tr>
-        <th>상품ID</th>
-        <th>상품 이름</th>
-        <th>가격</th>
-    </tr>
-    <tr th:each="item: ${itemlist}">
-        <td th:text="${item.id}"></td>
-        <td>
-            <a th:href="@{|/item/${item.id}|}" th:text="${item.productName}"></a>
-        </td>
-        <td th:text="${item.price}"></td>
-    </tr>
-</table>
+    <a th:unless="${session.loginBy}">
+        <span class="login-notice">상품 등록은 로그인이 필요합니다.</span>
+    </a>
+
+    <table>
+        <tr>
+            <th>상품ID</th>
+            <th>상품 이름</th>
+            <th>가격</th>
+        </tr>
+        <tr th:each="item: ${itemlist}">
+            <td th:text="${item.id}"></td>
+            <td>
+                <a th:href="@{|/item/${item.id}|}" th:text="${item.productName}"></a>
+            </td>
+            <td th:text="${item.price}"></td>
+        </tr>
+    </table>
+</div>
+
+<footer>
+    © 2024 GreenComputer Academy, KwangYu Lee
+</footer>
+
 </body>
 </html>
