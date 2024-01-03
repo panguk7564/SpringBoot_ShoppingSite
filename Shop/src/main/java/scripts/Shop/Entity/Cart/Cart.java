@@ -24,8 +24,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //--pk
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY) // -- 본 상품
-    private Option option;
+    private Long option;
 
     @ManyToOne(fetch = FetchType.LAZY) //-- 유저 별로 카트에 몪임
     private Uuser user;
@@ -40,7 +39,7 @@ public class Cart {
     private String cartedName;
 
     @Builder
-    public Cart(Long id, Option option, Uuser user, Long item_Quantity, Long price, String cartedName) {
+    public Cart(Long id, Long option, Uuser user, Long item_Quantity, Long price, String cartedName) {
         this.id = id;
         this.option = option;
         this.user = user;

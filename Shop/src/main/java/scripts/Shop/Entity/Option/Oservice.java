@@ -95,7 +95,8 @@ public class Oservice {
     }
 
     @Transactional
-    public void quantity_update(Option option, Long quantity){
+    public void quantity_update(Long optionId, Long quantity){
+        Option option = findById(optionId);
         option.update(option.getOptionName(), option.getPrice(), (option.getQuantity() - quantity));
         System.out.println(quantity);
         reposit.save(option);

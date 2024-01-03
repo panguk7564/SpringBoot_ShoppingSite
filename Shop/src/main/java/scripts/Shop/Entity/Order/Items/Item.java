@@ -21,8 +21,7 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    private Option option;
+    private Long option;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Oorder order;
@@ -34,7 +33,7 @@ public class Item {
     private Long price;
 
     @Builder
-    public Item(Long id, Option option, Oorder order, Long quantity, Long price) {
+    public Item(Long id, Long option, Oorder order, Long quantity, Long price) {
         this.id = id;
         this.option = option;
         this.order = order;

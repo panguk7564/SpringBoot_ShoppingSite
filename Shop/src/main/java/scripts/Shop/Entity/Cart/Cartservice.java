@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oreposit;
+import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.Entity.Uuser.Ureposit;
 import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.error.exception.Exception400;
@@ -24,6 +25,7 @@ public class Cartservice {
 
     private final Cartreposit cartreposit;
     private final Oreposit oreposit;
+    private final Oservice optionservice;
 
     public List<Cart> findAllById(Long id) {
         List<Cart> cartList = cartreposit.findByUserId(id);
@@ -101,6 +103,8 @@ public class Cartservice {
         else {return null;}
     }
 
+
+
     @Transactional
     public Cartresponse.updateDto update(List<Cartrequest.updateDto> requestDto, Uuser user) { // -- 상품 업데이트
 
@@ -125,7 +129,7 @@ public class Cartservice {
         for(Cartrequest.updateDto updateDto : requestDto){
             for(Cart cart : cartList){
                 if(cart.getId() == updateDto.getCartid()){ //-- 수량에 비례한 가격 업데이트
-                    cart.update(updateDto.getQuantity(),cart.getOption().getPrice() * updateDto.getQuantity());
+                    cart.update(updateDto.getQuantity(),optionservice.findById(cart.getOption()).getPrice() * updateDto.getQuantity());
                 }
             }
         }

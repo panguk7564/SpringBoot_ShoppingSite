@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Cart.Cart;
 import scripts.Shop.Entity.Cart.Cartreposit;
+import scripts.Shop.Entity.Option.Option;
+import scripts.Shop.Entity.Option.Oreposit;
+import scripts.Shop.Entity.Option.Oservice;
 import scripts.Shop.Entity.Order.Items.Item;
 import scripts.Shop.Entity.Order.Items.ItemsReposit;
 import scripts.Shop.Entity.Uuser.Uuser;
@@ -25,6 +28,7 @@ public class Ordservices {
     private final Orreposit reposit;
     private final Cartreposit creposit;
     private final ItemsReposit itemsReposit;
+    private final Oservice oservice;
 
     @Transactional
     public Oorder ordersave(Uuser user,String name){
@@ -37,8 +41,10 @@ public class Ordservices {
         return reposit.save(Oorder.builder().user(user).orderName(name).build());
     }
 
+
     @Transactional
     public Orderesponse.FindbyIdDto save(Uuser user, Oorder oorder) {
+
         List<Cart> cartList = creposit.findByUserId(user.getId());
         Optional<Oorder> Optionalorder = reposit.findById(oorder.getId());
 
@@ -54,10 +60,10 @@ public class Ordservices {
                     .option(cart.getOption())
                     .order(order)
                     .quantity(cart.getItem_Quantity())
-                    .price(cart.getOption().getPrice() * cart.getItem_Quantity())
+                    .price(oservice.findById(cart.getOption()).getPrice())
                     .build();
 
-            if (item.getOption().getQuantity() == 0 || item.getOption().getQuantity() <= cart.getItem_Quantity()) {
+            if (oservice.findById(item.getOption()).getQuantity() == 0 || oservice.findById(item.getOption()).getQuantity() <= cart.getItem_Quantity()) {
                 reposit.deleteByUser(user);
                 throw new Exception404("주문하려는 상품의 재고가 부족합니다.");
             }

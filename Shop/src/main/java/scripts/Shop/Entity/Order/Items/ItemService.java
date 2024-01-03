@@ -19,7 +19,7 @@ public class ItemService {
         List<Item> itemList = reposit.findAllByOrderId(oorder.getId());
 
         for (Item item : itemList) {
-            Option option = item.getOption();
+            Long option = item.getOption();
             oservice.quantity_update(option, item.getQuantity());
         }
     }
