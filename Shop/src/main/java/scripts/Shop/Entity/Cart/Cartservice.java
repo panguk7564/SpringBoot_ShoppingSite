@@ -50,7 +50,7 @@ public class Cartservice {
             if(option.getQuantity() == 0){
                 throw new Exception400("해당 상품재고 없음");
             }
-            return cartdto.toEn(option, user);
+            return cartdto.toEn(option.getId(), user);
 
         }).collect(Collectors.toList());
 
@@ -61,7 +61,7 @@ public class Cartservice {
             try {
                 boolean hasSameValue = usercart.stream().anyMatch(otherCart -> {
                     //
-                    return cart.getOption().equals(otherCart.getOption());
+                    return cart.getOptionId().equals(otherCart.getOptionId());
                 });
 
                 if (hasSameValue) {
@@ -86,7 +86,7 @@ public class Cartservice {
 
         return carts.map(option -> new Cart( // -- 람다 人
                 option.getId(),
-                option.getOption(),
+                option.getOptionId(),
                 option.getUser(),
                 option.getItem_Quantity(),
                 option.getPrice(),
@@ -129,7 +129,7 @@ public class Cartservice {
         for(Cartrequest.updateDto updateDto : requestDto){
             for(Cart cart : cartList){
                 if(cart.getId() == updateDto.getCartid()){ //-- 수량에 비례한 가격 업데이트
-                    cart.update(updateDto.getQuantity(),optionservice.findById(cart.getOption()).getPrice() * updateDto.getQuantity());
+                    cart.update(updateDto.getQuantity(),optionservice.findById(cart.getOptionId()).getPrice() * updateDto.getQuantity());
                 }
             }
         }

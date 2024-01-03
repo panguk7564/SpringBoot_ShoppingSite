@@ -19,8 +19,8 @@ public class ItemService {
         List<Item> itemList = reposit.findAllByOrderId(oorder.getId());
 
         for (Item item : itemList) {
-            Long option = item.getOption();
-            oservice.quantity_update(option, item.getQuantity());
+            Option option = item.getOption();
+            oservice.quantity_update(option.getId(), item.getQuantity());
         }
     }
 }
