@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <title>장바구니</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            max-width: 800px; /* 전체 크기를 조정 */
+            margin: 0 auto; /* 가운데 정렬 */
+        }
+
+         header {
+             background-color: #006bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         footer {
             background-color: #006bff;
             padding: 10px;
@@ -16,16 +32,58 @@
         }
 
         table {
-            border: 1px solid black;
             border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
         }
 
         th, td {
             border: 1px solid black;
             padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #006bff;
+            color: #fff;
+        }
+
+        td {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fff;
+        }
+
+        button {
+            background-color: #006bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+            border: 1px solid black;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            color: #006bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
+<header>
+    <h1>내 장바구니</h1>
+</header>
 <body>
 <table>
     <tr th:each="cart: ${cartList}">
@@ -47,15 +105,18 @@
         window.history.back();
     }
 
-  function sendData() {
-    const confirmation = confirm("주문하시겠습니까?");
-    if (confirmation) {
-        window.location.href = "/payment";
-    } else {
-        console.log("주문이 취소되었습니다.");
+    function sendData() {
+        const confirmation = confirm("주문하시겠습니까?");
+        if (confirmation) {
+            window.location.href = "/payment";
+        } else {
+            console.log("주문이 취소되었습니다.");
+        }
     }
-}
 </script>
 
+<footer>
+    © 2024. GreenComputer Academy. Kwang Yu Lee
+</footer>
 </body>
 </html>
