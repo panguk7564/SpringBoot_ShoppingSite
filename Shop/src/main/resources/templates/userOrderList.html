@@ -3,53 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>주문내역</title>
-    <style> body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    header {
-        background-color: #006bff;
-        padding: 10px;
-        color: #fff;
-        text-align: center;
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            max-width: 800px; /* 전체 크기를 조정 */
+            margin: 0 auto; /* 가운데 정렬 */
+        }
 
-    footer {
-        background-color: #006bff;
-        padding: 10px;
-        color: #fff;
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        text-align: center;
-    }
+        header {
+             background-color: #006bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    table {
-        border: 1px solid black;
-        border-collapse: collapse;
-        width: 80%;
-        margin: 20px auto;
-    }
+        footer {
+            background-color: #006bff;
+            padding: 10px;
+            color: #fff;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
 
-    th, td {
-        border: 1px solid black;
-        padding: 10px;
-        text-align: center;
-    }
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          margin-bottom: 20px;
+        }
 
-    button {
-        background-color: #006bff;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        margin-bottom: 20px;
-    }
+        th, td {
+          border: 1px solid black;
+          padding: 10px;
+          text-align: center;
+        }
 
-    button:hover {
-        background-color: #0056b3;
-    }
+        th {
+          background-color: #006bff;
+          color: #fff;
+        }
+
+        td {
+          background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) td {
+          background-color: #fff;
+        }
+
+        button.go-back {
+            background-color: #006bff;
+            color: #fff;
+            border: 1px solid black; /* 버튼에 테두리 추가 */
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button.go-back:hover {
+          background-color: #0056b3;
+        }
+
+        a {
+          color: #006bff;
+          text-decoration: none;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
     </style>
 </head>
+
+<header>
+    <h1>주문내역</h1>
+</header>
+
 <body>
 <button class="go-back" onclick="goBack()">뒤로가기</button>
 <table>
@@ -77,5 +112,9 @@
     window.history.back();
 }
 </script>
+
+<footer>
+    © 2024. GreenComputer Academy. Kwang Yu Lee
+</footer>
 </body>
 </html>
