@@ -8,12 +8,12 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            max-width: 800px; /* 전체 크기를 조정 */
-            margin: 0 auto; /* 가운데 정렬 */
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-         header {
-             background-color: #006bff;
+        header {
+            background-color: #006bff;
             color: white;
             padding: 10px;
             text-align: center;
@@ -44,8 +44,8 @@
         }
 
         th {
-            background-color: #006bff;
-            color: #fff;
+        background-color: #f2f2f2;
+        color: #000;
         }
 
         td {
@@ -79,6 +79,64 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .pagination {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .pagination a,
+    .pagination span {
+        padding: 5px 10px;
+        border: none;
+        margin: 0 3px; /* 수정: 간격을 좁히기 위해 3px로 수정 */
+        color: #000;
+        text-decoration: none;
+    }
+
+        .pagination a:hover {
+            background-color: #006bff;
+            color: #fff;
+        }
+
+        .pagination .active {
+            background-color: #006bff;
+            color: #fff;
+        }
+
+        .total-table {
+  border-collapse: collapse;
+  width: 35%; /* 표의 너비를 조정해주세요 */
+  margin: 0 auto; /* 표를 가운데 정렬해주세요 */
+}
+
+.total-table th,
+.total-table td {
+  padding: 6px; /* 셀의 패딩을 조정해주세요 */
+  font-size: 15px; /* 글자 크기를 조정해주세요 */
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.total-table th {
+  background-color: #f5f5f5;
+}
+
+.total-table td {
+  font-weight: bold;
+}
+
+.total-table td[colspan="2"] {
+  text-align: right;
+}
+
+.total-table td[colspan="3"] {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+
     </style>
 </head>
 <header>
@@ -86,6 +144,12 @@
 </header>
 <body>
 <table>
+    <tr>
+        <th>ID</th>
+        <th>상품명</th>
+        <th>가격</th>
+        <th>수량</th>
+    </tr>
     <tr th:each="cart: ${cartList}">
         <td th:text="${cart.getId}"></td>
         <td><a th:text="${cart.getCartedName()}"></a></td>
@@ -94,6 +158,31 @@
         <td>
             <a th:href="@{'/mem/cart/delete/' + ${cart.getId}}">삭제</a>
         </td>
+    </tr>
+</table>
+
+
+<div class="pagination">
+    <a th:href="@{/mem/cart/{userId}(userId=${userId}, page=1)}">처음</a>
+    <a th:href="${cartList.first} ? '#' : @{/mem/cart/{userId}(userId=${userId},page=${cartList.number})}" th:unless="${cartList.first} and not cartList.empty">이전</a>
+    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+        <span th:if="${page == cartList.number + 1 and not cartList.empty}" th:text="${page}" class="active"></span>
+        <span th:unless="${page == cartList.number + 1 or cartList.empty}">
+            <a th:href="@{/mem/cart/{userId}(userId=${userId}, page=${page})}" th:text="${page}"></a>
+        </span>
+    </span>
+    <a th:href="${cartList.last} ? '#' : @{/mem/cart/{userId}(userId=${userId},page=${cartList.number + 2})}" th:unless="${cartList.last} and not cartList.empty">다음</a>
+    <a th:href="@{/mem/cart/{userId}(userId=${userId}, page=${cartList.totalPages})}">마지막</a>
+</div>
+
+<table class="total-table">
+    <tr>
+        <th colspan="2">구매하는 상품 전체 수</th>
+        <td colspan="3" style="padding-top: 10px;" th:text="${totalQuantity}"></td>
+    </tr>
+    <tr>
+        <th colspan="2">전체 가격</th>
+        <td colspan="3" style="padding-bottom: 10px;" th:text="${totalPrice}"></td>
     </tr>
 </table>
 

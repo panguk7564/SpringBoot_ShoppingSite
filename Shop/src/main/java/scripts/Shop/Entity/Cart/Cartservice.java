@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import scripts.Shop.Entity.Option.Option;
 import scripts.Shop.Entity.Option.Oreposit;
+import scripts.Shop.Entity.Uuser.Ureposit;
 import scripts.Shop.Entity.Uuser.Uuser;
 import scripts.Shop.core.error.exception.Exception400;
 import scripts.Shop.core.error.exception.Exception404;
@@ -24,9 +25,15 @@ public class Cartservice {
     private final Cartreposit cartreposit;
     private final Oreposit oreposit;
 
-    public Cartresponse.findAllDto findAll() {
-        List<Cart> cartList = cartreposit.findAll();
-        return new Cartresponse.findAllDto(cartList);
+    public List<Cart> findAllById(Long id) {
+        List<Cart> cartList = cartreposit.findByUserId(id);
+
+        if(!cartList.isEmpty()){
+            return cartList;
+        }
+        else {
+            return null;
+        }
     }
 
 
