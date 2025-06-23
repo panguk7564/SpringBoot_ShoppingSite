@@ -37,6 +37,7 @@
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/join');
+
         xhr.onload = function() {
             if (xhr.status === 200) {
                 // 전송 성공 시 메시지 출력 및 리다이렉트
@@ -45,7 +46,7 @@
             } else {
                 // 전송 실패 시 폼 초기화
                 form.reset();
-                alert("이미 있는 계정입니다")
+                alert("회원가입에 실패했습니다. 상태코드: " + xhr.status)
             }
         };
         xhr.send(formData);

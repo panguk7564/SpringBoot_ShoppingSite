@@ -43,13 +43,13 @@ public class Ucontroller {
 
         String enPass = passwordEncoder.encode(dto.getPassword());
         dto.setPassword(enPass);
-
         service.save(dto,file);
 
         return ResponseEntity.ok().body(ApiUtils.success("회원가입 성공:"+ dto.getName()));
     }
 
     private void valideuser(String email){
+
         if(ureposit.findByEmail(email).isPresent()) {
             Optional<Uuser> uuser1 = ureposit.findByEmail(email);
             if (uuser1.isPresent()) {

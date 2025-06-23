@@ -13,17 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import scripts.Shop.Entity.Img.ImgFile;
 import scripts.Shop.Entity.Img.ImgReposit;
-import scripts.Shop.Entity.Product.Preposit;
-import scripts.Shop.Entity.Product.Product;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,19 +28,25 @@ import java.util.UUID;
 public class Uservice {
     private final Ureposit ureposit;
     private final ImgReposit ireposit;
-    private final Preposit preposit;
-    private final String filePath = "C:/Users/G/Desktop/DB_Files/";
+    private final String filePath = "C:/Users/" + System.getProperty("user.name") + "/Desktop/DB_Files/";
     //private final String filePath = "C:/Users/bongd/Desktop/DB_Files/";
 
     private final PasswordEncoder passwordEncoder;
 
    private final HttpClient client = HttpClientBuilder.create().build();
-    private HttpPost post = null;
+   private HttpPost post = null;
 
 
 
     @Transactional
     public void save(URequest dto, MultipartFile file) throws IOException{
+        if (!Files.exists(Path.of(filePath))) {
+            try {
+                Files.createDirectories(Path.of(filePath)); // createDirectories는 중간 경로도 모두 생성
+            } catch (IOException e) {
+                throw new RuntimeException("디렉토리 생성 실패: " + filePath, e);
+            }
+        }
 
         Path uploadpath = Paths.get(filePath);
         Uuser user = ureposit.save(dto.toEntity());
@@ -81,6 +82,7 @@ public class Uservice {
                     .imgSize(file.getSize())
                     .uuser(user)
                     .build();
+
 
             ireposit.save(imgFile);
         } else {

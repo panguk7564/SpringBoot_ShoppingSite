@@ -1,6 +1,5 @@
 package scripts.Shop.Entity.Uuser;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import scripts.Shop.Entity.Product.Product;
 import scripts.Shop.core.utils.StringArrayConverter;
 
 import javax.persistence.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
